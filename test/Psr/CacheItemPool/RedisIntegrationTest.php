@@ -1,20 +1,20 @@
 <?php
 /**
  * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
+ * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Psr\SimpleCache;
+namespace ZendTest\Cache\Psr\CacheItemPool;
 
-use Cache\IntegrationTests\SimpleCacheTest;
-use Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator;
+use Cache\IntegrationTests\CachePoolTest;
+use Zend\Cache\Psr\CacheItemPool\CacheItemPoolAdapter;
 use Zend\Cache\Storage\Adapter\Redis;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Exception;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 
-class RedisIntegrationTest extends SimpleCacheTest
+class RedisIntegrationTest extends CachePoolTest
 {
     /**
      * Backup default timezone
@@ -51,7 +51,7 @@ class RedisIntegrationTest extends SimpleCacheTest
         parent::tearDown();
     }
 
-    public function createSimpleCache()
+    public function createCachePool()
     {
         $options = ['resource_id' => __CLASS__];
 
@@ -71,7 +71,14 @@ class RedisIntegrationTest extends SimpleCacheTest
 
         try {
             $storage = StorageFactory::adapterFactory('redis', $options);
-            return new SimpleCacheDecorator($storage);
+
+            $deferredSkippedMessage = sprintf(
+                '%s storage doesn\'t support driver deferred',
+                \get_class($storage)
+            );
+            $this->skippedTests['testHasItemReturnsFalseWhenDeferredItemIsExpired'] = $deferredSkippedMessage;
+
+            return new CacheItemPoolAdapter($storage);
         } catch (Exception\ExtensionNotLoadedException $e) {
             $this->markTestSkipped($e->getMessage());
         } catch (ServiceNotCreatedException $e) {
