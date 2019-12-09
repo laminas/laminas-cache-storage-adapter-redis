@@ -1,0 +1,3 @@
+# laminas-{component}
+
+This component provides ...

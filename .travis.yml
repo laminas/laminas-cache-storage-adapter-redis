@@ -1,0 +1,2 @@
+version: ~> 1.0
+import: laminas/.github/travis/supported.yml
