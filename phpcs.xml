@@ -9,7 +9,4 @@
 
     <file>src</file>
     <file>test</file>
-
-    <exclude-pattern>test/TestAsset/</exclude-pattern>
-    <exclude-pattern>test/classes.php</exclude-pattern>
 </ruleset>
