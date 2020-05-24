@@ -26,12 +26,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Laminas\\Cache\\Adapter\\": "src/"
+            "Laminas\\Cache\\Storage\\Adapter\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "LaminasTest\\Cache\\Adapter\\": "test/"
+            "LaminasTest\\Cache\\Storage\\Adapter\\": "test/"
         }
     },
     "extra": {
