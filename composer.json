@@ -33,7 +33,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "LaminasTest\\Cache\\Storage\\Adapter\\": "test/"
+            "LaminasTest\\Cache\\Storage\\Adapter\\": "test/unit",
+            "LaminasTest\\Cache\\Psr\\": "test/integration/Psr"
         }
     },
     "scripts": {
