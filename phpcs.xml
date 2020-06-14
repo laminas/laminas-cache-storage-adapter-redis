@@ -5,5 +5,4 @@
     <!-- Paths to check -->
     <file>src</file>
     <file>test</file>
-    <file>benchmark</file>
 </ruleset>
