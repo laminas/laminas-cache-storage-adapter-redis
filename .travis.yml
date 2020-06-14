@@ -49,7 +49,6 @@ matrix:
       env:
         - DEPS=latest
         - CS_CHECK=true
-        - BENCHMARKS=true
         - TEST_COVERAGE=true
 
 before_install:
@@ -64,7 +63,6 @@ install:
 
 script:
   - if [[ $TEST_COVERAGE == 'true' ]]; then composer run-script test-coverage -- --verbose ; else composer run-script test -- --verbose ; fi
-  - if [[ $BENCHMARKS == 'true' ]]; then vendor/bin/phpbench run --revs=2 --iterations=2 --report=aggregate ; fi
   - if [[ $CS_CHECK == 'true' ]]; then composer cs-check ; fi
 
 after_script:
