@@ -36,10 +36,6 @@ class RedisTest extends CommonAdapterTest
 
     public function setUp()
     {
-        if (getenv('TESTS_LAMINAS_CACHE_REDIS_ENABLED') != 'true') {
-            $this->markTestSkipped('Enable TESTS_LAMINAS_CACHE_REDIS_ENABLED to run this test');
-        }
-
         if (! extension_loaded('redis')) {
             $this->markTestSkipped("Redis extension is not loaded");
         }

@@ -102,10 +102,6 @@ class RedisResourceManagerTest extends TestCase
      */
     public function testValidPersistentId()
     {
-        if (getenv('TESTS_LAMINAS_CACHE_REDIS_ENABLED') != 'true') {
-            $this->markTestSkipped('Enable TESTS_LAMINAS_CACHE_REDIS_ENABLED to run this test');
-        }
-
         if (! extension_loaded('redis')) {
             $this->markTestSkipped("Redis extension is not loaded");
         }
