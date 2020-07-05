@@ -4,6 +4,9 @@ cache:
   directories:
     - $HOME/.composer/cache
 
+services:
+  - redis-server
+
 env:
   global:
     - COMPOSER_ARGS="--no-interaction"
@@ -15,39 +18,51 @@ matrix:
     - php: 5.6
       env:
         - DEPS=lowest
+        - REDIS_PECL_VERSION="redis-2.2.3"
     - php: 5.6
       env:
         - DEPS=latest
+        - REDIS_PECL_VERSION="redis-4.3.0"
     - php: 7.0
       env:
         - DEPS=lowest
+        - REDIS_PECL_VERSION="redis-4.0.0"
     - php: 7.0
       env:
         - DEPS=latest
+        - REDIS_PECL_VERSION="redis"
     - php: 7.1
       env:
         - DEPS=lowest
+        - REDIS_PECL_VERSION="redis-4.0.0"
     - php: 7.1
       env:
         - DEPS=latest
+        - REDIS_PECL_VERSION="redis"
     - php: 7.2
       env:
         - DEPS=lowest
+        - REDIS_PECL_VERSION="redis-4.0.0"
     - php: 7.2
       env:
         - DEPS=latest
+        - REDIS_PECL_VERSION="redis"
     - php: 7.3
       env:
         - DEPS=lowest
+        - REDIS_PECL_VERSION="redis-4.0.0"
     - php: 7.3
       env:
         - DEPS=latest
+        - REDIS_PECL_VERSION="redis"
     - php: 7.4
       env:
         - DEPS=lowest
+        - REDIS_PECL_VERSION="redis-4.0.0"
     - php: 7.4
       env:
         - DEPS=latest
+        - REDIS_PECL_VERSION="redis"
         - CS_CHECK=true
         - TEST_COVERAGE=true
 
@@ -55,6 +70,7 @@ before_install:
   - if [[ $TEST_COVERAGE != 'true' ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
 
 install:
+  - echo "no" | pecl install -f $REDIS_PECL_VERSION ;
   - travis_retry composer install $COMPOSER_ARGS --ignore-platform-reqs
   - if [[ $DEPS == 'latest' ]]; then travis_retry composer update $COMPOSER_ARGS ; fi
   - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-lowest --prefer-stable $COMPOSER_ARGS ; fi

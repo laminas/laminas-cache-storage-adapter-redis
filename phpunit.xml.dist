@@ -14,4 +14,10 @@
             <directory suffix=".php">./src</directory>
         </whitelist>
     </filter>
+    <php>
+        <env name="TESTS_LAMINAS_CACHE_REDIS_HOST" value="127.0.0.1" />
+        <env name="TESTS_LAMINAS_CACHE_REDIS_PORT" value="6379" />
+        <env name="TESTS_LAMINAS_CACHE_REDIS_PASSWORD" value="" />
+        <env name="TESTS_LAMINAS_CACHE_REDIS_DATABASE" value="0" />
+    </php>
 </phpunit>
