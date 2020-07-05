@@ -72,7 +72,7 @@ before_install:
 
 install:
   - echo "no" | pecl install -f $REDIS_PECL_VERSION ;
-  - travis_retry composer install $COMPOSER_ARGS --ignore-platform-reqs
+  - travis_retry composer install $COMPOSER_ARGS
   - travis_retry composer require --dev $COMPOSER_ARGS $SERIALIZER_DEPS
   - if [[ $DEPS == 'latest' ]]; then travis_retry composer update $COMPOSER_ARGS ; fi
   - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-lowest --prefer-stable $COMPOSER_ARGS ; fi
