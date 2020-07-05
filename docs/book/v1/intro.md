@@ -1,3 +1,3 @@
-# laminas-cache-storage-adapter-{adapter}
+# laminas-cache-storage-adapter-redis
 
 This component provides ...
