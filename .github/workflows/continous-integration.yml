@@ -23,6 +23,8 @@ jobs:
     name: QA Checks
     needs: [matrix]
     runs-on: ${{ matrix.operatingSystem }}
+    env:
+      TESTS_LAMINAS_CACHE_REDIS_HOST: redis
     services:
       redis:
         image: redis
