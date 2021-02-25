@@ -23,13 +23,11 @@ jobs:
     name: QA Checks
     needs: [matrix]
     runs-on: ${{ matrix.operatingSystem }}
-    env:
-      TESTS_LAMINAS_CACHE_REDIS_HOST: redis
     services:
       redis:
         image: redis
         ports:
-          - 6379/tcp
+          - 6379:6379
         options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
     strategy:
       fail-fast: false
