@@ -10,7 +10,8 @@
     "php": "^7.3"
   },
   "conflict": {
-    "laminas/laminas-cache": "<2.10"
+    "laminas/laminas-cache": "<2.10",
+    "phpunit/phpunit": "<6.1.0"
   },
   "provide": {
     "laminas/laminas-cache-storage-implementation": "1.0"

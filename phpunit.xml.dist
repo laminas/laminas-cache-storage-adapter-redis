@@ -2,10 +2,15 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
-         colors="true">
+         colors="true"
+         defaultTestSuite="unit"
+>
     <testsuites>
-        <testsuite name="Laminas cache-storage-adapter-redis Tests">
-            <directory>./test</directory>
+        <testsuite name="unit">
+            <directory>./test/unit</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory>./test/unit</directory>
         </testsuite>
     </testsuites>
 
