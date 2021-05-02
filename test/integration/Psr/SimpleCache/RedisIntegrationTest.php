@@ -9,24 +9,26 @@
 namespace LaminasTest\Cache\Psr\SimpleCache;
 
 use Cache\IntegrationTests\SimpleCacheTest;
-use Laminas\Cache\Exception;
 use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
 use Laminas\Cache\Storage\Adapter\Redis;
 use Laminas\Cache\Storage\Plugin\Serializer;
 use Laminas\Cache\StorageFactory;
-use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Psr\SimpleCache\CacheInterface;
+
+use function date_default_timezone_get;
+use function date_default_timezone_set;
+use function getenv;
 
 class RedisIntegrationTest extends SimpleCacheTest
 {
     /**
      * Backup default timezone
+     *
      * @var string
      */
     private $tz;
 
-    /**
-     * @var Redis
-     */
+    /** @var Redis */
     private $storage;
 
     protected function setUp(): void
@@ -49,9 +51,9 @@ class RedisIntegrationTest extends SimpleCacheTest
         parent::tearDown();
     }
 
-    public function createSimpleCache()
+    public function createSimpleCache(): CacheInterface
     {
-        $options = ['resource_id' => __CLASS__];
+        $options = ['resource_id' => self::class];
 
         if (getenv('TESTS_LAMINAS_CACHE_REDIS_HOST') && getenv('TESTS_LAMINAS_CACHE_REDIS_PORT')) {
             $options['server'] = [getenv('TESTS_LAMINAS_CACHE_REDIS_HOST'), getenv('TESTS_LAMINAS_CACHE_REDIS_PORT')];

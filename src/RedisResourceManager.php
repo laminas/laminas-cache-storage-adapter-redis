@@ -14,6 +14,18 @@ use Redis as RedisResource;
 use ReflectionClass;
 use Traversable;
 
+use function array_merge;
+use function constant;
+use function defined;
+use function is_array;
+use function is_string;
+use function method_exists;
+use function parse_url;
+use function str_replace;
+use function strpos;
+use function strtoupper;
+use function trim;
+
 /**
  * This is a resource manager for redis
  */
@@ -93,7 +105,7 @@ class RedisResourceManager
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
-        $resource = & $this->resources[$id];
+        $resource = &$this->resources[$id];
         return $resource['database'];
     }
 
@@ -109,7 +121,7 @@ class RedisResourceManager
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
-        $resource = & $this->resources[$id];
+        $resource = &$this->resources[$id];
         return $resource['password'];
     }
 
@@ -126,7 +138,7 @@ class RedisResourceManager
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
-        $resource = & $this->resources[$id];
+        $resource = &$this->resources[$id];
         if ($resource['resource'] instanceof RedisResource) {
             //in case new server was set then connect
             if (! $resource['initialized']) {
@@ -134,7 +146,7 @@ class RedisResourceManager
             }
 
             if (! $resource['version']) {
-                $info = $resource['resource']->info();
+                $info                = $resource['resource']->info();
                 $resource['version'] = $info['redis_version'];
             }
 
@@ -152,14 +164,15 @@ class RedisResourceManager
             $redis->setOption($k, $v);
         }
 
-        $info = $redis->info();
-        $resource['version'] = $info['redis_version'];
+        $info                             = $redis->info();
+        $resource['version']              = $info['redis_version'];
         $this->resources[$id]['resource'] = $redis;
         return $redis;
     }
 
     /**
      * Get server
+     *
      * @param string $id
      * @throws Exception\RuntimeException
      * @return array array('host' => <host>[, 'port' => <port>[, 'timeout' => <timeout>]])
@@ -170,7 +183,7 @@ class RedisResourceManager
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
-        $resource = & $this->resources[$id];
+        $resource = &$this->resources[$id];
         return $resource['server'];
     }
 
@@ -179,7 +192,6 @@ class RedisResourceManager
      * array('host' => <host>[, 'port' => <port>[, 'timeout' => <timeout>]])
      *
      * @param string|array $server
-     *
      * @throws Exception\InvalidArgumentException
      */
     protected function normalizeServer(&$server)
@@ -241,7 +253,6 @@ class RedisResourceManager
      *
      * @param mixed $resource
      * @param mixed $serverUri
-     *
      * @return string|null
      */
     protected function extractPassword($resource, $serverUri)
@@ -264,19 +275,17 @@ class RedisResourceManager
         //non unix domain socket connection
         $server = parse_url($server);
 
-        return isset($server['pass']) ? $server['pass'] : null;
+        return $server['pass'] ?? null;
     }
 
     /**
      * Connects to redis server
      *
-     *
-     * @param array & $resource
-     *
-     * @return null
+     * @param array $resource
+     * @return void
      * @throws Exception\RuntimeException
      */
-    protected function connect(array & $resource)
+    protected function connect(array &$resource)
     {
         $server = $resource['server'];
         $redis  = $resource['resource'];
@@ -389,11 +398,11 @@ class RedisResourceManager
     {
         if (! $this->hasResource($id)) {
             return $this->setResource($id, [
-                'persistent_id' => $persistentId
+                'persistent_id' => $persistentId,
             ]);
         }
 
-        $resource = & $this->resources[$id];
+        $resource = &$this->resources[$id];
         if ($resource['resource'] instanceof RedisResource && $resource['initialized']) {
             throw new Exception\RuntimeException(
                 "Can't change persistent id of resource {$id} after initialization"
@@ -419,7 +428,7 @@ class RedisResourceManager
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
-        $resource = & $this->resources[$id];
+        $resource = &$this->resources[$id];
 
         return $resource['persistent_id'];
     }
@@ -429,7 +438,7 @@ class RedisResourceManager
      *
      * @param string $persistentId
      */
-    protected function normalizePersistentId(& $persistentId)
+    protected function normalizePersistentId(&$persistentId)
     {
         $persistentId = (string) $persistentId;
     }
@@ -445,11 +454,11 @@ class RedisResourceManager
     {
         if (! $this->hasResource($id)) {
             return $this->setResource($id, [
-                'lib_options' => $libOptions
+                'lib_options' => $libOptions,
             ]);
         }
 
-        $resource = & $this->resources[$id];
+        $resource = &$this->resources[$id];
 
         $resource['lib_options'] = $libOptions;
 
@@ -458,7 +467,7 @@ class RedisResourceManager
         }
 
         $this->normalizeLibOptions($libOptions);
-        $redis = & $resource['resource'];
+        $redis = &$resource['resource'];
 
         if (method_exists($redis, 'setOptions')) {
             $redis->setOptions($libOptions);
@@ -484,7 +493,7 @@ class RedisResourceManager
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
-        $resource = & $this->resources[$id];
+        $resource = &$this->resources[$id];
 
         if ($resource['resource'] instanceof RedisResource) {
             $libOptions = [];
@@ -528,13 +537,13 @@ class RedisResourceManager
         }
 
         $this->normalizeLibOptionKey($key);
-        $resource   = & $this->resources[$id];
+        $resource = &$this->resources[$id];
 
         if ($resource['resource'] instanceof RedisResource) {
             return $resource['resource']->getOption($key);
         }
 
-        return isset($resource['lib_options'][$key]) ? $resource['lib_options'][$key] : null;
+        return $resource['lib_options'][$key] ?? null;
     }
 
     /**
@@ -543,9 +552,9 @@ class RedisResourceManager
      * @param array|Traversable $libOptions
      * @throws Exception\InvalidArgumentException
      */
-    protected function normalizeLibOptions(& $libOptions)
+    protected function normalizeLibOptions(&$libOptions)
     {
-        if (! is_array($libOptions) && ! ($libOptions instanceof Traversable)) {
+        if (! is_array($libOptions) && ! $libOptions instanceof Traversable) {
             throw new Exception\InvalidArgumentException(
                 "Lib-Options must be an array or an instance of Traversable"
             );
@@ -566,7 +575,7 @@ class RedisResourceManager
      * @param string|int $key
      * @throws Exception\InvalidArgumentException
      */
-    protected function normalizeLibOptionKey(& $key)
+    protected function normalizeLibOptionKey(&$key)
     {
         // convert option name into it's constant value
         if (is_string($key)) {
@@ -596,13 +605,13 @@ class RedisResourceManager
     {
         if (! $this->hasResource($id)) {
             return $this->setResource($id, [
-                'server' => $server
+                'server' => $server,
             ]);
         }
 
         $this->normalizeServer($server);
 
-        $resource             = & $this->resources[$id];
+        $resource             = &$this->resources[$id];
         $resource['password'] = $this->extractPassword($resource, $server);
 
         if ($resource['resource'] instanceof RedisResource) {
@@ -635,7 +644,7 @@ class RedisResourceManager
             ]);
         }
 
-        $resource = & $this->resources[$id];
+        $resource                = &$this->resources[$id];
         $resource['password']    = $password;
         $resource['initialized'] = false;
         return $this;
@@ -658,7 +667,7 @@ class RedisResourceManager
             ]);
         }
 
-        $resource = & $this->resources[$id];
+        $resource = &$this->resources[$id];
         if ($resource['resource'] instanceof RedisResource && $resource['initialized']) {
             $resource['resource']->select($database);
         }
