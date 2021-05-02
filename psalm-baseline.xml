@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="4.7.2@83a0325c0a95c0ab531d6b90c877068b464377b5">
+  <file src="src/Redis.php">
+    <InvalidScalarArgument occurrences="18">
+      <code>$e-&gt;getCode()</code>
+      <code>$e-&gt;getCode()</code>
+      <code>$e-&gt;getCode()</code>
+      <code>$e-&gt;getCode()</code>
+      <code>$e-&gt;getCode()</code>
+      <code>$e-&gt;getCode()</code>
+      <code>$e-&gt;getCode()</code>
+      <code>$e-&gt;getCode()</code>
+      <code>$e-&gt;getCode()</code>
+      <code>$e-&gt;getCode()</code>
+      <code>$e-&gt;getCode()</code>
+      <code>$e-&gt;getCode()</code>
+      <code>$e-&gt;getCode()</code>
+      <code>$redisVersion</code>
+      <code>$ttl</code>
+      <code>$ttl</code>
+      <code>$ttl</code>
+      <code>$ttl</code>
+    </InvalidScalarArgument>
+    <InvalidThrow occurrences="1">
+      <code>Exception\ExceptionInterface</code>
+    </InvalidThrow>
+    <LessSpecificReturnStatement occurrences="1">
+      <code>parent::setOptions($options)</code>
+    </LessSpecificReturnStatement>
+    <MissingClosureParamType occurrences="1">
+      <code>$value</code>
+    </MissingClosureParamType>
+    <MixedArgument occurrences="4">
+      <code>$this-&gt;preSerialize($value)</code>
+      <code>$this-&gt;preSerialize($value)</code>
+      <code>$this-&gt;preSerialize($value)</code>
+      <code>$value</code>
+    </MixedArgument>
+    <MixedArgumentTypeCoercion occurrences="1">
+      <code>$normalizedKeys</code>
+    </MixedArgumentTypeCoercion>
+    <MixedAssignment occurrences="6">
+      <code>$namespacedKeyValuePairs[$this-&gt;namespacePrefix . $normalizedKey]</code>
+      <code>$normalizedKey</code>
+      <code>$serializer</code>
+      <code>$serializer</code>
+      <code>$value</code>
+      <code>$value</code>
+    </MixedAssignment>
+    <MixedInferredReturnType occurrences="2">
+      <code>RedisOptions</code>
+      <code>int|float</code>
+    </MixedInferredReturnType>
+    <MixedOperand occurrences="1">
+      <code>$normalizedKey</code>
+    </MixedOperand>
+    <MixedReturnStatement occurrences="2">
+      <code>$info['used_memory']</code>
+      <code>$this-&gt;options</code>
+    </MixedReturnStatement>
+    <MoreSpecificImplementedParamType occurrences="1">
+      <code>$options</code>
+    </MoreSpecificImplementedParamType>
+    <MoreSpecificReturnType occurrences="1">
+      <code>Redis</code>
+    </MoreSpecificReturnType>
+    <PossiblyNullArgument occurrences="16">
+      <code>$redis-&gt;getLastError()</code>
+      <code>$redis-&gt;getLastError()</code>
+      <code>$redis-&gt;getLastError()</code>
+      <code>$redis-&gt;getLastError()</code>
+      <code>$redis-&gt;getLastError()</code>
+      <code>$redis-&gt;getLastError()</code>
+      <code>$redis-&gt;getLastError()</code>
+      <code>$redis-&gt;getLastError()</code>
+      <code>$redis-&gt;getLastError()</code>
+      <code>$redis-&gt;getLastError()</code>
+      <code>$redis-&gt;getLastError()</code>
+      <code>$redis-&gt;getLastError()</code>
+      <code>$redis-&gt;getLastError()</code>
+      <code>$redis-&gt;getLastError()</code>
+      <code>$this-&gt;resourceId</code>
+      <code>$this-&gt;resourceId</code>
+    </PossiblyNullArgument>
+    <PossiblyNullReference occurrences="2">
+      <code>getResource</code>
+      <code>getVersion</code>
+    </PossiblyNullReference>
+    <PropertyNotSetInConstructor occurrences="1">
+      <code>Redis</code>
+    </PropertyNotSetInConstructor>
+    <RedundantCast occurrences="1">
+      <code>(bool) $redis-&gt;expire($this-&gt;namespacePrefix . $normalizedKey, $ttl)</code>
+    </RedundantCast>
+    <RedundantCastGivenDocblockType occurrences="2">
+      <code>(string) $namespace</code>
+      <code>(string) $prefix</code>
+    </RedundantCastGivenDocblockType>
+  </file>
+  <file src="src/RedisOptions.php">
+    <InvalidReturnStatement occurrences="1">
+      <code>$this-&gt;getResourceManager()-&gt;getDatabase($this-&gt;getResourceId())</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType occurrences="1">
+      <code>int</code>
+    </InvalidReturnType>
+    <LessSpecificReturnStatement occurrences="1">
+      <code>parent::setNamespace($namespace)</code>
+    </LessSpecificReturnStatement>
+    <MoreSpecificReturnType occurrences="1">
+      <code>RedisOptions</code>
+    </MoreSpecificReturnType>
+    <RedundantCastGivenDocblockType occurrences="3">
+      <code>(string) $namespace</code>
+      <code>(string) $namespaceSeparator</code>
+      <code>(string) $resourceId</code>
+    </RedundantCastGivenDocblockType>
+  </file>
+  <file src="src/RedisResourceManager.php">
+    <ArgumentTypeCoercion occurrences="1">
+      <code>'Redis'</code>
+    </ArgumentTypeCoercion>
+    <DocblockTypeContradiction occurrences="3">
+      <code>! is_array($libOptions) &amp;&amp; ! $libOptions instanceof Traversable</code>
+      <code>$server instanceof Traversable</code>
+      <code>is_array($resource)</code>
+    </DocblockTypeContradiction>
+    <InvalidReturnStatement occurrences="2">
+      <code>$this</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType occurrences="1">
+      <code>RedisResource</code>
+    </InvalidReturnType>
+    <MissingReturnType occurrences="4">
+      <code>normalizeLibOptionKey</code>
+      <code>normalizeLibOptions</code>
+      <code>normalizePersistentId</code>
+      <code>normalizeServer</code>
+    </MissingReturnType>
+    <MixedArgument occurrences="9">
+      <code>$k</code>
+      <code>$key</code>
+      <code>$redis</code>
+      <code>$resource</code>
+      <code>$resource</code>
+      <code>$resource['lib_options']</code>
+      <code>$resource['persistent_id']</code>
+      <code>$resource['server']</code>
+      <code>$server</code>
+    </MixedArgument>
+    <MixedArrayAccess occurrences="37">
+      <code>$info['redis_version']</code>
+      <code>$resource['database']</code>
+      <code>$resource['initialized']</code>
+      <code>$resource['initialized']</code>
+      <code>$resource['initialized']</code>
+      <code>$resource['lib_options']</code>
+      <code>$resource['lib_options']</code>
+      <code>$resource['password']</code>
+      <code>$resource['password']</code>
+      <code>$resource['persistent_id']</code>
+      <code>$resource['resource']</code>
+      <code>$resource['resource']</code>
+      <code>$resource['resource']</code>
+      <code>$resource['resource']</code>
+      <code>$resource['resource']</code>
+      <code>$resource['resource']</code>
+      <code>$resource['resource']</code>
+      <code>$resource['resource']</code>
+      <code>$resource['resource']</code>
+      <code>$resource['resource']</code>
+      <code>$resource['resource']</code>
+      <code>$resource['resource']</code>
+      <code>$resource['server']</code>
+      <code>$resource['version']</code>
+      <code>$server['host']</code>
+      <code>$server['host']</code>
+      <code>$server['host']</code>
+      <code>$server['host']</code>
+      <code>$server['port']</code>
+      <code>$server['port']</code>
+      <code>$server['port']</code>
+      <code>$server['timeout']</code>
+      <code>$server['timeout']</code>
+      <code>$server['timeout']</code>
+      <code>$server['timeout']</code>
+      <code>$this-&gt;resources[$resourceId]['version']</code>
+      <code>$this-&gt;resources[$resourceId]['version']</code>
+    </MixedArrayAccess>
+    <MixedArrayAssignment occurrences="10">
+      <code>$resource['database']</code>
+      <code>$resource['initialized']</code>
+      <code>$resource['lib_options']</code>
+      <code>$resource['password']</code>
+      <code>$resource['password']</code>
+      <code>$resource['persistent_id']</code>
+      <code>$resource['resource']</code>
+      <code>$resource['server']</code>
+      <code>$resource['version']</code>
+      <code>$this-&gt;resources[$id]['resource']</code>
+    </MixedArrayAssignment>
+    <MixedArrayOffset occurrences="1">
+      <code>$libOptions[$constValue]</code>
+    </MixedArrayOffset>
+    <MixedAssignment occurrences="31">
+      <code>$constValue</code>
+      <code>$info</code>
+      <code>$k</code>
+      <code>$key</code>
+      <code>$key</code>
+      <code>$libOptions[$constValue]</code>
+      <code>$redis</code>
+      <code>$redis</code>
+      <code>$resource</code>
+      <code>$resource</code>
+      <code>$resource</code>
+      <code>$resource</code>
+      <code>$resource</code>
+      <code>$resource</code>
+      <code>$resource</code>
+      <code>$resource</code>
+      <code>$resource</code>
+      <code>$resource</code>
+      <code>$resource</code>
+      <code>$resource</code>
+      <code>$resource['version']</code>
+      <code>$resource['version']</code>
+      <code>$result[$key]</code>
+      <code>$server</code>
+      <code>$success</code>
+      <code>$success</code>
+      <code>$success</code>
+      <code>$success</code>
+      <code>$v</code>
+      <code>$value</code>
+      <code>$value</code>
+    </MixedAssignment>
+    <MixedInferredReturnType occurrences="8">
+      <code>RedisResource</code>
+      <code>array</code>
+      <code>array</code>
+      <code>string</code>
+      <code>string</code>
+      <code>string</code>
+      <code>string</code>
+      <code>string|null</code>
+    </MixedInferredReturnType>
+    <MixedMethodCall occurrences="10">
+      <code>auth</code>
+      <code>connect</code>
+      <code>connect</code>
+      <code>connect</code>
+      <code>getOption</code>
+      <code>getOption</code>
+      <code>info</code>
+      <code>pconnect</code>
+      <code>select</code>
+      <code>setOption</code>
+    </MixedMethodCall>
+    <MixedReturnStatement occurrences="8">
+      <code>$resource['database']</code>
+      <code>$resource['lib_options']</code>
+      <code>$resource['password']</code>
+      <code>$resource['password']</code>
+      <code>$resource['persistent_id']</code>
+      <code>$resource['resource']</code>
+      <code>$resource['server']</code>
+      <code>$this-&gt;resources[$resourceId]['version']</code>
+    </MixedReturnStatement>
+    <PossiblyUndefinedArrayOffset occurrences="1">
+      <code>$server['host']</code>
+    </PossiblyUndefinedArrayOffset>
+    <RedundantCast occurrences="1">
+      <code>(int) $server['port']</code>
+    </RedundantCast>
+    <RedundantCastGivenDocblockType occurrences="4">
+      <code>(int) $database</code>
+      <code>(int) $key</code>
+      <code>(string) $id</code>
+      <code>(string) $persistentId</code>
+    </RedundantCastGivenDocblockType>
+    <UnusedVariable occurrences="1">
+      <code>$info</code>
+    </UnusedVariable>
+  </file>
+  <file src="test/integration/Psr/CacheItemPool/RedisIntegrationTest.php">
+    <MixedArrayAssignment occurrences="1">
+      <code>$this-&gt;skippedTests['testHasItemReturnsFalseWhenDeferredItemIsExpired']</code>
+    </MixedArrayAssignment>
+    <RedundantConditionGivenDocblockType occurrences="1">
+      <code>$this-&gt;storage</code>
+    </RedundantConditionGivenDocblockType>
+    <UndefinedInterfaceMethod occurrences="1">
+      <code>addPlugin</code>
+    </UndefinedInterfaceMethod>
+  </file>
+  <file src="test/integration/Psr/SimpleCache/RedisIntegrationTest.php">
+    <RedundantConditionGivenDocblockType occurrences="1">
+      <code>$this-&gt;storage</code>
+    </RedundantConditionGivenDocblockType>
+    <UndefinedInterfaceMethod occurrences="1">
+      <code>addPlugin</code>
+    </UndefinedInterfaceMethod>
+  </file>
+  <file src="test/unit/RedisResourceManagerTest.php">
+    <ArgumentTypeCoercion occurrences="2">
+      <code>'Redis'</code>
+      <code>'Redis'</code>
+    </ArgumentTypeCoercion>
+    <MissingReturnType occurrences="7">
+      <code>testGetMajorVersion</code>
+      <code>testGetVersion</code>
+      <code>testNotValidPersistentIdOptionName</code>
+      <code>testSetServerWithPasswordInParameters</code>
+      <code>testSetServerWithPasswordInUri</code>
+      <code>testSetServerWithPasswordInUriShouldNotOverridePreviousResource</code>
+      <code>testValidPersistentId</code>
+    </MissingReturnType>
+  </file>
+  <file src="test/unit/RedisTest.php">
+    <MissingReturnType occurrences="23">
+      <code>testGetCapabilitiesTtl</code>
+      <code>testGetSetDatabase</code>
+      <code>testGetSetLibOptionsOnExistingRedisResourceInstance</code>
+      <code>testGetSetLibOptionsWithCleanRedisResourceInstance</code>
+      <code>testGetSetNamespace</code>
+      <code>testGetSetNamespaceSeparator</code>
+      <code>testGetSetPassword</code>
+      <code>testGetSetPersistentId</code>
+      <code>testGetSetResourceId</code>
+      <code>testGetSetResourceManager</code>
+      <code>testGetSetServer</code>
+      <code>testHasItemReturnsFalseIfRedisExistsReturnsZero</code>
+      <code>testHasItemReturnsTrueIfRedisExistsReturnsNonZeroInt</code>
+      <code>testLibOptionsFirst</code>
+      <code>testOptionsGetSetDatabase</code>
+      <code>testOptionsGetSetLibOptions</code>
+      <code>testOptionsGetSetPassword</code>
+      <code>testRedisSerializer</code>
+      <code>testRedisSetBoolean</code>
+      <code>testRedisSetDouble</code>
+      <code>testRedisSetInt</code>
+      <code>testRedisSetNull</code>
+      <code>testSocketConnection</code>
+    </MissingReturnType>
+    <MixedArgument occurrences="2">
+      <code>$this-&gt;storage-&gt;getItem('key')</code>
+      <code>$this-&gt;storage-&gt;getMetadata($key)['ttl']</code>
+    </MixedArgument>
+    <NonInvariantDocblockPropertyType occurrences="2">
+      <code>$options</code>
+      <code>$storage</code>
+    </NonInvariantDocblockPropertyType>
+    <PossiblyInvalidArrayAccess occurrences="2">
+      <code>$this-&gt;storage-&gt;getMetadata($key)['ttl']</code>
+      <code>$this-&gt;storage-&gt;getMetadata($key)['ttl']</code>
+    </PossiblyInvalidArrayAccess>
+    <PossiblyNullPropertyAssignmentValue occurrences="2">
+      <code>null</code>
+      <code>null</code>
+    </PossiblyNullPropertyAssignmentValue>
+    <RedundantConditionGivenDocblockType occurrences="1">
+      <code>$this-&gt;storage</code>
+    </RedundantConditionGivenDocblockType>
+    <UndefinedPropertyAssignment occurrences="1">
+      <code>$redis-&gt;socket</code>
+    </UndefinedPropertyAssignment>
+  </file>
+</files>

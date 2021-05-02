@@ -21,12 +21,13 @@
     "laminas/laminas-cache": "^2.10",
     "laminas/laminas-cache-storage-adapter-test": "^1.1",
     "laminas/laminas-coding-standard": "^2.1",
-    "laminas/laminas-serializer": "^2.10"
+    "laminas/laminas-serializer": "^2.10",
+    "psalm/plugin-phpunit": "^0.15.1",
+    "vimeo/psalm": "^4.7"
   },
   "config": {
     "sort-packages": true
   },
-  "extra": {},
   "autoload": {
     "psr-4": {
       "Laminas\\Cache\\Storage\\Adapter\\": "src/"
@@ -42,7 +43,8 @@
     "cs-check": "phpcs",
     "cs-fix": "phpcbf",
     "test": "phpunit --colors=always",
-    "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
+    "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+    "static-analysis": "psalm --shepherd --stats"
   },
   "support": {
     "issues": "https://github.com/laminas/laminas-cache-storage-adapter-redis/issues",
