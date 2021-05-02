@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-         bootstrap="vendor/autoload.php"
-         colors="true">
-    <testsuites>
-        <testsuite name="Laminas cache-storage-adapter-redis Tests">
-            <directory>./test</directory>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
-    <php>
-        <env name="TESTS_LAMINAS_CACHE_REDIS_HOST" value="127.0.0.1" />
-        <env name="TESTS_LAMINAS_CACHE_REDIS_PORT" value="6379" />
-        <env name="TESTS_LAMINAS_CACHE_REDIS_PASSWORD" value="" />
-        <env name="TESTS_LAMINAS_CACHE_REDIS_DATABASE" value="0" />
-    </php>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" bootstrap="vendor/autoload.php" colors="true" defaultTestSuite="unit">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+  </coverage>
+  <testsuites>
+    <testsuite name="unit">
+      <directory>./test/unit</directory>
+    </testsuite>
+    <testsuite name="integration">
+      <directory>./test/unit</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <env name="TESTS_LAMINAS_CACHE_REDIS_HOST" value="127.0.0.1"/>
+    <env name="TESTS_LAMINAS_CACHE_REDIS_PORT" value="6379"/>
+    <env name="TESTS_LAMINAS_CACHE_REDIS_PASSWORD" value=""/>
+    <env name="TESTS_LAMINAS_CACHE_REDIS_DATABASE" value="0"/>
+  </php>
 </phpunit>

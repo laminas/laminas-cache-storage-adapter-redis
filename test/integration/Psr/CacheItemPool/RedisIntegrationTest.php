@@ -29,7 +29,7 @@ class RedisIntegrationTest extends CachePoolTest
      */
     private $storage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // set non-UTC timezone
         $this->tz = date_default_timezone_get();
@@ -38,7 +38,7 @@ class RedisIntegrationTest extends CachePoolTest
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         date_default_timezone_set($this->tz);
 
@@ -67,24 +67,15 @@ class RedisIntegrationTest extends CachePoolTest
             $options['password'] = getenv('TESTS_LAMINAS_CACHE_REDIS_PASSWORD');
         }
 
-        try {
-            $storage = StorageFactory::adapterFactory('redis', $options);
-            $storage->addPlugin(new Serializer());
+        $storage = StorageFactory::adapterFactory('redis', $options);
+        $storage->addPlugin(new Serializer());
 
-            $deferredSkippedMessage = sprintf(
-                '%s storage doesn\'t support driver deferred',
-                \get_class($storage)
-            );
-            $this->skippedTests['testHasItemReturnsFalseWhenDeferredItemIsExpired'] = $deferredSkippedMessage;
+        $deferredSkippedMessage = sprintf(
+            '%s storage doesn\'t support driver deferred',
+            \get_class($storage)
+        );
+        $this->skippedTests['testHasItemReturnsFalseWhenDeferredItemIsExpired'] = $deferredSkippedMessage;
 
-            return new CacheItemPoolDecorator($storage);
-        } catch (Exception\ExtensionNotLoadedException $e) {
-            $this->markTestSkipped($e->getMessage());
-        } catch (ServiceNotCreatedException $e) {
-            if ($e->getPrevious() instanceof Exception\ExtensionNotLoadedException) {
-                $this->markTestSkipped($e->getMessage());
-            }
-            throw $e;
-        }
+        return new CacheItemPoolDecorator($storage);
     }
 }

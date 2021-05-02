@@ -28,7 +28,7 @@ class RedisResourceManagerTest extends TestCase
      */
     protected $resourceManager;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->resourceManager = new RedisResourceManager();
     }
@@ -102,10 +102,6 @@ class RedisResourceManagerTest extends TestCase
      */
     public function testValidPersistentId()
     {
-        if (! extension_loaded('redis')) {
-            $this->markTestSkipped("Redis extension is not loaded");
-        }
-
         $resourceId = 'testValidPersistentId';
         $resource   = [
             'persistent_id' => 'my_connection_name',
@@ -125,14 +121,6 @@ class RedisResourceManagerTest extends TestCase
      */
     public function testNotValidPersistentIdOptionName()
     {
-        if (getenv('TESTS_LAMINAS_CACHE_REDIS_ENABLED') != 'true') {
-            $this->markTestSkipped('Enable TESTS_LAMINAS_CACHE_REDIS_ENABLED to run this test');
-        }
-
-        if (! extension_loaded('redis')) {
-            $this->markTestSkipped("Redis extension is not loaded");
-        }
-
         $resourceId = 'testNotValidPersistentId';
         $resource   = [
             'persistend_id' => 'my_connection_name',
@@ -151,14 +139,6 @@ class RedisResourceManagerTest extends TestCase
 
     public function testGetVersion()
     {
-        if (getenv('TESTS_LAMINAS_CACHE_REDIS_ENABLED') != 'true') {
-            $this->markTestSkipped('Enable TESTS_LAMINAS_CACHE_REDIS_ENABLED to run this test');
-        }
-
-        if (! extension_loaded('redis')) {
-            $this->markTestSkipped("Redis extension is not loaded");
-        }
-
         $resourceId = __FUNCTION__;
         $resource   = [
             'server' => [
@@ -168,19 +148,11 @@ class RedisResourceManagerTest extends TestCase
         ];
         $this->resourceManager->setResource($resourceId, $resource);
 
-        $this->assertRegExp('/^\d+\.\d+\.\d+/', $this->resourceManager->getVersion($resourceId));
+        $this->assertMatchesRegularExpression('/^\d+\.\d+\.\d+/', $this->resourceManager->getVersion($resourceId));
     }
 
     public function testGetMajorVersion()
     {
-        if (getenv('TESTS_LAMINAS_CACHE_REDIS_ENABLED') != 'true') {
-            $this->markTestSkipped('Enable TESTS_LAMINAS_CACHE_REDIS_ENABLED to run this test');
-        }
-
-        if (! extension_loaded('redis')) {
-            $this->markTestSkipped("Redis extension is not loaded");
-        }
-
         $resourceId = __FUNCTION__;
         $resource   = [
             'server' => [

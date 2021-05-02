@@ -29,7 +29,7 @@ class RedisIntegrationTest extends SimpleCacheTest
      */
     private $storage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // set non-UTC timezone
         $this->tz = date_default_timezone_get();
@@ -38,7 +38,7 @@ class RedisIntegrationTest extends SimpleCacheTest
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         date_default_timezone_set($this->tz);
 
@@ -67,17 +67,8 @@ class RedisIntegrationTest extends SimpleCacheTest
             $options['password'] = getenv('TESTS_LAMINAS_CACHE_REDIS_PASSWORD');
         }
 
-        try {
-            $storage = StorageFactory::adapterFactory('redis', $options);
-            $storage->addPlugin(new Serializer());
-            return new SimpleCacheDecorator($storage);
-        } catch (Exception\ExtensionNotLoadedException $e) {
-            $this->markTestSkipped($e->getMessage());
-        } catch (ServiceNotCreatedException $e) {
-            if ($e->getPrevious() instanceof Exception\ExtensionNotLoadedException) {
-                $this->markTestSkipped($e->getMessage());
-            }
-            throw $e;
-        }
+        $storage = StorageFactory::adapterFactory('redis', $options);
+        $storage->addPlugin(new Serializer());
+        return new SimpleCacheDecorator($storage);
     }
 }

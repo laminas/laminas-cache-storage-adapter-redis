@@ -1,9 +1,8 @@
 # laminas-cache-storage-adapter-redis
 
-[![Build Status](https://travis-ci.com/laminas/laminas-cache-storage-adapter-redis.svg?branch=master)](https://travis-ci.com/laminas/laminas-cache-storage-adapter-redis)
-[![Coverage Status](https://coveralls.io/repos/github/laminas/laminas-cache-storage-adapter-redis/badge.svg?branch=master)](https://coveralls.io/github/laminas/laminas-cache-storage-adapter-redis?branch=master)
+[![Build Status](https://github.com/laminas/laminas-cache-storage-adapter-redis/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/laminas/laminas-cache-storage-adapter-redis/actions/workflows/continuous-integration.yml)
 
-This library provides …
+This library provides a `laminas-cache` compatible `StorageInterface` implementation for Redis.
 
 ## Installation
 
