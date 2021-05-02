@@ -12,6 +12,7 @@ use Laminas\Cache;
 use Laminas\Cache\Storage\Adapter\Redis;
 use Laminas\Cache\Storage\Adapter\RedisOptions;
 use Laminas\Cache\Storage\Adapter\RedisResourceManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use Redis as RedisResource;
 use Throwable;
 
@@ -398,7 +399,7 @@ final class RedisTest extends AbstractCommonAdapterTest
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|RedisResource
+     * @return MockObject&RedisResource
      */
     private function mockInitializedRedisResource()
     {
