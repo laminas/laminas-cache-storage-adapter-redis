@@ -11,6 +11,8 @@ namespace LaminasTest\Cache\Storage\Adapter;
 use Laminas\Cache\Storage\Adapter\RedisResourceManager;
 use PHPUnit\Framework\TestCase;
 
+use function getenv;
+
 /**
  * PHPUnit test case
  */
@@ -60,7 +62,7 @@ class RedisResourceManagerTest extends TestCase
         $resource    = [
             'persistent_id' => 'my_connection_name',
             'server'        => $server,
-            'password'      => 'abcd1234'
+            'password'      => 'abcd1234',
         ];
 
         $this->resourceManager->setResource($dummyResId2, $resource);
@@ -83,7 +85,7 @@ class RedisResourceManagerTest extends TestCase
         $resource    = [
             'persistent_id' => 'my_connection_name',
             'server'        => $server,
-            'password'      => 'abcd1234'
+            'password'      => 'abcd1234',
         ];
 
         $this->resourceManager->setResource($dummyResId2, $resource);
@@ -102,10 +104,10 @@ class RedisResourceManagerTest extends TestCase
      */
     public function testValidPersistentId()
     {
-        $resourceId = 'testValidPersistentId';
-        $resource   = [
+        $resourceId           = 'testValidPersistentId';
+        $resource             = [
             'persistent_id' => 'my_connection_name',
-            'server' => [
+            'server'        => [
                 'host' => getenv('TESTS_LAMINAS_CACHE_REDIS_HOST') ?: 'localhost',
                 'port' => getenv('TESTS_LAMINAS_CACHE_REDIS_PORT') ?: 6379,
             ],
@@ -121,10 +123,10 @@ class RedisResourceManagerTest extends TestCase
      */
     public function testNotValidPersistentIdOptionName()
     {
-        $resourceId = 'testNotValidPersistentId';
-        $resource   = [
+        $resourceId           = 'testNotValidPersistentId';
+        $resource             = [
             'persistend_id' => 'my_connection_name',
-            'server' => [
+            'server'        => [
                 'host' => getenv('TESTS_LAMINAS_CACHE_REDIS_HOST') ?: 'localhost',
                 'port' => getenv('TESTS_LAMINAS_CACHE_REDIS_PORT') ?: 6379,
             ],

@@ -10,6 +10,9 @@ namespace Laminas\Cache\Storage\Adapter;
 
 use Laminas\Cache\Exception;
 
+use function sprintf;
+use function strlen;
+
 class RedisOptions extends AdapterOptions
 {
     // @codingStandardsIgnoreStart
@@ -24,6 +27,7 @@ class RedisOptions extends AdapterOptions
 
     /**
      * The namespace separator
+     *
      * @var string
      */
     protected $namespaceSeparator = ':';
@@ -48,11 +52,11 @@ class RedisOptions extends AdapterOptions
      * The option Redis::OPT_PREFIX will be used as the namespace.
      * It can't be longer than 128 characters.
      *
-     * @param string $namespace Prefix for each key stored in redis
-     * @return \Laminas\Cache\Storage\Adapter\RedisOptions
-     *
      * @see AdapterOptions::setNamespace()
      * @see RedisOptions::setPrefixKey()
+     *
+     * @param string $namespace Prefix for each key stored in redis
+     * @return RedisOptions
      */
     public function setNamespace($namespace)
     {
@@ -97,10 +101,9 @@ class RedisOptions extends AdapterOptions
     /**
      * Set the redis resource manager to use
      *
-     * @param null|RedisResourceManager $resourceManager
      * @return RedisOptions Provides a fluent interface
      */
-    public function setResourceManager(RedisResourceManager $resourceManager = null)
+    public function setResourceManager(?RedisResourceManager $resourceManager = null)
     {
         if ($this->resourceManager !== $resourceManager) {
             $this->triggerOptionEvent('resource_manager', $resourceManager);
@@ -172,12 +175,13 @@ class RedisOptions extends AdapterOptions
     }
 
      /**
-    * Set redis options
-    *
-    * @param array $libOptions
-    * @return RedisOptions Provides a fluent interface
-    * @link http://github.com/nicolasff/phpredis#setoption
-    */
+      * Set redis options
+      *
+      * @link http://github.com/nicolasff/phpredis#setoption
+      *
+      * @param array $libOptions
+      * @return RedisOptions Provides a fluent interface
+      */
     public function setLibOptions(array $libOptions)
     {
         $this->triggerOptionEvent('lib_option', $libOptions);
@@ -188,8 +192,9 @@ class RedisOptions extends AdapterOptions
     /**
      * Get redis options
      *
-     * @return array
      * @link http://github.com/nicolasff/phpredis#setoption
+     *
+     * @return array
      */
     public function getLibOptions()
     {
@@ -205,7 +210,6 @@ class RedisOptions extends AdapterOptions
      * - List:  array(<host>[, <port>, [, <timeout>]])
      *
      * @param string|array $server
-     *
      * @return RedisOptions Provides a fluent interface
      */
     public function setServer($server)
@@ -228,7 +232,6 @@ class RedisOptions extends AdapterOptions
      * Set resource database number
      *
      * @param int $database Database number
-     *
      * @return RedisOptions Provides a fluent interface
      */
     public function setDatabase($database)
@@ -251,7 +254,6 @@ class RedisOptions extends AdapterOptions
      * Set resource password
      *
      * @param string $password Password
-     *
      * @return RedisOptions Provides a fluent interface
      */
     public function setPassword($password)

@@ -12,32 +12,29 @@ use Laminas\Cache;
 use Laminas\Cache\Storage\Adapter\Redis;
 use Laminas\Cache\Storage\Adapter\RedisOptions;
 use Laminas\Cache\Storage\Adapter\RedisResourceManager;
+use Laminas\Cache\Storage\Plugin\Serializer;
 use PHPUnit\Framework\MockObject\MockObject;
 use Redis as RedisResource;
 use Throwable;
+
+use function ceil;
+use function count;
+use function getenv;
 
 /**
  * @covers Laminas\Cache\Storage\Adapter\Redis<extended>
  */
 final class RedisTest extends AbstractCommonAdapterTest
 {
-    // @codingStandardsIgnoreStart
-    /**
-     *
-     * @var Cache\Storage\Adapter\RedisOptions
-     */
+    /** @var Cache\Storage\Adapter\RedisOptions */
     protected $options;
 
-    /**
-     *
-     * @var Cache\Storage\Adapter\Redis
-     */
+    /** @var Cache\Storage\Adapter\Redis */
     protected $storage;
-    // @codingStandardsIgnoreEnd
 
     public function setUp(): void
     {
-        $options = ['resource_id' => __CLASS__];
+        $options = ['resource_id' => self::class];
 
         if (getenv('TESTS_LAMINAS_CACHE_REDIS_HOST') && getenv('TESTS_LAMINAS_CACHE_REDIS_PORT')) {
             $options['server'] = [getenv('TESTS_LAMINAS_CACHE_REDIS_HOST'), getenv('TESTS_LAMINAS_CACHE_REDIS_PORT')];
@@ -71,7 +68,7 @@ final class RedisTest extends AbstractCommonAdapterTest
         parent::tearDown();
     }
 
-    public function getCommonAdapterNamesProvider()
+    public function getCommonAdapterNamesProvider(): array
     {
         return [
             ['redis'],
@@ -82,8 +79,8 @@ final class RedisTest extends AbstractCommonAdapterTest
     public function testLibOptionsFirst()
     {
         $options = [
-            'resource_id' => __CLASS__ . '2',
-            'liboptions' => [
+            'resource_id' => self::class . '2',
+            'liboptions'  => [
                 RedisResource::OPT_SERIALIZER => RedisResource::SERIALIZER_PHP,
             ],
         ];
@@ -103,14 +100,14 @@ final class RedisTest extends AbstractCommonAdapterTest
         }
 
         $redisOptions = new Cache\Storage\Adapter\RedisOptions($options);
-        $storage = new Cache\Storage\Adapter\Redis($redisOptions);
+        $storage      = new Cache\Storage\Adapter\Redis($redisOptions);
 
-        $this->assertInstanceOf('Laminas\\Cache\\Storage\\Adapter\\Redis', $storage);
+        $this->assertInstanceOf(Redis::class, $storage);
     }
 
     public function testRedisSerializer()
     {
-        $this->storage->addPlugin(new \Laminas\Cache\Storage\Plugin\Serializer());
+        $this->storage->addPlugin(new Serializer());
         $value = ['test', 'of', 'array'];
         $this->storage->setItem('key', $value);
 
@@ -151,8 +148,8 @@ final class RedisTest extends AbstractCommonAdapterTest
     {
         $resourceManager = $this->options->getResourceManager();
         $resourceId      = $this->options->getResourceId();
-        $redis = $resourceManager->getResource($resourceId);
-        $majorVersion = (int) $redis->info()['redis_version'];
+        $redis           = $resourceManager->getResource($resourceId);
+        $majorVersion    = (int) $redis->info()['redis_version'];
 
         $this->assertEquals($majorVersion, $resourceManager->getMajorVersion($resourceId));
 
@@ -163,8 +160,6 @@ final class RedisTest extends AbstractCommonAdapterTest
             $this->assertEquals(1, $capabilities->getMinTtl(), 'Redis version > 2.0.0 supports key expiration');
         }
     }
-
-    /* ResourceManager */
 
     public function testSocketConnection()
     {
@@ -182,7 +177,7 @@ final class RedisTest extends AbstractCommonAdapterTest
         $this->assertTrue($this->storage->setItem('key', 'val'));
         $this->assertEquals('val', $this->storage->getItem('key'));
 
-        $databaseNumber = 1;
+        $databaseNumber  = 1;
         $resourceManager = $this->options->getResourceManager();
         $resourceManager->setDatabase($this->options->getResourceId(), $databaseNumber);
         $this->assertNull(
@@ -212,8 +207,8 @@ final class RedisTest extends AbstractCommonAdapterTest
         $options = ['serializer' => RedisResource::SERIALIZER_PHP];
         $this->options->setLibOptions($options);
 
-        $value  = ['value'];
-        $key    = 'key';
+        $value = ['value'];
+        $key   = 'key';
         //test if it's still possible to set/get item and if lib serializer works
         $this->storage->setItem($key, $value);
 
@@ -239,8 +234,8 @@ final class RedisTest extends AbstractCommonAdapterTest
         $this->options->setLibOptions($options);
 
         $redis = new Cache\Storage\Adapter\Redis($this->options);
-        $value  = ['value'];
-        $key    = 'key';
+        $value = ['value'];
+        $key   = 'key';
         //test if it's still possible to set/get item and if lib serializer works
         $redis->setItem($key, $value);
         $this->assertEquals(
@@ -248,7 +243,6 @@ final class RedisTest extends AbstractCommonAdapterTest
             $redis->getItem($key),
             'Redis should return an array, lib options were not set correctly'
         );
-
 
         $options = ['serializer' => RedisResource::SERIALIZER_NONE];
         $this->options->setLibOptions($options);
@@ -259,8 +253,6 @@ final class RedisTest extends AbstractCommonAdapterTest
             'Redis should not serialize automatically anymore, lib options were not set correctly'
         );
     }
-
-    /* RedisOptions */
 
     public function testGetSetNamespace()
     {
@@ -278,11 +270,11 @@ final class RedisTest extends AbstractCommonAdapterTest
 
     public function testGetSetResourceManager()
     {
-        $resourceManager = new \Laminas\Cache\Storage\Adapter\RedisResourceManager();
-        $options = new \Laminas\Cache\Storage\Adapter\RedisOptions();
+        $resourceManager = new RedisResourceManager();
+        $options         = new RedisOptions();
         $options->setResourceManager($resourceManager);
         $this->assertInstanceOf(
-            'Laminas\\Cache\\Storage\\Adapter\\RedisResourceManager',
+            RedisResourceManager::class,
             $options->getResourceManager(),
             'Wrong resource manager retuned, it should of type RedisResourceManager'
         );
@@ -293,7 +285,7 @@ final class RedisTest extends AbstractCommonAdapterTest
     public function testGetSetResourceId()
     {
         $resourceId = '1';
-        $options = new \Laminas\Cache\Storage\Adapter\RedisOptions();
+        $options    = new RedisOptions();
         $options->setResourceId($resourceId);
         $this->assertEquals($resourceId, $options->getResourceId(), 'Resource id was not set correctly');
     }
@@ -319,8 +311,8 @@ final class RedisTest extends AbstractCommonAdapterTest
     public function testGetSetServer()
     {
         $server = [
-            'host' => '127.0.0.1',
-            'port' => 6379,
+            'host'    => '127.0.0.1',
+            'port'    => 6379,
             'timeout' => 0,
         ];
         $this->options->setServer($server);
@@ -392,7 +384,7 @@ final class RedisTest extends AbstractCommonAdapterTest
     private function createAdapterFromResource(RedisResource $redis)
     {
         $resourceManager = new RedisResourceManager();
-        $resourceId = 'my-resource';
+        $resourceId      = 'my-resource';
         $resourceManager->setResource($resourceId, $redis);
         $options = new RedisOptions(['resource_manager' => $resourceManager, 'resource_id' => $resourceId]);
         return new Redis($options);
@@ -403,7 +395,7 @@ final class RedisTest extends AbstractCommonAdapterTest
      */
     private function mockInitializedRedisResource()
     {
-        $redis = $this->getMockBuilder(RedisResource::class)->getMock();
+        $redis         = $this->getMockBuilder(RedisResource::class)->getMock();
         $redis->socket = true;
         $redis->method('info')->willReturn(['redis_version' => '0.0.0-unknown']);
         return $redis;
