@@ -17,6 +17,7 @@
     "laminas/laminas-cache-storage-implementation": "1.0"
   },
   "require-dev": {
+    "ext-redis": "*",
     "laminas/laminas-cache": "^2.10",
     "laminas/laminas-cache-storage-adapter-test": "^1.0.2",
     "laminas/laminas-coding-standard": "~1.0.0",
