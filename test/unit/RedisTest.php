@@ -404,6 +404,7 @@ final class RedisTest extends AbstractCommonAdapterTest
     {
         $redis = $this->getMockBuilder(RedisResource::class)->getMock();
         $redis->socket = true;
+        $redis->method('info')->willReturn(['redis_version' => '0.0.0-unknown']);
         return $redis;
     }
 }
