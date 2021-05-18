@@ -5,18 +5,19 @@ namespace LaminasTest\Cache\Psr\SimpleCache;
 use Cache\IntegrationTests\SimpleCacheTest;
 use Composer\InstalledVersions;
 use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
-use Laminas\Cache\Storage\Plugin\Serializer;
-use Laminas\Cache\StorageFactory;
+use LaminasTest\Cache\Storage\Adapter\Redis\RedisStorageCreationTrait;
 use Psr\SimpleCache\CacheInterface;
+use Redis;
 
 use function date_default_timezone_get;
 use function date_default_timezone_set;
-use function getenv;
 use function is_string;
 use function version_compare;
 
-class RedisIntegrationTest extends SimpleCacheTest
+final class RedisIntegrationTest extends SimpleCacheTest
 {
+    use RedisStorageCreationTrait;
+
     /**
      * Backup default timezone
      *
@@ -43,7 +44,7 @@ class RedisIntegrationTest extends SimpleCacheTest
         ) {
             /** @psalm-suppress MixedArrayAssignment */
             $this->skippedTests['testBasicUsageWithLongKey']
-                = 'Long keys will be supported for the redis adapter with 2.12+ of `laminas-cache`';
+                = 'Long keys will be supported for the redis adapter with `laminas-cache` v2.12+';
         }
 
         parent::setUp();
@@ -58,24 +59,9 @@ class RedisIntegrationTest extends SimpleCacheTest
 
     public function createSimpleCache(): CacheInterface
     {
-        $options = ['resource_id' => self::class];
-
-        if (getenv('TESTS_LAMINAS_CACHE_REDIS_HOST') && getenv('TESTS_LAMINAS_CACHE_REDIS_PORT')) {
-            $options['server'] = [getenv('TESTS_LAMINAS_CACHE_REDIS_HOST'), getenv('TESTS_LAMINAS_CACHE_REDIS_PORT')];
-        } elseif (getenv('TESTS_LAMINAS_CACHE_REDIS_HOST')) {
-            $options['server'] = [getenv('TESTS_LAMINAS_CACHE_REDIS_HOST')];
-        }
-
-        if (getenv('TESTS_LAMINAS_CACHE_REDIS_DATABASE')) {
-            $options['database'] = getenv('TESTS_LAMINAS_CACHE_REDIS_DATABASE');
-        }
-
-        if (getenv('TESTS_LAMINAS_CACHE_REDIS_PASSWORD')) {
-            $options['password'] = getenv('TESTS_LAMINAS_CACHE_REDIS_PASSWORD');
-        }
-
-        $storage = StorageFactory::adapterFactory('redis', $options);
-        $storage->addPlugin(new Serializer());
-        return new SimpleCacheDecorator($storage);
+        return new SimpleCacheDecorator($this->createRedisStorage(
+            Redis::SERIALIZER_NONE,
+            true
+        ));
     }
 }
