@@ -1,0 +1,18 @@
+<?php
+
+declare(strict_types=1);
+
+namespace LaminasTest\Cache\Storage\Adapter\Exception;
+
+use Laminas\Cache\Exception\ExceptionInterface;
+use Laminas\Cache\Storage\Adapter\Exception\InvalidRedisConfigurationException;
+use PHPUnit\Framework\TestCase;
+
+final class InvalidConfigurationExceptionTest extends TestCase
+{
+    public function testInstanceOfLaminasCacheException(): void
+    {
+        $exception = new InvalidRedisConfigurationException();
+        $this->assertInstanceOf(ExceptionInterface::class, $exception);
+    }
+}
