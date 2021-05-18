@@ -17,6 +17,7 @@
     "laminas/laminas-cache-storage-implementation": "1.0"
   },
   "require-dev": {
+    "ext-posix": "*",
     "ext-redis": "*",
     "composer-runtime-api": "^2",
     "laminas/laminas-cache": "^2.10",
@@ -37,7 +38,8 @@
   "autoload-dev": {
     "psr-4": {
       "LaminasTest\\Cache\\Storage\\Adapter\\": "test/unit",
-      "LaminasTest\\Cache\\Psr\\": "test/integration/Psr"
+      "LaminasTest\\Cache\\Psr\\": "test/integration/Psr",
+      "LaminasTest\\Cache\\Storage\\Adapter\\Redis\\": "test/integration/Redis"
     }
   },
   "scripts": {
