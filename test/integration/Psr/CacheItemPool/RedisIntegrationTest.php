@@ -4,7 +4,6 @@ namespace LaminasTest\Cache\Psr\CacheItemPool;
 
 use Cache\IntegrationTests\CachePoolTest;
 use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
-use Laminas\Cache\Storage\Adapter\Redis;
 use Laminas\Cache\Storage\Plugin\Serializer;
 use Laminas\Cache\StorageFactory;
 use Psr\Cache\CacheItemPoolInterface;
@@ -24,9 +23,6 @@ class RedisIntegrationTest extends CachePoolTest
      */
     private $tz;
 
-    /** @var Redis */
-    private $storage;
-
     protected function setUp(): void
     {
         // set non-UTC timezone
@@ -39,11 +35,6 @@ class RedisIntegrationTest extends CachePoolTest
     protected function tearDown(): void
     {
         date_default_timezone_set($this->tz);
-
-        if ($this->storage) {
-            $this->storage->flush();
-        }
-
         parent::tearDown();
     }
 
