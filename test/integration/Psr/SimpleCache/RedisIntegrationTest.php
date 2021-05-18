@@ -3,8 +3,8 @@
 namespace LaminasTest\Cache\Psr\SimpleCache;
 
 use Cache\IntegrationTests\SimpleCacheTest;
+use Composer\InstalledVersions;
 use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
-use Laminas\Cache\Storage\Adapter\Redis;
 use Laminas\Cache\Storage\Plugin\Serializer;
 use Laminas\Cache\StorageFactory;
 use Psr\SimpleCache\CacheInterface;
@@ -12,6 +12,8 @@ use Psr\SimpleCache\CacheInterface;
 use function date_default_timezone_get;
 use function date_default_timezone_set;
 use function getenv;
+use function is_string;
+use function version_compare;
 
 class RedisIntegrationTest extends SimpleCacheTest
 {
@@ -22,14 +24,27 @@ class RedisIntegrationTest extends SimpleCacheTest
      */
     private $tz;
 
-    /** @var Redis */
-    private $storage;
-
     protected function setUp(): void
     {
         // set non-UTC timezone
         $this->tz = date_default_timezone_get();
         date_default_timezone_set('America/Vancouver');
+        $laminasCacheVersion = InstalledVersions::getVersion('laminas/laminas-cache');
+        if (! is_string($laminasCacheVersion)) {
+            self::fail('Could not determine `laminas-cache` version!');
+        }
+
+        if (
+            version_compare(
+                $laminasCacheVersion,
+                '2.12',
+                'lt'
+            )
+        ) {
+            /** @psalm-suppress MixedArrayAssignment */
+            $this->skippedTests['testBasicUsageWithLongKey']
+                = 'Long keys will be supported for the redis adapter with 2.12+ of `laminas-cache`';
+        }
 
         parent::setUp();
     }
@@ -37,10 +52,6 @@ class RedisIntegrationTest extends SimpleCacheTest
     protected function tearDown(): void
     {
         date_default_timezone_set($this->tz);
-
-        if ($this->storage) {
-            $this->storage->flush();
-        }
 
         parent::tearDown();
     }
