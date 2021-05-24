@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Laminas\Cache\Storage\Adapter;
 
-use Laminas\Cache\Storage\Adapter\Exception\InvalidRedisConfigurationException;
+use Laminas\Cache\Storage\Adapter\Exception\InvalidRedisClusterConfigurationException;
 use Traversable;
 
 final class RedisClusterOptions extends AdapterOptions
@@ -52,11 +52,11 @@ final class RedisClusterOptions extends AdapterOptions
         $hasSeeds    = $this->seeds() !== [];
 
         if (! $hasNodename && ! $hasSeeds) {
-            throw InvalidRedisConfigurationException::fromMissingRequiredValues();
+            throw InvalidRedisClusterConfigurationException::fromMissingRequiredValues();
         }
 
         if ($hasNodename && $hasSeeds) {
-            throw InvalidRedisConfigurationException::nodenameAndSeedsProvided();
+            throw InvalidRedisClusterConfigurationException::nodenameAndSeedsProvided();
         }
     }
 

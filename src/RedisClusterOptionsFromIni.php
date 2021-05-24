@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Laminas\Cache\Storage\Adapter;
 
-use Laminas\Cache\Storage\Adapter\Exception\InvalidRedisConfigurationException;
+use Laminas\Cache\Storage\Adapter\Exception\InvalidRedisClusterConfigurationException;
 
 use function assert;
 use function ini_get;
@@ -34,7 +34,7 @@ final class RedisClusterOptionsFromIni
         }
 
         if ($seedsConfiguration === '') {
-            throw InvalidRedisConfigurationException::fromMissingSeedsConfiguration();
+            throw InvalidRedisClusterConfigurationException::fromMissingSeedsConfiguration();
         }
 
         $seedsByNodename = [];
@@ -80,7 +80,7 @@ final class RedisClusterOptionsFromIni
     {
         $seeds = $this->seedsByNodename[$nodename] ?? [];
         if (! $seeds) {
-            throw InvalidRedisConfigurationException::forMissingSeedsForNodename($nodename);
+            throw InvalidRedisClusterConfigurationException::forMissingSeedsForNodename($nodename);
         }
 
         return $seeds;

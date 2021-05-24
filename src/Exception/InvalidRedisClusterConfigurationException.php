@@ -8,7 +8,7 @@ use Laminas\Cache\Exception\InvalidArgumentException;
 
 use function sprintf;
 
-final class InvalidRedisConfigurationException extends InvalidArgumentException
+final class InvalidRedisClusterConfigurationException extends InvalidArgumentException
 {
     public static function fromMissingSeedsConfiguration(): self
     {

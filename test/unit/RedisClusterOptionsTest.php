@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LaminasTest\Cache\Storage\Adapter;
 
 use InvalidArgumentException;
-use Laminas\Cache\Storage\Adapter\Exception\InvalidRedisConfigurationException;
+use Laminas\Cache\Storage\Adapter\Exception\InvalidRedisClusterConfigurationException;
 use Laminas\Cache\Storage\Adapter\RedisClusterOptions;
 use PHPUnit\Framework\TestCase;
 
@@ -47,7 +47,7 @@ final class RedisClusterOptionsTest extends TestCase
 
     public function testWillDetectSeedsAndNodenameConfiguration(): void
     {
-        $this->expectException(InvalidRedisConfigurationException::class);
+        $this->expectException(InvalidRedisClusterConfigurationException::class);
         $this->expectExceptionMessage('Please provide either `nodename` or `seeds` configuration, not both.');
         new RedisClusterOptions([
             'seeds'    => ['localhost:1234'],
@@ -73,7 +73,7 @@ final class RedisClusterOptionsTest extends TestCase
 
     public function testWillDetectMissingRequiredValues(): void
     {
-        $this->expectException(InvalidRedisConfigurationException::class);
+        $this->expectException(InvalidRedisClusterConfigurationException::class);
         $this->expectExceptionMessage('Missing either `nodename` or `seeds`.');
         new RedisClusterOptions();
     }
