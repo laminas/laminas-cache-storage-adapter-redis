@@ -128,6 +128,9 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
         );
     }
 
+    /**
+     * @psalm-param non-empty-string $name
+     */
     private function createRedisResourceFromName(
         string $name,
         float $fallbackTimeout,
@@ -139,7 +142,7 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
         $timeout     = $options->getTimeout($name, $fallbackTimeout);
         $readTimeout = $options->getReadTimeout($name, $fallbackReadTimeout);
 
-        return new RedisClusterFromExtension(null, $seeds, $timeout, $readTimeout, $persistent);
+        return new RedisClusterFromExtension($name, $seeds, $timeout, $readTimeout, $persistent);
     }
 
     /**

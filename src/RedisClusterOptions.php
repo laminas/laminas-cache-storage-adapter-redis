@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Laminas\Cache\Storage\Adapter;
 
+use Laminas\Cache\Exception\RuntimeException;
 use Laminas\Cache\Storage\Adapter\Exception\InvalidRedisClusterConfigurationException;
 use Traversable;
 
@@ -97,9 +98,18 @@ final class RedisClusterOptions extends AdapterOptions
         return $this->name !== '';
     }
 
+    /**
+     * @psalm-return non-empty-string
+     * @throws RuntimeException If method is called but `name` was not provided via configuration.
+     */
     public function getName(): string
     {
-        return $this->name;
+        $name = $this->name;
+        if ($name === '') {
+            throw new RuntimeException('`name` is not provided via configuration.');
+        }
+
+        return $name;
     }
 
     /**

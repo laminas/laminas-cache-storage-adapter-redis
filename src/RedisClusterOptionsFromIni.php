@@ -73,6 +73,7 @@ final class RedisClusterOptionsFromIni
     }
 
     /**
+     * @psalm-param non-empty-string $name
      * @return array<int,string>
      * @psalm-return list<non-empty-string>
      */
@@ -86,11 +87,17 @@ final class RedisClusterOptionsFromIni
         return $seeds;
     }
 
+    /**
+     * @psalm-param non-empty-string $name
+     */
     public function getTimeout(string $name, float $fallback): float
     {
         return $this->timeoutByName[$name] ?? $fallback;
     }
 
+    /**
+     * @psalm-param non-empty-string $name
+     */
     public function getReadTimeout(string $name, float $fallback): float
     {
         return $this->readTimeoutByName[$name] ?? $fallback;
