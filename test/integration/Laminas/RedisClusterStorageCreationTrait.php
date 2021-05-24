@@ -35,14 +35,14 @@ trait RedisClusterStorageCreationTrait
             return $this->storage;
         }
 
-        $node = $this->nodename();
+        $node = $this->getClusterNameFromEnvironment();
 
         if ($node === '') {
-            throw new RuntimeException('Could not find nodename environment configuration.');
+            throw new RuntimeException('Could not find named config environment configuration.');
         }
 
         $this->options = new RedisClusterOptions([
-            'nodename'    => $node,
+            'name'        => $node,
             'lib_options' => [
                 RedisClusterFromExtension::OPT_SERIALIZER => $serializerOption,
             ],

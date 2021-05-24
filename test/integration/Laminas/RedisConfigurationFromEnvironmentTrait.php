@@ -48,13 +48,13 @@ trait RedisConfigurationFromEnvironmentTrait
         return $password;
     }
 
-    private function nodename(): string
+    private function getClusterNameFromEnvironment(): string
     {
-        $nodename = getenv('TESTS_LAMINAS_CACHE_REDIS_CLUSTER_NODENAME');
-        if ($nodename === false) {
+        $name = getenv('TESTS_LAMINAS_CACHE_REDIS_CLUSTER_NAME');
+        if ($name === false) {
             return '';
         }
 
-        return $nodename;
+        return $name;
     }
 }

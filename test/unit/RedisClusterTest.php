@@ -15,7 +15,7 @@ final class RedisClusterTest extends TestCase
         $resourceManager = $this->createMock(RedisClusterResourceManagerInterface::class);
 
         $adapter = new RedisCluster([
-            'nodename' => 'bar',
+            'name' => 'bar',
         ]);
         $adapter->getOptions()->setResourceManager($resourceManager);
 
@@ -49,7 +49,7 @@ final class RedisClusterTest extends TestCase
         $resourceManager = $this->createMock(RedisClusterResourceManagerInterface::class);
 
         $adapter = new RedisCluster([
-            'nodename' => 'bar',
+            'name' => 'bar',
         ]);
         $adapter->getOptions()->setResourceManager($resourceManager);
 

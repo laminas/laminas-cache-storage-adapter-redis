@@ -42,4 +42,4 @@ jobs:
           job: ${{ matrix.job }}
         env:
           TESTS_LAMINAS_CACHE_REDIS_HOST: redis
-          TESTS_LAMINAS_CACHE_REDIS_CLUSTER_NODENAME: cluster
+          TESTS_LAMINAS_CACHE_REDIS_CLUSTER_NAME: cluster

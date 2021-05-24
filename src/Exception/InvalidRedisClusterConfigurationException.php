@@ -25,12 +25,12 @@ final class InvalidRedisClusterConfigurationException extends InvalidArgumentExc
 
     public static function fromMissingRequiredValues(): self
     {
-        return new self('Missing either `nodename` or `seeds`.');
+        return new self('Missing either `name` or `seeds`.');
     }
 
-    public static function nodenameAndSeedsProvided(): self
+    public static function fromNameAndSeedsProvidedViaConfiguration(): self
     {
-        return new self('Please provide either `nodename` or `seeds` configuration, not both.');
+        return new self('Please provide either `name` or `seeds` configuration, not both.');
     }
 
     public static function fromInvalidSeedsConfiguration(string $seed): self

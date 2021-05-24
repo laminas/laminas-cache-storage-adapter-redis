@@ -14,14 +14,14 @@ final class RedisClusterOptionsTest extends TestCase
     public function testCanHandleOptionsWithNodename(): void
     {
         $options = new RedisClusterOptions([
-            'nodename'      => 'foo',
+            'name'          => 'foo',
             'timeout'       => 1.0,
             'read_timeout'  => 2.0,
             'persistent'    => false,
             'redis_version' => '1.0',
         ]);
 
-        $this->assertEquals($options->nodename(), 'foo');
+        $this->assertEquals($options->getName(), 'foo');
         $this->assertEquals($options->timeout(), 1.0);
         $this->assertEquals($options->readTimeout(), 2.0);
         $this->assertEquals($options->persistent(), false);
@@ -48,10 +48,10 @@ final class RedisClusterOptionsTest extends TestCase
     public function testWillDetectSeedsAndNodenameConfiguration(): void
     {
         $this->expectException(InvalidRedisClusterConfigurationException::class);
-        $this->expectExceptionMessage('Please provide either `nodename` or `seeds` configuration, not both.');
+        $this->expectExceptionMessage('Please provide either `name` or `seeds` configuration, not both.');
         new RedisClusterOptions([
-            'seeds'    => ['localhost:1234'],
-            'nodename' => 'foo',
+            'seeds' => ['localhost:1234'],
+            'name'  => 'foo',
         ]);
     }
 
@@ -74,7 +74,7 @@ final class RedisClusterOptionsTest extends TestCase
     public function testWillDetectMissingRequiredValues(): void
     {
         $this->expectException(InvalidRedisClusterConfigurationException::class);
-        $this->expectExceptionMessage('Missing either `nodename` or `seeds`.');
+        $this->expectExceptionMessage('Missing either `name` or `seeds`.');
         new RedisClusterOptions();
     }
 }

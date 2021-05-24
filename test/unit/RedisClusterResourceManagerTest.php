@@ -44,7 +44,7 @@ final class RedisClusterResourceManagerTest extends TestCase
             ->willReturn(true);
 
         $manager = new RedisClusterResourceManager(new RedisClusterOptions([
-            'nodename' => uniqid('', true),
+            'name' => uniqid('', true),
         ]));
         $adapter = $this->createMock(AbstractAdapter::class);
         $adapter
@@ -58,7 +58,7 @@ final class RedisClusterResourceManagerTest extends TestCase
     public function testWillReturnVersionFromOptions(): void
     {
         $manager = new RedisClusterResourceManager(new RedisClusterOptions([
-            'nodename'      => uniqid('', true),
+            'name'          => uniqid('', true),
             'redis_version' => '1.0.0',
         ]));
 
@@ -74,7 +74,7 @@ final class RedisClusterResourceManagerTest extends TestCase
         return [
             'php-serialize'      => [
                 new RedisClusterOptions([
-                    'nodename'    => uniqid('', true),
+                    'name'        => uniqid('', true),
                     'lib_options' => [
                         RedisCluster::OPT_SERIALIZER => RedisCluster::SERIALIZER_PHP,
                     ],
@@ -82,7 +82,7 @@ final class RedisClusterResourceManagerTest extends TestCase
             ],
             'igbinary-serialize' => [
                 new RedisClusterOptions([
-                    'nodename'    => uniqid('', true),
+                    'name'        => uniqid('', true),
                     'lib_options' => [
                         RedisCluster::OPT_SERIALIZER => RedisCluster::SERIALIZER_IGBINARY,
                     ],

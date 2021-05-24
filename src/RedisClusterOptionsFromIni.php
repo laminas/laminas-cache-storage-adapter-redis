@@ -18,13 +18,13 @@ use function parse_str;
 final class RedisClusterOptionsFromIni
 {
     /** @psalm-var array<non-empty-string,list<non-empty-string>> */
-    private $seedsByNodename;
+    private $seedsByName;
 
     /** @psalm-var array<non-empty-string,float> */
-    private $timeoutByNodename;
+    private $timeoutByName;
 
     /** @psalm-var array<non-empty-string,float> */
-    private $readTimeoutByNodename;
+    private $readTimeoutByName;
 
     public function __construct()
     {
@@ -37,62 +37,62 @@ final class RedisClusterOptionsFromIni
             throw InvalidRedisClusterConfigurationException::fromMissingSeedsConfiguration();
         }
 
-        $seedsByNodename = [];
-        parse_str($seedsConfiguration, $seedsByNodename);
-        /** @psalm-var non-empty-array<non-empty-string,list<non-empty-string>> $seedsByNodename */
-        $this->seedsByNodename = $seedsByNodename;
+        $seedsByName = [];
+        parse_str($seedsConfiguration, $seedsByName);
+        /** @psalm-var non-empty-array<non-empty-string,list<non-empty-string>> $seedsByName */
+        $this->seedsByName = $seedsByName;
 
         $timeoutConfiguration = ini_get('redis.clusters.timeout');
         if (! is_string($timeoutConfiguration)) {
             $timeoutConfiguration = '';
         }
 
-        $timeoutByNodename = [];
-        parse_str($timeoutConfiguration, $timeoutByNodename);
-        foreach ($timeoutByNodename as $nodename => $timeout) {
-            assert($nodename !== '' && is_numeric($timeout));
-            $timeoutByNodename[$nodename] = (float) $timeout;
+        $timeoutByName = [];
+        parse_str($timeoutConfiguration, $timeoutByName);
+        foreach ($timeoutByName as $name => $timeout) {
+            assert($name !== '' && is_numeric($timeout));
+            $timeoutByName[$name] = (float) $timeout;
         }
-        /** @psalm-var array<non-empty-string,float> $timeoutByNodename */
-        $this->timeoutByNodename = $timeoutByNodename;
+        /** @psalm-var array<non-empty-string,float> $timeoutByName */
+        $this->timeoutByName = $timeoutByName;
 
         $readTimeoutConfiguration = ini_get('redis.clusters.read_timeout');
         if (! is_string($readTimeoutConfiguration)) {
             $readTimeoutConfiguration = '';
         }
 
-        $readTimeoutByNodename = [];
-        parse_str($readTimeoutConfiguration, $readTimeoutByNodename);
-        foreach ($readTimeoutByNodename as $nodename => $readTimeout) {
-            assert($nodename !== '' && is_numeric($readTimeout));
-            $readTimeoutByNodename[$nodename] = (float) $readTimeout;
+        $readTimeoutByName = [];
+        parse_str($readTimeoutConfiguration, $readTimeoutByName);
+        foreach ($readTimeoutByName as $name => $readTimeout) {
+            assert($name !== '' && is_numeric($readTimeout));
+            $readTimeoutByName[$name] = (float) $readTimeout;
         }
 
-        /** @psalm-var array<non-empty-string,float> $readTimeoutByNodename */
-        $this->readTimeoutByNodename = $readTimeoutByNodename;
+        /** @psalm-var array<non-empty-string,float> $readTimeoutByName */
+        $this->readTimeoutByName = $readTimeoutByName;
     }
 
     /**
      * @return array<int,string>
      * @psalm-return list<non-empty-string>
      */
-    public function seeds(string $nodename): array
+    public function seeds(string $name): array
     {
-        $seeds = $this->seedsByNodename[$nodename] ?? [];
+        $seeds = $this->seedsByName[$name] ?? [];
         if (! $seeds) {
-            throw InvalidRedisClusterConfigurationException::fromMissingSeedsForNamedConfiguration($nodename);
+            throw InvalidRedisClusterConfigurationException::fromMissingSeedsForNamedConfiguration($name);
         }
 
         return $seeds;
     }
 
-    public function timeout(string $nodename, float $fallback): float
+    public function timeout(string $name, float $fallback): float
     {
-        return $this->timeoutByNodename[$nodename] ?? $fallback;
+        return $this->timeoutByName[$name] ?? $fallback;
     }
 
-    public function readTimeout(string $nodename, float $fallback): float
+    public function readTimeout(string $name, float $fallback): float
     {
-        return $this->readTimeoutByNodename[$nodename] ?? $fallback;
+        return $this->readTimeoutByName[$name] ?? $fallback;
     }
 }

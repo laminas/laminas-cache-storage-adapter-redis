@@ -110,9 +110,9 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
 
     private function createRedisResource(RedisClusterOptions $options): RedisClusterFromExtension
     {
-        if ($options->hasNodename()) {
-            return $this->createRedisResourceFromNodename(
-                $options->nodename(),
+        if ($options->hasName()) {
+            return $this->createRedisResourceFromName(
+                $options->getName(),
                 $options->timeout(),
                 $options->readTimeout(),
                 $options->persistent()
@@ -128,16 +128,16 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
         );
     }
 
-    private function createRedisResourceFromNodename(
-        string $nodename,
+    private function createRedisResourceFromName(
+        string $name,
         float $fallbackTimeout,
         float $fallbackReadTimeout,
         bool $persistent
     ): RedisClusterFromExtension {
         $options     = new RedisClusterOptionsFromIni();
-        $seeds       = $options->seeds($nodename);
-        $timeout     = $options->timeout($nodename, $fallbackTimeout);
-        $readTimeout = $options->readTimeout($nodename, $fallbackReadTimeout);
+        $seeds       = $options->seeds($name);
+        $timeout     = $options->timeout($name, $fallbackTimeout);
+        $readTimeout = $options->readTimeout($name, $fallbackReadTimeout);
 
         return new RedisClusterFromExtension(null, $seeds, $timeout, $readTimeout, $persistent);
     }
@@ -222,11 +222,11 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
      */
     private function info(RedisClusterFromExtension $resource): array
     {
-        $nodename = $this->options->nodename();
+        if ($this->options->hasName()) {
+            $name = $this->options->getName();
 
-        if ($nodename !== '') {
             /** @psalm-var RedisClusterInfoType $info */
-            $info = $resource->info($nodename);
+            $info = $resource->info($name);
             return $info;
         }
 

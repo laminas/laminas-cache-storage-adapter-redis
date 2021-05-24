@@ -23,17 +23,18 @@ final class RedisClusterOptionsFromIniTest extends TestCase
     }
 
     /**
-     * @dataProvider seedsByNodenameProvider
+     * @psalm-param non-empty-string $name
+     * @dataProvider seedsByNameProvider
      */
-    public function testWillDetectSeedsByNodename(string $nodename, string $config, array $expected): void
+    public function testWillDetectSeedsByName(string $name, string $config, array $expected): void
     {
         ini_set('redis.clusters.seeds', $config);
         $options = new RedisClusterOptionsFromIni();
-        $seeds   = $options->seeds($nodename);
+        $seeds   = $options->getSeeds($name);
         $this->assertEquals($expected, $seeds);
     }
 
-    public function testWillThrowExceptionOnMissingNodenameInSeeds(): void
+    public function testWillThrowExceptionOnMissingNameInSeeds(): void
     {
         ini_set('redis.clusters.seeds', 'foo[]=bar:123');
         $options = new RedisClusterOptionsFromIni();
@@ -44,7 +45,7 @@ final class RedisClusterOptionsFromIniTest extends TestCase
     /**
      * @psalm-return non-empty-array<non-empty-string,array{0:non-empty-string,1:non-empty-string,2:non-empty-list<non-empty-string>}>
      */
-    public function seedsByNodenameProvider(): array
+    public function seedsByNameProvider(): array
     {
         return [
             'simple'         => [

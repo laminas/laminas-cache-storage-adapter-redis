@@ -29,10 +29,11 @@ final class RedisClusterTest extends AbstractCommonAdapterTest
 
     public function testCanCreateResourceFromSeeds(): void
     {
-        $nodename       = $this->nodename();
+        $name = $this->getClusterNameFromEnvironment();
+        self::assertNotEmpty($name, 'Missing cluster name environment configuration.');
         $optionsFromIni = new RedisClusterOptionsFromIni();
         $options        = new RedisClusterOptions([
-            'seeds' => $optionsFromIni->seeds($nodename),
+            'seeds' => $optionsFromIni->seeds($name),
         ]);
 
         $storage = new RedisCluster($options);

@@ -13,7 +13,7 @@ final class RedisClusterOptions extends AdapterOptions
     protected $namespaceSeparator = ':';
 
     /** @var string */
-    private $nodename = '';
+    private $name = '';
 
     /** @var float */
     private $timeout = 1.0;
@@ -48,15 +48,15 @@ final class RedisClusterOptions extends AdapterOptions
 
         /** @psalm-suppress InvalidArgument */
         parent::__construct($options);
-        $hasNodename = $this->hasNodename();
-        $hasSeeds    = $this->seeds() !== [];
+        $hasName  = $this->hasName();
+        $hasSeeds = $this->seeds() !== [];
 
-        if (! $hasNodename && ! $hasSeeds) {
+        if (! $hasName && ! $hasSeeds) {
             throw InvalidRedisClusterConfigurationException::fromMissingRequiredValues();
         }
 
-        if ($hasNodename && $hasSeeds) {
-            throw InvalidRedisClusterConfigurationException::nodenameAndSeedsProvided();
+        if ($hasName && $hasSeeds) {
+            throw InvalidRedisClusterConfigurationException::fromNameAndSeedsProvidedViaConfiguration();
         }
     }
 
@@ -92,20 +92,23 @@ final class RedisClusterOptions extends AdapterOptions
         $this->namespaceSeparator = $namespaceSeparator;
     }
 
-    public function hasNodename(): bool
+    public function hasName(): bool
     {
-        return $this->nodename !== '';
+        return $this->name !== '';
     }
 
-    public function nodename(): string
+    public function getName(): string
     {
-        return $this->nodename;
+        return $this->name;
     }
 
-    public function setNodename(string $nodename): void
+    /**
+     * @psalm-param non-empty-string $name
+     */
+    public function setName(string $name): void
     {
-        $this->nodename = $nodename;
-        $this->triggerOptionEvent('nodename', $nodename);
+        $this->name = $name;
+        $this->triggerOptionEvent('name', $name);
     }
 
     public function timeout(): float
