@@ -20,6 +20,11 @@
                 <referencedClass name="Laminas\Cache\Exception\ExceptionInterface"/>
             </errorLevel>
         </InvalidThrow>
+        <InternalMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="Laminas\Cache\Storage\Adapter\RedisClusterOptions::setResourceManager"/>
+            </errorLevel>
+        </InternalMethod>
     </issueHandlers>
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>

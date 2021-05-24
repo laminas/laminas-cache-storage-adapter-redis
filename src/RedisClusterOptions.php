@@ -175,6 +175,9 @@ final class RedisClusterOptions extends AdapterOptions
         return $this->libOptions;
     }
 
+    /**
+     * @internal This method should only be used within this library to have better test coverage!
+     */
     public function setResourceManager(RedisClusterResourceManagerInterface $resourceManager): void
     {
         $this->resourceManager = $resourceManager;
