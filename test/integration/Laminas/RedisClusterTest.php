@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaminasTest\Cache\Storage\Adapter\Redis;
+namespace LaminasTest\Cache\Storage\Adapter\Laminas;
 
 use Laminas\Cache\Storage\Adapter\AbstractAdapter;
 use Laminas\Cache\Storage\Adapter\RedisCluster;

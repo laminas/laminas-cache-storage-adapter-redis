@@ -1,12 +1,13 @@
 <?php
 
-namespace LaminasTest\Cache\Storage\Adapter;
+namespace LaminasTest\Cache\Storage\Adapter\Laminas;
 
 use Laminas\Cache;
 use Laminas\Cache\Storage\Adapter\Redis;
 use Laminas\Cache\Storage\Adapter\RedisOptions;
 use Laminas\Cache\Storage\Adapter\RedisResourceManager;
 use Laminas\Cache\Storage\Plugin\Serializer;
+use LaminasTest\Cache\Storage\Adapter\AbstractCommonAdapterTest;
 use PHPUnit\Framework\MockObject\MockObject;
 use Redis as RedisResource;
 use Throwable;

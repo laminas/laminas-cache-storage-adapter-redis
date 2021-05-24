@@ -39,7 +39,7 @@
     "psr-4": {
       "LaminasTest\\Cache\\Storage\\Adapter\\": "test/unit",
       "LaminasTest\\Cache\\Psr\\": "test/integration/Psr",
-      "LaminasTest\\Cache\\Storage\\Adapter\\Redis\\": "test/integration/Redis"
+      "LaminasTest\\Cache\\Storage\\Adapter\\Laminas\\": "test/integration/Laminas"
     }
   },
   "scripts": {

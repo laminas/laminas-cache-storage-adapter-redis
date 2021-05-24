@@ -6,7 +6,7 @@ namespace LaminasTest\Cache\Psr\CacheItemPool;
 
 use Cache\IntegrationTests\CachePoolTest;
 use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
-use LaminasTest\Cache\Storage\Adapter\Redis\RedisClusterStorageCreationTrait;
+use LaminasTest\Cache\Storage\Adapter\Laminas\RedisClusterStorageCreationTrait;
 use Psr\Cache\CacheItemPoolInterface;
 use RedisCluster;
 

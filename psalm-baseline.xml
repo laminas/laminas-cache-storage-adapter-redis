@@ -295,7 +295,7 @@
       <code>testValidPersistentId</code>
     </MissingReturnType>
   </file>
-  <file src="test/unit/RedisTest.php">
+  <file src="test/integration/Laminas/RedisTest.php">
     <MissingReturnType occurrences="23">
       <code>testGetCapabilitiesTtl</code>
       <code>testGetSetDatabase</code>

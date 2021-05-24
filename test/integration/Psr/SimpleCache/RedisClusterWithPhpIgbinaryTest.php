@@ -7,7 +7,7 @@ namespace LaminasTest\Cache\Psr\SimpleCache;
 use Cache\IntegrationTests\SimpleCacheTest;
 use Composer\InstalledVersions;
 use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
-use LaminasTest\Cache\Storage\Adapter\Redis\RedisClusterStorageCreationTrait;
+use LaminasTest\Cache\Storage\Adapter\Laminas\RedisClusterStorageCreationTrait;
 use Psr\SimpleCache\CacheInterface;
 use RedisCluster;
 
