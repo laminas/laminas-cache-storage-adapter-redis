@@ -93,7 +93,7 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
         try {
             $resource = $this->createRedisResource($this->options);
         } catch (RedisClusterException $exception) {
-            throw RedisRuntimeException::connectionFailed($exception);
+            throw RedisRuntimeException::fromFailedConnection($exception);
         }
 
         $libraryOptions = $this->options->libOptions();

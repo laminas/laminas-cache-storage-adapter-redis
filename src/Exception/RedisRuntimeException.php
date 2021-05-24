@@ -18,10 +18,10 @@ final class RedisRuntimeException extends LaminasCacheRuntimeException
         return new self($message, (int) $exception->getCode(), $exception);
     }
 
-    public static function connectionFailed(Throwable $exception): self
+    public static function fromFailedConnection(Throwable $exception): self
     {
         return new self(
-            'Could not establish connection to redis cluster',
+            'Could not establish connection',
             (int) $exception->getCode(),
             $exception
         );

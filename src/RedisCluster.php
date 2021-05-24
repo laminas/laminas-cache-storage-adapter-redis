@@ -115,7 +115,7 @@ final class RedisCluster extends AbstractAdapter implements
         try {
             return $this->resource = $resourceManager->getResource();
         } catch (RedisClusterException $exception) {
-            throw RedisRuntimeException::connectionFailed($exception);
+            throw RedisRuntimeException::fromFailedConnection($exception);
         }
     }
 
