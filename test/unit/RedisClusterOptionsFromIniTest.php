@@ -39,7 +39,7 @@ final class RedisClusterOptionsFromIniTest extends TestCase
         ini_set('redis.clusters.seeds', 'foo[]=bar:123');
         $options = new RedisClusterOptionsFromIni();
         $this->expectException(InvalidRedisClusterConfigurationException::class);
-        $options->seeds('bar');
+        $options->getSeeds('bar');
     }
 
     /**

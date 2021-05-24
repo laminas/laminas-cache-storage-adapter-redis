@@ -33,7 +33,7 @@ final class RedisClusterTest extends AbstractCommonAdapterTest
         self::assertNotEmpty($name, 'Missing cluster name environment configuration.');
         $optionsFromIni = new RedisClusterOptionsFromIni();
         $options        = new RedisClusterOptions([
-            'seeds' => $optionsFromIni->seeds($name),
+            'seeds' => $optionsFromIni->getSeeds($name),
         ]);
 
         $storage = new RedisCluster($options);

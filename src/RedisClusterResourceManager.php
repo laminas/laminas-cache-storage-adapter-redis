@@ -135,9 +135,9 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
         bool $persistent
     ): RedisClusterFromExtension {
         $options     = new RedisClusterOptionsFromIni();
-        $seeds       = $options->seeds($name);
-        $timeout     = $options->timeout($name, $fallbackTimeout);
-        $readTimeout = $options->readTimeout($name, $fallbackReadTimeout);
+        $seeds       = $options->getSeeds($name);
+        $timeout     = $options->getTimeout($name, $fallbackTimeout);
+        $readTimeout = $options->getReadTimeout($name, $fallbackReadTimeout);
 
         return new RedisClusterFromExtension(null, $seeds, $timeout, $readTimeout, $persistent);
     }

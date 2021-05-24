@@ -76,7 +76,7 @@ final class RedisClusterOptionsFromIni
      * @return array<int,string>
      * @psalm-return list<non-empty-string>
      */
-    public function seeds(string $name): array
+    public function getSeeds(string $name): array
     {
         $seeds = $this->seedsByName[$name] ?? [];
         if (! $seeds) {
@@ -86,12 +86,12 @@ final class RedisClusterOptionsFromIni
         return $seeds;
     }
 
-    public function timeout(string $name, float $fallback): float
+    public function getTimeout(string $name, float $fallback): float
     {
         return $this->timeoutByName[$name] ?? $fallback;
     }
 
-    public function readTimeout(string $name, float $fallback): float
+    public function getReadTimeout(string $name, float $fallback): float
     {
         return $this->readTimeoutByName[$name] ?? $fallback;
     }
