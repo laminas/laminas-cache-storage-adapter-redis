@@ -69,7 +69,7 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
 
     public function getVersion(): string
     {
-        $versionFromOptions = $this->options->redisVersion();
+        $versionFromOptions = $this->options->getRedisVersion();
         if ($versionFromOptions) {
             return $versionFromOptions;
         }
@@ -96,7 +96,7 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
             throw RedisRuntimeException::fromFailedConnection($exception);
         }
 
-        $libraryOptions = $this->options->libOptions();
+        $libraryOptions = $this->options->getLibOptions();
 
         try {
             $resource             = $this->applyLibraryOptions($resource, $libraryOptions);
@@ -113,18 +113,18 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
         if ($options->hasName()) {
             return $this->createRedisResourceFromName(
                 $options->getName(),
-                $options->timeout(),
-                $options->readTimeout(),
-                $options->persistent()
+                $options->getTimeout(),
+                $options->getReadTimeout(),
+                $options->isPersistent()
             );
         }
 
         return new RedisClusterFromExtension(
             null,
-            $options->seeds(),
-            $options->timeout(),
-            $options->readTimeout(),
-            $options->persistent()
+            $options->getSeeds(),
+            $options->getTimeout(),
+            $options->getReadTimeout(),
+            $options->isPersistent()
         );
     }
 
@@ -199,7 +199,7 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
     public function hasSerializationSupport(PluginCapableInterface $adapter): bool
     {
         $options        = $this->options;
-        $libraryOptions = $options->libOptions();
+        $libraryOptions = $options->getLibOptions();
         $serializer     = $libraryOptions[RedisClusterFromExtension::OPT_SERIALIZER] ??
             RedisClusterFromExtension::SERIALIZER_NONE;
 
@@ -233,7 +233,7 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
             return $info;
         }
 
-        $seeds = $this->options->seeds();
+        $seeds = $this->options->getSeeds();
         if ($seeds === []) {
             throw new RuntimeException('Neither the node name nor any seed is configured.');
         }

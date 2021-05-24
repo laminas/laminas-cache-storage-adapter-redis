@@ -50,7 +50,7 @@ final class RedisClusterOptions extends AdapterOptions
         /** @psalm-suppress InvalidArgument */
         parent::__construct($options);
         $hasName  = $this->hasName();
-        $hasSeeds = $this->seeds() !== [];
+        $hasSeeds = $this->getSeeds() !== [];
 
         if (! $hasName && ! $hasSeeds) {
             throw InvalidRedisClusterConfigurationException::fromMissingRequiredValues();
@@ -121,17 +121,17 @@ final class RedisClusterOptions extends AdapterOptions
         $this->triggerOptionEvent('name', $name);
     }
 
-    public function timeout(): float
+    public function getTimeout(): float
     {
         return $this->timeout;
     }
 
-    public function readTimeout(): float
+    public function getReadTimeout(): float
     {
         return $this->readTimeout;
     }
 
-    public function persistent(): bool
+    public function isPersistent(): bool
     {
         return $this->persistent;
     }
@@ -140,7 +140,7 @@ final class RedisClusterOptions extends AdapterOptions
      * @return array<int,string>
      * @psalm-return list<non-empty-string>
      */
-    public function seeds(): array
+    public function getSeeds(): array
     {
         return $this->seeds;
     }
@@ -164,7 +164,7 @@ final class RedisClusterOptions extends AdapterOptions
         $this->version = $version;
     }
 
-    public function redisVersion(): string
+    public function getRedisVersion(): string
     {
         return $this->version;
     }
@@ -180,7 +180,7 @@ final class RedisClusterOptions extends AdapterOptions
     /**
      * @psalm-return array<int,mixed>
      */
-    public function libOptions(): array
+    public function getLibOptions(): array
     {
         return $this->libOptions;
     }

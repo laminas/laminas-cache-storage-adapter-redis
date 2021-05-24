@@ -22,10 +22,10 @@ final class RedisClusterOptionsTest extends TestCase
         ]);
 
         $this->assertEquals($options->getName(), 'foo');
-        $this->assertEquals($options->timeout(), 1.0);
-        $this->assertEquals($options->readTimeout(), 2.0);
-        $this->assertEquals($options->persistent(), false);
-        $this->assertEquals($options->redisVersion(), '1.0');
+        $this->assertEquals($options->getTimeout(), 1.0);
+        $this->assertEquals($options->getReadTimeout(), 2.0);
+        $this->assertEquals($options->isPersistent(), false);
+        $this->assertEquals($options->getRedisVersion(), '1.0');
     }
 
     public function testCanHandleOptionsWithSeeds(): void
@@ -38,11 +38,11 @@ final class RedisClusterOptionsTest extends TestCase
             'redis_version' => '1.0',
         ]);
 
-        $this->assertEquals($options->seeds(), ['localhost:1234']);
-        $this->assertEquals($options->timeout(), 1.0);
-        $this->assertEquals($options->readTimeout(), 2.0);
-        $this->assertEquals($options->persistent(), false);
-        $this->assertEquals($options->redisVersion(), '1.0');
+        $this->assertEquals($options->getSeeds(), ['localhost:1234']);
+        $this->assertEquals($options->getTimeout(), 1.0);
+        $this->assertEquals($options->getReadTimeout(), 2.0);
+        $this->assertEquals($options->isPersistent(), false);
+        $this->assertEquals($options->getRedisVersion(), '1.0');
     }
 
     public function testWillDetectSeedsAndNodenameConfiguration(): void
