@@ -21,9 +21,6 @@
       <code>$ttl</code>
       <code>$ttl</code>
     </InvalidScalarArgument>
-    <InvalidThrow occurrences="1">
-      <code>Exception\ExceptionInterface</code>
-    </InvalidThrow>
     <LessSpecificReturnStatement occurrences="1">
       <code>parent::setOptions($options)</code>
     </LessSpecificReturnStatement>
@@ -282,25 +279,6 @@
     <UnusedVariable occurrences="1">
       <code>$info</code>
     </UnusedVariable>
-  </file>
-  <file src="test/integration/Psr/CacheItemPool/RedisIntegrationTest.php">
-    <MixedArrayAssignment occurrences="1">
-      <code>$this-&gt;skippedTests['testHasItemReturnsFalseWhenDeferredItemIsExpired']</code>
-    </MixedArrayAssignment>
-    <RedundantConditionGivenDocblockType occurrences="1">
-      <code>$this-&gt;storage</code>
-    </RedundantConditionGivenDocblockType>
-    <UndefinedInterfaceMethod occurrences="1">
-      <code>addPlugin</code>
-    </UndefinedInterfaceMethod>
-  </file>
-  <file src="test/integration/Psr/SimpleCache/RedisIntegrationTest.php">
-    <RedundantConditionGivenDocblockType occurrences="1">
-      <code>$this-&gt;storage</code>
-    </RedundantConditionGivenDocblockType>
-    <UndefinedInterfaceMethod occurrences="1">
-      <code>addPlugin</code>
-    </UndefinedInterfaceMethod>
   </file>
   <file src="test/unit/RedisResourceManagerTest.php">
     <ArgumentTypeCoercion occurrences="2">
