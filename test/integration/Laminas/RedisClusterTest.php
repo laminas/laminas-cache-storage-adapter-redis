@@ -7,6 +7,7 @@ namespace LaminasTest\Cache\Storage\Adapter\Laminas;
 use Laminas\Cache\Storage\Adapter\AbstractAdapter;
 use Laminas\Cache\Storage\Adapter\RedisCluster;
 use Laminas\Cache\Storage\Adapter\RedisClusterOptions;
+use Laminas\Cache\Storage\Adapter\RedisClusterOptionsFromIni;
 use Laminas\Cache\Storage\Plugin\Serializer;
 use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Storage\Adapter\AbstractCommonAdapterTest;
@@ -28,8 +29,10 @@ final class RedisClusterTest extends AbstractCommonAdapterTest
 
     public function testCanCreateResourceFromSeeds(): void
     {
-        $options = new RedisClusterOptions([
-            'seeds' => ['localhost:7000'],
+        $nodename       = $this->nodename();
+        $optionsFromIni = new RedisClusterOptionsFromIni();
+        $options        = new RedisClusterOptions([
+            'seeds' => $optionsFromIni->seeds($nodename),
         ]);
 
         $storage = new RedisCluster($options);

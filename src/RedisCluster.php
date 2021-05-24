@@ -93,7 +93,7 @@ final class RedisCluster extends AbstractAdapter implements
                 continue;
             }
 
-            if (! $redis->flushDB()) {
+            if (! $redis->flushAll()) {
                 continue;
             }
 
