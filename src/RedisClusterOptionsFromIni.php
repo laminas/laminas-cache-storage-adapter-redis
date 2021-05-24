@@ -26,6 +26,9 @@ final class RedisClusterOptionsFromIni
     /** @psalm-var array<non-empty-string,float> */
     private $readTimeoutByName;
 
+    /** @psalm-var array<non-empty-string,string> */
+    private $authenticationByName;
+
     public function __construct()
     {
         $seedsConfiguration = ini_get('redis.clusters.seeds');
@@ -70,6 +73,17 @@ final class RedisClusterOptionsFromIni
 
         /** @psalm-var array<non-empty-string,float> $readTimeoutByName */
         $this->readTimeoutByName = $readTimeoutByName;
+
+        $authenticationConfiguration = ini_get('redis.clusters.auth');
+        if (! is_string($authenticationConfiguration)) {
+            $authenticationConfiguration = '';
+        }
+
+        $authenticationByName = [];
+        parse_str($authenticationConfiguration, $authenticationByName);
+        /** @psalm-var array<non-empty-string,string> $authenticationByName */
+
+        $this->authenticationByName = $authenticationByName;
     }
 
     /**
@@ -101,5 +115,13 @@ final class RedisClusterOptionsFromIni
     public function getReadTimeout(string $name, float $fallback): float
     {
         return $this->readTimeoutByName[$name] ?? $fallback;
+    }
+
+    /**
+     * @psalm-param non-empty-string $name
+     */
+    public function getPasswordByName(string $name, string $fallback): string
+    {
+        return $this->authenticationByName[$name] ?? $fallback;
     }
 }

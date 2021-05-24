@@ -19,13 +19,15 @@ final class RedisClusterOptionsTest extends TestCase
             'read_timeout'  => 2.0,
             'persistent'    => false,
             'redis_version' => '1.0',
+            'password'      => 'secret',
         ]);
 
-        $this->assertEquals($options->getName(), 'foo');
-        $this->assertEquals($options->getTimeout(), 1.0);
-        $this->assertEquals($options->getReadTimeout(), 2.0);
-        $this->assertEquals($options->isPersistent(), false);
-        $this->assertEquals($options->getRedisVersion(), '1.0');
+        $this->assertEquals('foo', $options->getName());
+        $this->assertEquals(1.0, $options->getTimeout());
+        $this->assertEquals(2.0, $options->getReadTimeout());
+        $this->assertEquals(false, $options->isPersistent());
+        $this->assertEquals('1.0', $options->getRedisVersion());
+        $this->assertEquals('secret', $options->getPassword());
     }
 
     public function testCanHandleOptionsWithSeeds(): void
@@ -36,13 +38,15 @@ final class RedisClusterOptionsTest extends TestCase
             'read_timeout'  => 2.0,
             'persistent'    => false,
             'redis_version' => '1.0',
+            'password'      => 'secret',
         ]);
 
-        $this->assertEquals($options->getSeeds(), ['localhost:1234']);
-        $this->assertEquals($options->getTimeout(), 1.0);
-        $this->assertEquals($options->getReadTimeout(), 2.0);
-        $this->assertEquals($options->isPersistent(), false);
-        $this->assertEquals($options->getRedisVersion(), '1.0');
+        $this->assertEquals(['localhost:1234'], $options->getSeeds());
+        $this->assertEquals(1.0, $options->getTimeout());
+        $this->assertEquals(2.0, $options->getReadTimeout());
+        $this->assertEquals(false, $options->isPersistent());
+        $this->assertEquals('1.0', $options->getRedisVersion());
+        $this->assertEquals('secret', $options->getPassword());
     }
 
     public function testWillDetectSeedsAndNodenameConfiguration(): void

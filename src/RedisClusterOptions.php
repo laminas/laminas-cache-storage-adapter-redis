@@ -37,6 +37,9 @@ final class RedisClusterOptions extends AdapterOptions
     /** @var RedisClusterResourceManagerInterface|null */
     private $resourceManager;
 
+    /** @var string */
+    private $password = '';
+
     /**
      * @param array|Traversable|null|AdapterOptions $options
      * @psalm-param array<string,mixed>|Traversable<string,mixed>|null|AdapterOptions $options
@@ -200,5 +203,18 @@ final class RedisClusterOptions extends AdapterOptions
         }
 
         return $this->resourceManager = new RedisClusterResourceManager($this);
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    /**
+     * @psalm-param non-empty-string $password
+     */
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
     }
 }

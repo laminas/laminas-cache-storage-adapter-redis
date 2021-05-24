@@ -66,6 +66,20 @@ final class RedisClusterOptionsFromIniTest extends TestCase
         ];
     }
 
+    public function testCanParseAllConfigurationsForName(): void
+    {
+        ini_set('redis.clusters.seeds', 'foo[]=bar');
+        ini_set('redis.clusters.timeout', 'foo=1.0');
+        ini_set('redis.clusters.read_timeout', 'foo=2.0');
+        ini_set('redis.clusters.auth', 'foo=secret');
+        $options = new RedisClusterOptionsFromIni();
+
+        $this->assertEquals(['bar'], $options->getSeeds('foo'));
+        $this->assertEquals(1.0, $options->getTimeout('foo', 0.0));
+        $this->assertEquals(2.0, $options->getReadTimeout('foo', 0.0));
+        $this->assertEquals('secret', $options->getPasswordByName('foo', ''));
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
