@@ -15,11 +15,11 @@ final class InvalidRedisClusterConfigurationException extends InvalidArgumentExc
         return new self('Could not find `redis.clusters.seeds` entry in the php.ini file(s).');
     }
 
-    public static function forMissingSeedsForNodename(string $nodename): self
+    public static function fromMissingSeedsForNamedConfiguration(string $name): self
     {
         return new self(sprintf(
             'Missing `%s` within the configured `redis.cluster.seeds` entry in the php.ini file(s).',
-            $nodename
+            $name
         ));
     }
 

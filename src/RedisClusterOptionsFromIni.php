@@ -80,7 +80,7 @@ final class RedisClusterOptionsFromIni
     {
         $seeds = $this->seedsByNodename[$nodename] ?? [];
         if (! $seeds) {
-            throw InvalidRedisClusterConfigurationException::forMissingSeedsForNodename($nodename);
+            throw InvalidRedisClusterConfigurationException::fromMissingSeedsForNamedConfiguration($nodename);
         }
 
         return $seeds;
