@@ -21,6 +21,7 @@ use Traversable;
 use function array_key_exists;
 use function array_values;
 use function count;
+use function extension_loaded;
 use function in_array;
 use function sprintf;
 use function version_compare;
@@ -48,6 +49,10 @@ final class RedisCluster extends AbstractAdapter implements
      */
     public function __construct($options = null)
     {
+        if (! extension_loaded('redis')) {
+            throw new Exception\ExtensionNotLoadedException("Redis extension is not loaded");
+        }
+
         /** @psalm-suppress PossiblyInvalidArgument */
         parent::__construct($options);
         $eventManager = $this->getEventManager();
