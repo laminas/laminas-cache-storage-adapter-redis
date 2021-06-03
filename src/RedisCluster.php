@@ -351,6 +351,7 @@ final class RedisCluster extends AbstractAdapter implements
         $redisVersion           = $this->getRedisVersion();
         $serializer             = $this->hasSerializationSupport();
         $redisVersionLessThanV2 = version_compare($redisVersion, '2.0', '<');
+        $redisVersionLessThanV3 = version_compare($redisVersion, '3.0', '<');
         $minTtl                 = $redisVersionLessThanV2 ? 0 : 1;
         $supportedMetadata      = ! $redisVersionLessThanV2 ? ['ttl'] : [];
 
@@ -365,7 +366,7 @@ final class RedisCluster extends AbstractAdapter implements
                 'staticTtl'          => true,
                 'ttlPrecision'       => 1,
                 'useRequestTime'     => false,
-                'maxKeyLength'       => 255,
+                'maxKeyLength'       => $redisVersionLessThanV3 ? 255 : 512000000,
                 'namespaceIsPrefix'  => true,
             ]
         );
