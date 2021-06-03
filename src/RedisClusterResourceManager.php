@@ -179,20 +179,32 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
      */
     public function getLibOption(int $option)
     {
+        if (array_key_exists($option, $this->libraryOptions)) {
+            return $this->libraryOptions[$option];
+        }
+
         /**
          * @see https://github.com/phpredis/phpredis#getoption
          *
          * @psalm-suppress InvalidArgument
          */
-        return $this->libraryOptions[$option] ?? $this->getResource()->getOption($option);
+        return $this->libraryOptions[$option] = $this->getResource()->getOption($option);
     }
 
     public function hasSerializationSupport(PluginCapableInterface $adapter): bool
     {
-        $options        = $this->options;
-        $libraryOptions = $options->getLibOptions();
-        $serializer     = $libraryOptions[RedisClusterFromExtension::OPT_SERIALIZER] ??
-            RedisClusterFromExtension::SERIALIZER_NONE;
+        /**
+         * NOTE: we are not using {@see RedisClusterResourceManager::getLibOption} here
+         *       as this would create a connection to redis even tho it wont be needed.
+         *       Theoretically, it would be possible for upstream projects to receive the resource directly from the
+         *       resource manager and then apply changes to it. As this is not the common use-case, this is not
+         *       considered in this check.
+         */
+        $options    = $this->options;
+        $serializer = $options->getLibOption(
+            RedisClusterFromExtension::OPT_SERIALIZER,
+            RedisClusterFromExtension::SERIALIZER_NONE
+        );
 
         if ($serializer !== RedisClusterFromExtension::SERIALIZER_NONE) {
             return true;

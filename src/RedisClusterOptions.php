@@ -209,6 +209,16 @@ final class RedisClusterOptions extends AdapterOptions
         return $this->libOptions;
     }
 
+    /**
+     * @psalm-param RedisClusterOptions::OPT_* $option
+     * @param mixed $default
+     * @return mixed
+     */
+    public function getLibOption(int $option, $default = null)
+    {
+        return $this->libOptions[$option] ?? $default;
+    }
+
     public function getPassword(): string
     {
         return $this->password;
