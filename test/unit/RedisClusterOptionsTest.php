@@ -4,10 +4,20 @@ declare(strict_types=1);
 
 namespace LaminasTest\Cache\Storage\Adapter;
 
+use Generator;
 use InvalidArgumentException;
 use Laminas\Cache\Storage\Adapter\Exception\InvalidRedisClusterConfigurationException;
 use Laminas\Cache\Storage\Adapter\RedisClusterOptions;
 use PHPUnit\Framework\TestCase;
+use RedisCluster as RedisClusterFromExtension;
+use ReflectionClass;
+
+use function assert;
+use function constant;
+use function defined;
+use function is_int;
+use function sprintf;
+use function strpos;
 
 final class RedisClusterOptionsTest extends TestCase
 {
@@ -80,5 +90,91 @@ final class RedisClusterOptionsTest extends TestCase
         $this->expectException(InvalidRedisClusterConfigurationException::class);
         $this->expectExceptionMessage('Missing either `name` or `seeds`.');
         new RedisClusterOptions();
+    }
+
+    /**
+     * @psalm-param non-empty-string $constant
+     * @psalm-param positive-int    $constantValue
+     * @dataProvider redisClusterOptionConstants
+     */
+    public function testOptionConstantsMatchingExtensionImplementation(string $constant, int $constantValue): void
+    {
+        $constantInOptions = sprintf('%s::%s', RedisClusterOptions::class, $constant);
+
+        if (! defined($constantInOptions)) {
+            self::markTestSkipped(sprintf(
+                'Constant "%s" with value "%d" is not defined.',
+                $constantInOptions,
+                $constantValue
+            ));
+        }
+
+        /** @psalm-suppress MixedAssignment */
+        $constantValueInOptions = constant($constantInOptions);
+        self::assertIsInt($constantValueInOptions);
+        self::assertEquals(
+            $constantValue,
+            $constantValueInOptions,
+            sprintf(
+                'Constant "%s" diverged from ext-redis. Expected "%d", "%d" declared.',
+                $constant,
+                $constantValue,
+                $constantValueInOptions
+            )
+        );
+    }
+
+    /**
+     * @psalm-return Generator<non-empty-string,array{0:non-empty-string,1:positive-int}>
+     */
+    public function redisClusterOptionConstants(): Generator
+    {
+        $reflection = new ReflectionClass(RedisClusterFromExtension::class);
+
+        foreach ($reflection->getConstants() as $constant => $constantValue) {
+            if (strpos($constant, 'OPT_') !== 0) {
+                continue;
+            }
+
+            assert($constant !== '');
+            assert(is_int($constantValue) && $constantValue > 0);
+            yield $constant => [$constant, $constantValue];
+        }
+    }
+
+    /**
+     * @psalm-param non-empty-string $constant
+     * @psalm-param positive-int $constantValue
+     * @dataProvider declaredLibraryOptionConstants
+     */
+    public function testLibraryOptionsConstantContainsAllDeclaredConstants(string $constant, int $constantValue): void
+    {
+        self::assertContains(
+            $constantValue,
+            RedisClusterOptions::LIBRARY_OPTIONS,
+            sprintf(
+                'Missing constant "%s" in %s::LIBRARY_OPTIONS',
+                $constant,
+                RedisClusterOptions::class
+            )
+        );
+    }
+
+    /**
+     * @psalm-return Generator<non-empty-string,array{0:non-empty-string,1:positive-int}>
+     */
+    public function declaredLibraryOptionConstants(): Generator
+    {
+        $reflection = new ReflectionClass(RedisClusterOptions::class);
+
+        foreach ($reflection->getConstants() as $constant => $constantValue) {
+            if (strpos($constant, 'OPT_') !== 0) {
+                continue;
+            }
+
+            assert($constant !== '');
+            assert(is_int($constantValue) && $constantValue > 0);
+            yield $constant => [$constant, $constantValue];
+        }
     }
 }

@@ -14,6 +14,7 @@ interface RedisClusterResourceManagerInterface
     public function getResource(): RedisClusterFromExtension;
 
     /**
+     * @psalm-param RedisClusterOptions::OPT_* $option
      * @return mixed
      */
     public function getLibOption(int $option);

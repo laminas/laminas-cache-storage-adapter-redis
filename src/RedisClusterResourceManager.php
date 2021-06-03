@@ -12,26 +12,20 @@ use Laminas\Cache\Storage\Plugin\Serializer;
 use Laminas\Cache\Storage\PluginCapableInterface;
 use RedisCluster as RedisClusterFromExtension;
 use RedisClusterException;
-use ReflectionClass;
 
 use function array_key_exists;
 use function assert;
 use function extension_loaded;
-use function is_int;
-use function strpos;
 
 /**
  * @psalm-type RedisClusterInfoType = array<string,mixed>&array{redis_version:string}
  */
 final class RedisClusterResourceManager implements RedisClusterResourceManagerInterface
 {
-    /** @var array<non-empty-string,int>|null */
-    private static $clusterOptionsCache;
-
     /** @var RedisClusterOptions */
     private $options;
 
-    /** @psalm-var array<int,mixed> */
+    /** @psalm-var array<positive-int,mixed> */
     private $libraryOptions = [];
 
     public function __construct(RedisClusterOptions $options)
@@ -40,31 +34,6 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
         if (! extension_loaded('redis')) {
             throw new ExtensionNotLoadedException('Redis extension is not loaded');
         }
-    }
-
-    /**
-     * @return array<non-empty-string,int>
-     */
-    private static function getRedisClusterOptions(): array
-    {
-        if (self::$clusterOptionsCache !== null) {
-            return self::$clusterOptionsCache;
-        }
-
-        $reflection = new ReflectionClass(RedisClusterFromExtension::class);
-
-        $options = [];
-        foreach ($reflection->getConstants() as $constant => $constantValue) {
-            if (strpos($constant, 'OPT_') !== 0) {
-                continue;
-            }
-            assert($constant !== '');
-            assert(is_int($constantValue));
-
-            $options[$constant] = $constantValue;
-        }
-
-        return self::$clusterOptionsCache = $options;
     }
 
     public function getVersion(): string
@@ -162,7 +131,7 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
     }
 
     /**
-     * @param array<int,mixed> $options
+     * @psalm-param array<positive-int,mixed> $options
      */
     private function applyLibraryOptions(
         RedisClusterFromExtension $resource,
@@ -170,7 +139,12 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
     ): RedisClusterFromExtension {
         /** @psalm-suppress MixedAssignment */
         foreach ($options as $option => $value) {
-            /** @psalm-suppress InvalidArgument,MixedArgument */
+            /**
+             * @see https://github.com/phpredis/phpredis#setoption
+             *
+             * @psalm-suppress InvalidArgument
+             * @psalm-suppress MixedArgument
+             */
             $resource->setOption($option, $value);
         }
 
@@ -178,13 +152,13 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
     }
 
     /**
-     * @param array<int,mixed> $options
-     * @return array<int,mixed>
+     * @psalm-param array<positive-int,mixed> $options
+     * @psalm-return array<positive-int,mixed>
      */
     private function mergeLibraryOptionsFromCluster(array $options, RedisClusterFromExtension $resource): array
     {
-        foreach (self::getRedisClusterOptions() as $constantValue) {
-            if (array_key_exists($constantValue, $options)) {
+        foreach (RedisClusterOptions::LIBRARY_OPTIONS as $option) {
+            if (array_key_exists($option, $options)) {
                 continue;
             }
 
@@ -193,13 +167,14 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
              *
              * @psalm-suppress InvalidArgument
              */
-            $options[$constantValue] = $resource->getOption($constantValue);
+            $options[$option] = $resource->getOption($option);
         }
 
         return $options;
     }
 
     /**
+     * @psalm-param RedisClusterOptions::OPT_* $option
      * @return mixed
      */
     public function getLibOption(int $option)

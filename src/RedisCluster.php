@@ -39,6 +39,9 @@ final class RedisCluster extends AbstractAdapter implements
     /** @var string|null */
     private $namespacePrefix;
 
+    /** @var RedisClusterResourceManagerInterface|null */
+    private $resourceManager;
+
     /**
      * @param null|array|Traversable|RedisClusterOptions $options
      * @psalm-param array<string,mixed>|RedisClusterOptions|Traversable<string,mixed> $options
@@ -68,15 +71,15 @@ final class RedisCluster extends AbstractAdapter implements
             $options = new RedisClusterOptions($options);
         }
 
-        $options->setAdapter($this);
-
         parent::setOptions($options);
         return $this;
     }
 
     /**
-     * In RedisCluster, it is totally okay if just one master is being flushed. If one master is not reachable, it will
-     * re-sync if that master is coming back online.
+     * In RedisCluster, it is totally okay if just one primary server is being flushed.
+     * If one or more primaries are not reachable, they will re-sync if they're coming back online.
+     *
+     * One has to connect to the primaries directly using {@see Redis::connect}.
      */
     public function flush(): bool
     {
@@ -109,8 +112,7 @@ final class RedisCluster extends AbstractAdapter implements
             return $this->resource;
         }
 
-        $options         = $this->getOptions();
-        $resourceManager = $options->getResourceManager();
+        $resourceManager = $this->getResourceManager();
 
         try {
             return $this->resource = $resourceManager->getResource();
@@ -402,12 +404,12 @@ final class RedisCluster extends AbstractAdapter implements
     }
 
     /**
+     * @psalm-param RedisClusterOptions::OPT_* $option
      * @return mixed
      */
     private function getLibOption(int $option)
     {
-        $options         = $this->getOptions();
-        $resourceManager = $options->getResourceManager();
+        $resourceManager = $this->getResourceManager();
         return $resourceManager->getLibOption($option);
     }
 
@@ -541,15 +543,30 @@ final class RedisCluster extends AbstractAdapter implements
 
     private function getRedisVersion(): string
     {
-        $options         = $this->getOptions();
-        $resourceManager = $options->getResourceManager();
+        $resourceManager = $this->getResourceManager();
         return $resourceManager->getVersion();
     }
 
     private function hasSerializationSupport(): bool
     {
-        $options         = $this->getOptions();
-        $resourceManager = $options->getResourceManager();
+        $resourceManager = $this->getResourceManager();
         return $resourceManager->hasSerializationSupport($this);
+    }
+
+    private function getResourceManager(): RedisClusterResourceManagerInterface
+    {
+        if ($this->resourceManager !== null) {
+            return $this->resourceManager;
+        }
+
+        return $this->resourceManager = new RedisClusterResourceManager($this->getOptions());
+    }
+
+    /**
+     * @internal This is only used for unit testing. There should be no need to use this method in upstream projects.
+     */
+    public function setResourceManager(RedisClusterResourceManagerInterface $resourceManager): void
+    {
+        $this->resourceManager = $resourceManager;
     }
 }

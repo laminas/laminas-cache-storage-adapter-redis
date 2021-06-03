@@ -10,6 +10,30 @@ use Traversable;
 
 final class RedisClusterOptions extends AdapterOptions
 {
+    public const LIBRARY_OPTIONS = [
+        self::OPT_SERIALIZER,
+        self::OPT_PREFIX,
+        self::OPT_READ_TIMEOUT,
+        self::OPT_SCAN,
+        self::OPT_SLAVE_FAILOVER,
+        self::OPT_TCP_KEEPALIVE,
+        self::OPT_COMPRESSION,
+        self::OPT_REPLY_LITERAL,
+        self::OPT_COMPRESSION_LEVEL,
+        self::OPT_NULL_MULTIBULK_AS_NULL,
+    ];
+
+    public const OPT_SERIALIZER             = 1;
+    public const OPT_PREFIX                 = 2;
+    public const OPT_READ_TIMEOUT           = 3;
+    public const OPT_SCAN                   = 4;
+    public const OPT_SLAVE_FAILOVER         = 5;
+    public const OPT_TCP_KEEPALIVE          = 6;
+    public const OPT_COMPRESSION            = 7;
+    public const OPT_REPLY_LITERAL          = 8;
+    public const OPT_COMPRESSION_LEVEL      = 9;
+    public const OPT_NULL_MULTIBULK_AS_NULL = 10;
+
     /** @var string */
     protected $namespaceSeparator = ':';
 
@@ -31,11 +55,8 @@ final class RedisClusterOptions extends AdapterOptions
     /** @var string */
     private $version = '';
 
-    /** @psalm-var array<int,mixed> */
+    /** @psalm-var array<positive-int,mixed> */
     private $libOptions = [];
-
-    /** @var RedisClusterResourceManagerInterface|null */
-    private $resourceManager;
 
     /** @var string */
     private $password = '';
@@ -173,7 +194,7 @@ final class RedisClusterOptions extends AdapterOptions
     }
 
     /**
-     * @psalm-param array<int,mixed> $options
+     * @psalm-param array<positive-int,mixed> $options
      */
     public function setLibOptions(array $options): void
     {
@@ -181,28 +202,11 @@ final class RedisClusterOptions extends AdapterOptions
     }
 
     /**
-     * @psalm-return array<int,mixed>
+     * @psalm-return array<positive-int,mixed>
      */
     public function getLibOptions(): array
     {
         return $this->libOptions;
-    }
-
-    /**
-     * @internal This method should only be used within this library to have better test coverage!
-     */
-    public function setResourceManager(RedisClusterResourceManagerInterface $resourceManager): void
-    {
-        $this->resourceManager = $resourceManager;
-    }
-
-    public function getResourceManager(): RedisClusterResourceManagerInterface
-    {
-        if ($this->resourceManager) {
-            return $this->resourceManager;
-        }
-
-        return $this->resourceManager = new RedisClusterResourceManager($this);
     }
 
     public function getPassword(): string

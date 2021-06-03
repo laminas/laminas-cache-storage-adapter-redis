@@ -17,7 +17,8 @@ final class RedisClusterTest extends TestCase
         $adapter = new RedisCluster([
             'name' => 'bar',
         ]);
-        $adapter->getOptions()->setResourceManager($resourceManager);
+        /** @psalm-suppress InternalMethod */
+        $adapter->setResourceManager($resourceManager);
 
         $resourceManager
             ->expects($this->once())
@@ -51,7 +52,8 @@ final class RedisClusterTest extends TestCase
         $adapter = new RedisCluster([
             'name' => 'bar',
         ]);
-        $adapter->getOptions()->setResourceManager($resourceManager);
+        /** @psalm-suppress InternalMethod */
+        $adapter->setResourceManager($resourceManager);
 
         $resourceManager
             ->expects($this->once())
