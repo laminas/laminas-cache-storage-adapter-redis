@@ -5,7 +5,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
-    errorBaseline="psalm-baseline.xml"
+        errorBaseline="psalm-baseline.xml"
 >
     <projectFiles>
         <directory name="src"/>
@@ -14,6 +14,18 @@
             <directory name="vendor"/>
         </ignoreFiles>
     </projectFiles>
+    <issueHandlers>
+        <InvalidThrow>
+            <errorLevel type="suppress">
+                <referencedClass name="Laminas\Cache\Exception\ExceptionInterface"/>
+            </errorLevel>
+        </InvalidThrow>
+        <InternalMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="Laminas\Cache\Storage\Adapter\RedisClusterOptions::setResourceManager"/>
+            </errorLevel>
+        </InternalMethod>
+    </issueHandlers>
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
     </plugins>

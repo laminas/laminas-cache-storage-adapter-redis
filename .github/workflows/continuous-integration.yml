@@ -29,6 +29,9 @@ jobs:
         ports:
           - 6379:6379
         options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      redis-cluster:
+        image: vishnunair/docker-redis-cluster:latest
+        options: --health-cmd="redis-cli -c -p 6379 cluster nodes" --health-interval=10s --health-timeout=5s --health-retries=3
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.matrix.outputs.matrix) }}
@@ -39,3 +42,4 @@ jobs:
           job: ${{ matrix.job }}
         env:
           TESTS_LAMINAS_CACHE_REDIS_HOST: redis
+          TESTS_LAMINAS_CACHE_REDIS_CLUSTER_NAME: cluster

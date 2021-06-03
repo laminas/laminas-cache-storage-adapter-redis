@@ -1,5 +1,11 @@
 {
     "extensions": [
-        "redis"
+        "redis",
+        "igbinary"
+    ],
+    "ini": [
+        "redis.clusters.seeds = 'cluster[]=redis-cluster:6379&cluster[]=redis-cluster:6380&cluster[]=redis-cluster:6381&cluster[]=redis-cluster:6382&cluster[]=redis-cluster:6383&cluster[]=redis-cluster:6384'",
+        "redis.clusters.timeout = 'cluster=5'",
+        "redis.clusters.read_timeout = 'cluster=10'"
     ]
 }

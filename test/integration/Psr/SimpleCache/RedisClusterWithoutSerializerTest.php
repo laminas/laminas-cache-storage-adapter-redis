@@ -1,35 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Cache\Psr\SimpleCache;
 
 use Cache\IntegrationTests\SimpleCacheTest;
 use Composer\InstalledVersions;
 use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
-use LaminasTest\Cache\Storage\Adapter\Laminas\RedisStorageCreationTrait;
+use LaminasTest\Cache\Storage\Adapter\Laminas\RedisClusterStorageCreationTrait;
 use Psr\SimpleCache\CacheInterface;
-use Redis;
+use RedisCluster;
 
-use function date_default_timezone_get;
-use function date_default_timezone_set;
 use function is_string;
 use function version_compare;
 
-final class RedisIntegrationTest extends SimpleCacheTest
+final class RedisClusterWithoutSerializerTest extends SimpleCacheTest
 {
-    use RedisStorageCreationTrait;
+    use RedisClusterStorageCreationTrait;
 
-    /**
-     * Backup default timezone
-     *
-     * @var string
-     */
-    private $tz;
+    public function createSimpleCache(): CacheInterface
+    {
+        $storage = $this->createRedisClusterStorage(RedisCluster::SERIALIZER_NONE, true);
+
+        return new SimpleCacheDecorator($storage);
+    }
 
     protected function setUp(): void
     {
-        // set non-UTC timezone
-        $this->tz = date_default_timezone_get();
-        date_default_timezone_set('America/Vancouver');
+        parent::setUp();
         $laminasCacheVersion = InstalledVersions::getVersion('laminas/laminas-cache');
         if (! is_string($laminasCacheVersion)) {
             self::fail('Could not determine `laminas-cache` version!');
@@ -46,22 +44,5 @@ final class RedisIntegrationTest extends SimpleCacheTest
             $this->skippedTests['testBasicUsageWithLongKey']
                 = 'Long keys will be supported for the redis adapter with `laminas-cache` v2.12+';
         }
-
-        parent::setUp();
-    }
-
-    protected function tearDown(): void
-    {
-        date_default_timezone_set($this->tz);
-
-        parent::tearDown();
-    }
-
-    public function createSimpleCache(): CacheInterface
-    {
-        return new SimpleCacheDecorator($this->createRedisStorage(
-            Redis::SERIALIZER_NONE,
-            true
-        ));
     }
 }

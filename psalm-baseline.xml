@@ -21,9 +21,6 @@
       <code>$ttl</code>
       <code>$ttl</code>
     </InvalidScalarArgument>
-    <InvalidThrow occurrences="1">
-      <code>Exception\ExceptionInterface</code>
-    </InvalidThrow>
     <LessSpecificReturnStatement occurrences="1">
       <code>parent::setOptions($options)</code>
     </LessSpecificReturnStatement>
@@ -283,25 +280,6 @@
       <code>$info</code>
     </UnusedVariable>
   </file>
-  <file src="test/integration/Psr/CacheItemPool/RedisIntegrationTest.php">
-    <MixedArrayAssignment occurrences="1">
-      <code>$this-&gt;skippedTests['testHasItemReturnsFalseWhenDeferredItemIsExpired']</code>
-    </MixedArrayAssignment>
-    <RedundantConditionGivenDocblockType occurrences="1">
-      <code>$this-&gt;storage</code>
-    </RedundantConditionGivenDocblockType>
-    <UndefinedInterfaceMethod occurrences="1">
-      <code>addPlugin</code>
-    </UndefinedInterfaceMethod>
-  </file>
-  <file src="test/integration/Psr/SimpleCache/RedisIntegrationTest.php">
-    <RedundantConditionGivenDocblockType occurrences="1">
-      <code>$this-&gt;storage</code>
-    </RedundantConditionGivenDocblockType>
-    <UndefinedInterfaceMethod occurrences="1">
-      <code>addPlugin</code>
-    </UndefinedInterfaceMethod>
-  </file>
   <file src="test/unit/RedisResourceManagerTest.php">
     <ArgumentTypeCoercion occurrences="2">
       <code>'Redis'</code>
@@ -317,7 +295,7 @@
       <code>testValidPersistentId</code>
     </MissingReturnType>
   </file>
-  <file src="test/unit/RedisTest.php">
+  <file src="test/integration/Laminas/RedisTest.php">
     <MissingReturnType occurrences="23">
       <code>testGetCapabilitiesTtl</code>
       <code>testGetSetDatabase</code>
