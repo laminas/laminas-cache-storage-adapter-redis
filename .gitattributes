@@ -11,3 +11,5 @@
 /psalm.xml export-ignore
 /psalm-baseline.xml export-ignore
 /test/ export-ignore
+/benchmark/ export-ignore
+/phpbench.json export-ignore
