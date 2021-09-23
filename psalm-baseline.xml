@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.7.2@83a0325c0a95c0ab531d6b90c877068b464377b5">
+<files psalm-version="4.10.0@916b098b008f6de4543892b1e0651c1c3b92cbfa">
   <file src="src/Redis.php">
-    <InvalidScalarArgument occurrences="18">
+    <InvalidScalarArgument occurrences="17">
       <code>$e-&gt;getCode()</code>
       <code>$e-&gt;getCode()</code>
       <code>$e-&gt;getCode()</code>
@@ -15,7 +15,6 @@
       <code>$e-&gt;getCode()</code>
       <code>$e-&gt;getCode()</code>
       <code>$e-&gt;getCode()</code>
-      <code>$redisVersion</code>
       <code>$ttl</code>
       <code>$ttl</code>
       <code>$ttl</code>

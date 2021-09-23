@@ -13,6 +13,9 @@ use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Storage\Adapter\AbstractCommonAdapterTest;
 use RedisCluster as RedisClusterFromExtension;
 
+/**
+ * @template-extends AbstractCommonAdapterTest<RedisCluster,RedisClusterOptions>
+ */
 final class RedisClusterTest extends AbstractCommonAdapterTest
 {
     use RedisClusterStorageCreationTrait;

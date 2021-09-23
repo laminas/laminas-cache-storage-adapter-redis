@@ -6,9 +6,9 @@ namespace LaminasTest\Cache\Storage\Adapter;
 
 use Generator;
 use InvalidArgumentException;
+use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use Laminas\Cache\Storage\Adapter\Exception\InvalidRedisClusterConfigurationException;
 use Laminas\Cache\Storage\Adapter\RedisClusterOptions;
-use PHPUnit\Framework\TestCase;
 use RedisCluster as RedisClusterFromExtension;
 use ReflectionClass;
 
@@ -19,8 +19,16 @@ use function is_int;
 use function sprintf;
 use function strpos;
 
-final class RedisClusterOptionsTest extends TestCase
+/**
+ * @template-extends AbstractAdapterOptionsTest<RedisClusterOptions>
+ */
+final class RedisClusterOptionsTest extends AbstractAdapterOptionsTest
 {
+    protected function createAdapterOptions(): AdapterOptions
+    {
+        return new RedisClusterOptions(['seeds' => ['localhost']]);
+    }
+
     public function testCanHandleOptionsWithNodename(): void
     {
         $options = new RedisClusterOptions([

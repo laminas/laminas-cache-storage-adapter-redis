@@ -495,8 +495,8 @@ class Redis extends AbstractAdapter implements
             $resourceMgr       = $options->getResourceManager();
             $serializer        = $resourceMgr->getLibOption($options->getResourceId(), RedisResource::OPT_SERIALIZER);
             $redisVersion      = $resourceMgr->getMajorVersion($options->getResourceId());
-            $minTtl            = version_compare($redisVersion, '2', '<') ? 0 : 1;
-            $maxKeyLength      = version_compare($redisVersion, '3', '<') ? 255 : 512000000;
+            $minTtl            = version_compare((string) $redisVersion, '2', '<') ? 0 : 1;
+            $maxKeyLength      = version_compare((string) $redisVersion, '3', '<') ? 255 : 512000000;
             $supportedMetadata = $redisVersion >= 2 ? ['ttl'] : [];
 
             $this->capabilities = new Capabilities(

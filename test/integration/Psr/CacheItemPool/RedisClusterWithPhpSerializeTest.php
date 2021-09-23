@@ -4,28 +4,29 @@ declare(strict_types=1);
 
 namespace LaminasTest\Cache\Psr\CacheItemPool;
 
-use Cache\IntegrationTests\CachePoolTest;
-use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
+use Laminas\Cache\Storage\StorageInterface;
+use LaminasTest\Cache\Storage\Adapter\AbstractCacheItemPoolIntegrationTest;
 use LaminasTest\Cache\Storage\Adapter\Laminas\RedisClusterStorageCreationTrait;
-use Psr\Cache\CacheItemPoolInterface;
 use RedisCluster;
 
-use function get_class;
 use function sprintf;
 
-final class RedisClusterWithPhpSerializeTest extends CachePoolTest
+final class RedisClusterWithPhpSerializeTest extends AbstractCacheItemPoolIntegrationTest
 {
     use RedisClusterStorageCreationTrait;
 
-    public function createCachePool(): CacheItemPoolInterface
+    protected function setUp(): void
     {
-        $storage = $this->createRedisClusterStorage(RedisCluster::SERIALIZER_PHP, false);
+        parent::setUp();
         /** @psalm-suppress MixedArrayAssignment */
         $this->skippedTests['testHasItemReturnsFalseWhenDeferredItemIsExpired'] = sprintf(
             '%s storage doesn\'t support driver deferred',
-            get_class($storage)
+            RedisCluster::class
         );
+    }
 
-        return new CacheItemPoolDecorator($storage);
+    protected function createStorage(): StorageInterface
+    {
+        return $this->createRedisClusterStorage(RedisCluster::SERIALIZER_PHP, false);
     }
 }
