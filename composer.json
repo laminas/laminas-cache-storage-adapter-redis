@@ -7,28 +7,30 @@
   ],
   "license": "BSD-3-Clause",
   "require": {
-    "php": "^7.3 || ~8.0.0"
-  },
-  "conflict": {
-    "laminas/laminas-cache": "<2.10",
-    "phpunit/phpunit": "<6.1.0"
+    "php": "^7.3 || ~8.0.0",
+    "ext-posix": "*",
+    "ext-redis": "*",
+    "laminas/laminas-cache": "^3.0"
   },
   "provide": {
     "laminas/laminas-cache-storage-implementation": "1.0"
   },
   "require-dev": {
-    "ext-posix": "*",
-    "ext-redis": "*",
-    "composer-runtime-api": "^2",
-    "laminas/laminas-cache": "^2.10",
-    "laminas/laminas-cache-storage-adapter-test": "^1.1",
-    "laminas/laminas-coding-standard": "^2.1",
+    "laminas/laminas-cache": "^3.0.x-dev",
+    "laminas/laminas-cache-storage-adapter-test": "2.0.x-dev",
+    "laminas/laminas-coding-standard": "~2.1.4",
     "laminas/laminas-serializer": "^2.10",
     "psalm/plugin-phpunit": "^0.15.1",
     "vimeo/psalm": "^4.7"
   },
   "config": {
     "sort-packages": true
+  },
+  "extra": {
+    "laminas": {
+      "config-provider": "Laminas\\Cache\\Storage\\Adapter\\Redis\\ConfigProvider",
+      "module": "Laminas\\Cache\\Storage\\Adapter\\Redis"
+    }
   },
   "autoload": {
     "psr-4": {
@@ -37,9 +39,10 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "LaminasTest\\Cache\\Storage\\Adapter\\": "test/unit",
-      "LaminasTest\\Cache\\Psr\\": "test/integration/Psr",
-      "LaminasTest\\Cache\\Storage\\Adapter\\Laminas\\": "test/integration/Laminas"
+      "LaminasTest\\Cache\\Storage\\Adapter\\": [
+        "test/unit",
+        "test/integration/"
+      ]
     }
   },
   "scripts": {
