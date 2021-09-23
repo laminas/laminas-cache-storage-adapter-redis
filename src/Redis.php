@@ -15,10 +15,9 @@ use Traversable;
 
 use function array_combine;
 use function array_filter;
-use function extension_loaded;
 use function version_compare;
 
-class Redis extends AbstractAdapter implements
+final class Redis extends AbstractAdapter implements
     ClearByNamespaceInterface,
     ClearByPrefixInterface,
     FlushableInterface,
@@ -61,10 +60,6 @@ class Redis extends AbstractAdapter implements
      */
     public function __construct($options = null)
     {
-        if (! extension_loaded('redis')) {
-            throw new Exception\ExtensionNotLoadedException("Redis extension is not loaded");
-        }
-
         parent::__construct($options);
 
         // reset initialized flag on update option(s)
