@@ -23,7 +23,7 @@ use function trim;
 /**
  * This is a resource manager for redis
  */
-class RedisResourceManager
+final class RedisResourceManager
 {
     /**
      * Registered resources

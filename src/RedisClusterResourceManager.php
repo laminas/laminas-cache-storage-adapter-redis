@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Laminas\Cache\Storage\Adapter;
 
-use Laminas\Cache\Exception\ExtensionNotLoadedException;
 use Laminas\Cache\Exception\RuntimeException;
 use Laminas\Cache\Storage\Adapter\Exception\RedisRuntimeException;
 use Laminas\Cache\Storage\Plugin\PluginInterface;
@@ -15,7 +14,6 @@ use RedisClusterException;
 
 use function array_key_exists;
 use function assert;
-use function extension_loaded;
 
 /**
  * @psalm-type RedisClusterInfoType = array<string,mixed>&array{redis_version:string}
@@ -31,9 +29,6 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
     public function __construct(RedisClusterOptions $options)
     {
         $this->options = $options;
-        if (! extension_loaded('redis')) {
-            throw new ExtensionNotLoadedException('Redis extension is not loaded');
-        }
     }
 
     public function getVersion(): string

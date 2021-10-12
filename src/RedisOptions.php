@@ -7,7 +7,7 @@ use Laminas\Cache\Exception;
 use function sprintf;
 use function strlen;
 
-class RedisOptions extends AdapterOptions
+final class RedisOptions extends AdapterOptions
 {
     // @codingStandardsIgnoreStart
     /**
