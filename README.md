@@ -14,7 +14,7 @@ $ composer require laminas/laminas-cache-storage-adapter-redis
 
 ## Documentation
 
-Browse the documentation online at https://docs.laminas.dev/laminas-cache-storage-adapter-redis/
+Browse the documentation online at https://docs.laminas.dev/laminas-cache/v3/storage/adapter/#redis-adapter
 
 ## Support
 
