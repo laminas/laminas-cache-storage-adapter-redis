@@ -4,8 +4,42 @@ on:
   pull_request:
   push:
     branches:
+      - '[0-9]+.[0-9]+.x'
+      - 'refs/pull/*'
     tags:
 
 jobs:
-  ci:
-    uses: laminas/workflow-continuous-integration/.github/workflows/continuous-integration.yml@1.x
+  matrix:
+    name: Generate job matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - name: Gather CI configuration
+        id: matrix
+        uses: laminas/laminas-ci-matrix-action@v1
+
+  qa:
+    name: QA Checks
+    needs: [matrix]
+    runs-on: ${{ matrix.operatingSystem }}
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      redis-cluster:
+        image: vishnunair/docker-redis-cluster:latest
+        options: --health-cmd="redis-cli -c -p 6379 cluster nodes" --health-interval=10s --health-timeout=5s --health-retries=3
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.matrix.outputs.matrix) }}
+    steps:
+      - name: ${{ matrix.name }}
+        uses: laminas/laminas-continuous-integration-action@v1
+        with:
+          job: ${{ matrix.job }}
+        env:
+          TESTS_LAMINAS_CACHE_REDIS_HOST: redis
+          TESTS_LAMINAS_CACHE_REDIS_CLUSTER_NAME: cluster
