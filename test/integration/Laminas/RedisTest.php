@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Cache\Storage\Adapter\Laminas;
 
 use Laminas\Cache;
@@ -71,7 +73,7 @@ final class RedisTest extends AbstractCommonAdapterTest
         ];
     }
 
-    public function testLibOptionsFirst()
+    public function testLibOptionsFirst(): void
     {
         $options = [
             'resource_id' => self::class . '2',
@@ -100,7 +102,7 @@ final class RedisTest extends AbstractCommonAdapterTest
         $this->assertInstanceOf(Redis::class, $storage);
     }
 
-    public function testRedisSerializer()
+    public function testRedisSerializer(): void
     {
         $this->storage->addPlugin(new Serializer());
         $value = ['test', 'of', 'array'];
@@ -109,28 +111,28 @@ final class RedisTest extends AbstractCommonAdapterTest
         $this->assertCount(count($value), $this->storage->getItem('key'), 'Problem with Redis serialization');
     }
 
-    public function testRedisSetInt()
+    public function testRedisSetInt(): void
     {
         $key = 'key';
         $this->assertTrue($this->storage->setItem($key, 123));
         $this->assertEquals('123', $this->storage->getItem($key), 'Integer should be cast to string');
     }
 
-    public function testRedisSetDouble()
+    public function testRedisSetDouble(): void
     {
         $key = 'key';
         $this->assertTrue($this->storage->setItem($key, 123.12));
         $this->assertEquals('123.12', $this->storage->getItem($key), 'Integer should be cast to string');
     }
 
-    public function testRedisSetNull()
+    public function testRedisSetNull(): void
     {
         $key = 'key';
         $this->assertTrue($this->storage->setItem($key, null));
         $this->assertEquals('', $this->storage->getItem($key), 'Null should be cast to string');
     }
 
-    public function testRedisSetBoolean()
+    public function testRedisSetBoolean(): void
     {
         $key = 'key';
         $this->assertTrue($this->storage->setItem($key, true));
@@ -139,7 +141,7 @@ final class RedisTest extends AbstractCommonAdapterTest
         $this->assertEquals('', $this->storage->getItem($key), 'Boolean should be cast to string');
     }
 
-    public function testGetCapabilitiesTtl()
+    public function testGetCapabilitiesTtl(): void
     {
         $resourceManager = $this->options->getResourceManager();
         $resourceId      = $this->options->getResourceId();
@@ -156,7 +158,7 @@ final class RedisTest extends AbstractCommonAdapterTest
         }
     }
 
-    public function testSocketConnection()
+    public function testSocketConnection(): void
     {
         $socket = '/tmp/redis.sock';
         $this->options->getResourceManager()->setServer($this->options->getResourceId(), $socket);
@@ -167,7 +169,7 @@ final class RedisTest extends AbstractCommonAdapterTest
         $this->storage = null;
     }
 
-    public function testGetSetDatabase()
+    public function testGetSetDatabase(): void
     {
         $this->assertTrue($this->storage->setItem('key', 'val'));
         $this->assertEquals('val', $this->storage->getItem('key'));
@@ -186,7 +188,7 @@ final class RedisTest extends AbstractCommonAdapterTest
         );
     }
 
-    public function testGetSetPassword()
+    public function testGetSetPassword(): void
     {
         $pass = 'super secret';
         $this->options->getResourceManager()->setPassword($this->options->getResourceId(), $pass);
@@ -197,7 +199,7 @@ final class RedisTest extends AbstractCommonAdapterTest
         );
     }
 
-    public function testGetSetLibOptionsOnExistingRedisResourceInstance()
+    public function testGetSetLibOptionsOnExistingRedisResourceInstance(): void
     {
         $options = ['serializer' => RedisResource::SERIALIZER_PHP];
         $this->options->setLibOptions($options);
@@ -223,7 +225,7 @@ final class RedisTest extends AbstractCommonAdapterTest
         );
     }
 
-    public function testGetSetLibOptionsWithCleanRedisResourceInstance()
+    public function testGetSetLibOptionsWithCleanRedisResourceInstance(): void
     {
         $options = ['serializer' => RedisResource::SERIALIZER_PHP];
         $this->options->setLibOptions($options);
@@ -249,21 +251,21 @@ final class RedisTest extends AbstractCommonAdapterTest
         );
     }
 
-    public function testGetSetNamespace()
+    public function testGetSetNamespace(): void
     {
         $namespace = 'testNamespace';
         $this->options->setNamespace($namespace);
         $this->assertEquals($namespace, $this->options->getNamespace(), 'Namespace was not set correctly');
     }
 
-    public function testGetSetNamespaceSeparator()
+    public function testGetSetNamespaceSeparator(): void
     {
         $separator = '/';
         $this->options->setNamespaceSeparator($separator);
         $this->assertEquals($separator, $this->options->getNamespaceSeparator(), 'Separator was not set correctly');
     }
 
-    public function testGetSetResourceManager()
+    public function testGetSetResourceManager(): void
     {
         $resourceManager = new RedisResourceManager();
         $options         = new RedisOptions();
@@ -277,7 +279,7 @@ final class RedisTest extends AbstractCommonAdapterTest
         $this->assertEquals($resourceManager, $options->getResourceManager());
     }
 
-    public function testGetSetResourceId()
+    public function testGetSetResourceId(): void
     {
         $resourceId = '1';
         $options    = new RedisOptions();
@@ -285,14 +287,14 @@ final class RedisTest extends AbstractCommonAdapterTest
         $this->assertEquals($resourceId, $options->getResourceId(), 'Resource id was not set correctly');
     }
 
-    public function testGetSetPersistentId()
+    public function testGetSetPersistentId(): void
     {
         $persistentId = '1';
         $this->options->setPersistentId($persistentId);
         $this->assertEquals($persistentId, $this->options->getPersistentId(), 'Persistent id was not set correctly');
     }
 
-    public function testOptionsGetSetLibOptions()
+    public function testOptionsGetSetLibOptions(): void
     {
         $options = ['serializer' => RedisResource::SERIALIZER_PHP];
         $this->options->setLibOptions($options);
@@ -303,7 +305,7 @@ final class RedisTest extends AbstractCommonAdapterTest
         );
     }
 
-    public function testGetSetServer()
+    public function testGetSetServer(): void
     {
         $server = [
             'host'    => '127.0.0.1',
@@ -317,14 +319,14 @@ final class RedisTest extends AbstractCommonAdapterTest
         $this->storage = null;
     }
 
-    public function testOptionsGetSetDatabase()
+    public function testOptionsGetSetDatabase(): void
     {
         $database = 1;
         $this->options->setDatabase($database);
         $this->assertEquals($database, $this->options->getDatabase(), 'Database not set correctly using RedisOptions');
     }
 
-    public function testOptionsGetSetPassword()
+    public function testOptionsGetSetPassword(): void
     {
         $password = 'my-secret';
         $this->options->setPassword($password);
@@ -351,7 +353,7 @@ final class RedisTest extends AbstractCommonAdapterTest
         $this->assertEquals($ttl, ceil($this->storage->getMetadata($key)['ttl']));
     }
 
-    public function testHasItemReturnsFalseIfRedisExistsReturnsZero()
+    public function testHasItemReturnsFalseIfRedisExistsReturnsZero(): void
     {
         $redis = $this->mockInitializedRedisResource();
         $redis->method('exists')->willReturn(0);
@@ -362,7 +364,7 @@ final class RedisTest extends AbstractCommonAdapterTest
         $this->assertFalse($hasItem);
     }
 
-    public function testHasItemReturnsTrueIfRedisExistsReturnsNonZeroInt()
+    public function testHasItemReturnsTrueIfRedisExistsReturnsNonZeroInt(): void
     {
         $redis = $this->mockInitializedRedisResource();
         $redis->method('exists')->willReturn(23);

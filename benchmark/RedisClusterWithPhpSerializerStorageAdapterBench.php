@@ -1,12 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasBench\Cache;
 
 use Laminas\Cache\Storage\Adapter\Benchmark\AbstractStorageAdapterBenchmark;
 use LaminasTest\Cache\Storage\Adapter\Laminas\RedisClusterStorageCreationTrait;
-use PhpBench\Benchmark\Metadata\Annotations\Iterations;
-use PhpBench\Benchmark\Metadata\Annotations\Revs;
-use PhpBench\Benchmark\Metadata\Annotations\Warmup;
 use RedisCluster;
 
 /**
