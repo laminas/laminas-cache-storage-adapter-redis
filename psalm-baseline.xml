@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.10.0@916b098b008f6de4543892b1e0651c1c3b92cbfa">
+<files psalm-version="4.24.0@06dd975cb55d36af80f242561738f16c5f58264f">
   <file src="src/Redis.php">
-    <InvalidScalarArgument occurrences="17">
-      <code>$e-&gt;getCode()</code>
-      <code>$e-&gt;getCode()</code>
-      <code>$e-&gt;getCode()</code>
-      <code>$e-&gt;getCode()</code>
-      <code>$e-&gt;getCode()</code>
-      <code>$e-&gt;getCode()</code>
-      <code>$e-&gt;getCode()</code>
-      <code>$e-&gt;getCode()</code>
-      <code>$e-&gt;getCode()</code>
-      <code>$e-&gt;getCode()</code>
-      <code>$e-&gt;getCode()</code>
-      <code>$e-&gt;getCode()</code>
-      <code>$e-&gt;getCode()</code>
+    <DocblockTypeContradiction occurrences="1">
+      <code>$value === false</code>
+    </DocblockTypeContradiction>
+    <InvalidArgument occurrences="4">
       <code>$ttl</code>
       <code>$ttl</code>
       <code>$ttl</code>
       <code>$ttl</code>
-    </InvalidScalarArgument>
+    </InvalidArgument>
+    <InvalidOperand occurrences="2">
+      <code>$pttl</code>
+      <code>$pttl</code>
+    </InvalidOperand>
+    <InvalidReturnStatement occurrences="4">
+      <code>$redis-&gt;decrBy($this-&gt;namespacePrefix . $normalizedKey, $value)</code>
+      <code>$redis-&gt;incrBy($this-&gt;namespacePrefix . $normalizedKey, $value)</code>
+      <code>$success</code>
+      <code>$success</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType occurrences="4">
+      <code>bool</code>
+      <code>bool</code>
+      <code>int|bool</code>
+      <code>int|bool</code>
+    </InvalidReturnType>
     <LessSpecificReturnStatement occurrences="1">
       <code>parent::setOptions($options)</code>
     </LessSpecificReturnStatement>
     <MissingClosureParamType occurrences="1">
       <code>$value</code>
     </MissingClosureParamType>
-    <MixedArgument occurrences="4">
-      <code>$this-&gt;preSerialize($value)</code>
-      <code>$this-&gt;preSerialize($value)</code>
-      <code>$this-&gt;preSerialize($value)</code>
-      <code>$value</code>
-    </MixedArgument>
     <MixedArgumentTypeCoercion occurrences="1">
       <code>$normalizedKeys</code>
     </MixedArgumentTypeCoercion>
@@ -60,6 +60,15 @@
     <MoreSpecificReturnType occurrences="1">
       <code>Redis</code>
     </MoreSpecificReturnType>
+    <PossiblyInvalidArgument occurrences="3">
+      <code>$redis-&gt;keys($prefix . '*')</code>
+      <code>$redis-&gt;keys($prefix . '*')</code>
+      <code>$results</code>
+    </PossiblyInvalidArgument>
+    <PossiblyInvalidMethodCall occurrences="2">
+      <code>exec</code>
+      <code>setex</code>
+    </PossiblyInvalidMethodCall>
     <PossiblyNullArgument occurrences="16">
       <code>$redis-&gt;getLastError()</code>
       <code>$redis-&gt;getLastError()</code>
@@ -85,13 +94,16 @@
     <PropertyNotSetInConstructor occurrences="1">
       <code>Redis</code>
     </PropertyNotSetInConstructor>
-    <RedundantCast occurrences="1">
-      <code>(bool) $redis-&gt;expire($this-&gt;namespacePrefix . $normalizedKey, $ttl)</code>
-    </RedundantCast>
     <RedundantCastGivenDocblockType occurrences="2">
       <code>(string) $namespace</code>
       <code>(string) $prefix</code>
     </RedundantCastGivenDocblockType>
+    <ReservedWord occurrences="1">
+      <code>$info</code>
+    </ReservedWord>
+    <UndefinedMethod occurrences="1">
+      <code>$info</code>
+    </UndefinedMethod>
   </file>
   <file src="src/RedisOptions.php">
     <InvalidReturnStatement occurrences="1">
@@ -116,8 +128,7 @@
     <ArgumentTypeCoercion occurrences="1">
       <code>'Redis'</code>
     </ArgumentTypeCoercion>
-    <DocblockTypeContradiction occurrences="3">
-      <code>! is_array($libOptions) &amp;&amp; ! $libOptions instanceof Traversable</code>
+    <DocblockTypeContradiction occurrences="2">
       <code>$server instanceof Traversable</code>
       <code>is_array($resource)</code>
     </DocblockTypeContradiction>
@@ -275,51 +286,14 @@
       <code>(string) $id</code>
       <code>(string) $persistentId</code>
     </RedundantCastGivenDocblockType>
-    <UnusedVariable occurrences="1">
+    <ReservedWord occurrences="1">
       <code>$info</code>
-    </UnusedVariable>
-  </file>
-  <file src="test/unit/RedisResourceManagerTest.php">
-    <ArgumentTypeCoercion occurrences="2">
-      <code>'Redis'</code>
-      <code>'Redis'</code>
-    </ArgumentTypeCoercion>
-    <MissingReturnType occurrences="7">
-      <code>testGetMajorVersion</code>
-      <code>testGetVersion</code>
-      <code>testNotValidPersistentIdOptionName</code>
-      <code>testSetServerWithPasswordInParameters</code>
-      <code>testSetServerWithPasswordInUri</code>
-      <code>testSetServerWithPasswordInUriShouldNotOverridePreviousResource</code>
-      <code>testValidPersistentId</code>
-    </MissingReturnType>
+    </ReservedWord>
+    <UndefinedMethod occurrences="1">
+      <code>$info</code>
+    </UndefinedMethod>
   </file>
   <file src="test/integration/Laminas/RedisTest.php">
-    <MissingReturnType occurrences="23">
-      <code>testGetCapabilitiesTtl</code>
-      <code>testGetSetDatabase</code>
-      <code>testGetSetLibOptionsOnExistingRedisResourceInstance</code>
-      <code>testGetSetLibOptionsWithCleanRedisResourceInstance</code>
-      <code>testGetSetNamespace</code>
-      <code>testGetSetNamespaceSeparator</code>
-      <code>testGetSetPassword</code>
-      <code>testGetSetPersistentId</code>
-      <code>testGetSetResourceId</code>
-      <code>testGetSetResourceManager</code>
-      <code>testGetSetServer</code>
-      <code>testHasItemReturnsFalseIfRedisExistsReturnsZero</code>
-      <code>testHasItemReturnsTrueIfRedisExistsReturnsNonZeroInt</code>
-      <code>testLibOptionsFirst</code>
-      <code>testOptionsGetSetDatabase</code>
-      <code>testOptionsGetSetLibOptions</code>
-      <code>testOptionsGetSetPassword</code>
-      <code>testRedisSerializer</code>
-      <code>testRedisSetBoolean</code>
-      <code>testRedisSetDouble</code>
-      <code>testRedisSetInt</code>
-      <code>testRedisSetNull</code>
-      <code>testSocketConnection</code>
-    </MissingReturnType>
     <MixedArgument occurrences="2">
       <code>$this-&gt;storage-&gt;getItem('key')</code>
       <code>$this-&gt;storage-&gt;getMetadata($key)['ttl']</code>
@@ -336,11 +310,24 @@
       <code>null</code>
       <code>null</code>
     </PossiblyNullPropertyAssignmentValue>
-    <RedundantConditionGivenDocblockType occurrences="1">
+    <RedundantConditionGivenDocblockType occurrences="2">
+      <code>$this-&gt;storage</code>
       <code>$this-&gt;storage</code>
     </RedundantConditionGivenDocblockType>
+    <ReservedWord occurrences="1">
+      <code>$redis-&gt;info()</code>
+    </ReservedWord>
+    <UndefinedMethod occurrences="1">
+      <code>$redis-&gt;info()</code>
+    </UndefinedMethod>
     <UndefinedPropertyAssignment occurrences="1">
       <code>$redis-&gt;socket</code>
     </UndefinedPropertyAssignment>
+  </file>
+  <file src="test/unit/RedisResourceManagerTest.php">
+    <ArgumentTypeCoercion occurrences="2">
+      <code>'Redis'</code>
+      <code>'Redis'</code>
+    </ArgumentTypeCoercion>
   </file>
 </files>

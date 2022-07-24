@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Cache\Storage\Adapter;
 
 use Laminas\Cache\Storage\Adapter\RedisResourceManager;
@@ -32,7 +34,7 @@ class RedisResourceManagerTest extends TestCase
     /**
      * @group 6495
      */
-    public function testSetServerWithPasswordInUri()
+    public function testSetServerWithPasswordInUri(): void
     {
         $dummyResId = '1234567890';
         $server     = 'redis://dummyuser:dummypass@testhost:1234';
@@ -49,7 +51,7 @@ class RedisResourceManagerTest extends TestCase
     /**
      * @group 6495
      */
-    public function testSetServerWithPasswordInParameters()
+    public function testSetServerWithPasswordInParameters(): void
     {
         $server      = 'redis://dummyuser:dummypass@testhost:1234';
         $dummyResId2 = '12345678901';
@@ -71,7 +73,7 @@ class RedisResourceManagerTest extends TestCase
     /**
      * @group 6495
      */
-    public function testSetServerWithPasswordInUriShouldNotOverridePreviousResource()
+    public function testSetServerWithPasswordInUriShouldNotOverridePreviousResource(): void
     {
         $server      = 'redis://dummyuser:dummypass@testhost:1234';
         $server2     = 'redis://dummyuser:dummypass@testhost2:1234';
@@ -96,7 +98,7 @@ class RedisResourceManagerTest extends TestCase
     /**
      * Test with 'persistent_id'
      */
-    public function testValidPersistentId()
+    public function testValidPersistentId(): void
     {
         $resourceId           = 'testValidPersistentId';
         $resource             = [
@@ -115,7 +117,7 @@ class RedisResourceManagerTest extends TestCase
     /**
      * Test with 'persistend_id' instead of 'persistent_id'
      */
-    public function testNotValidPersistentIdOptionName()
+    public function testNotValidPersistentIdOptionName(): void
     {
         $resourceId           = 'testNotValidPersistentId';
         $resource             = [
@@ -133,7 +135,7 @@ class RedisResourceManagerTest extends TestCase
         $this->assertInstanceOf('Redis', $this->resourceManager->getResource($resourceId));
     }
 
-    public function testGetVersion()
+    public function testGetVersion(): void
     {
         $resourceId = __FUNCTION__;
         $resource   = [
@@ -147,7 +149,7 @@ class RedisResourceManagerTest extends TestCase
         $this->assertMatchesRegularExpression('/^\d+\.\d+\.\d+/', $this->resourceManager->getVersion($resourceId));
     }
 
-    public function testGetMajorVersion()
+    public function testGetMajorVersion(): void
     {
         $resourceId = __FUNCTION__;
         $resource   = [
