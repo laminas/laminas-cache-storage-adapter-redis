@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "956e26ff002f2f4b35035e66aa04e6a9",
+    "content-hash": "cdd468563104802bb985e6b07d1cbbe0",
     "packages": [
         {
             "name": "laminas/laminas-cache",
@@ -695,6 +695,64 @@
                 }
             ],
             "time": "2021-03-30T17:13:30+00:00"
+        },
+        {
+            "name": "boesing/psalm-plugin-stringf",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/boesing/psalm-plugin-stringf.git",
+                "reference": "d70603ec58451206db01d9cfea437852ee8e8362"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/boesing/psalm-plugin-stringf/zipball/d70603ec58451206db01d9cfea437852ee8e8362",
+                "reference": "d70603ec58451206db01d9cfea437852ee8e8362",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4 || ~8.0.0 || ~8.1.0",
+                "vimeo/psalm": "^4.23 || ^5.0",
+                "webmozart/assert": "^1.10"
+            },
+            "require-dev": {
+                "codeception/codeception": "^4.1",
+                "codeception/module-asserts": "^2.0",
+                "codeception/module-phpbrowser": "^2.0",
+                "doctrine/coding-standard": "^9.0",
+                "symfony/console": "^5.4",
+                "symfony/finder": "^5.4",
+                "symfony/yaml": "^5.4",
+                "vimeo/psalm": "^4.23.0 || ^5.0 || 5.0.0@beta",
+                "weirdan/codeception-psalm-module": "^0.13.1"
+            },
+            "type": "psalm-plugin",
+            "extra": {
+                "psalm": {
+                    "pluginClass": "Boesing\\PsalmPluginStringf\\Plugin"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Boesing\\PsalmPluginStringf\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Psalm plugin to work with `sprintf`, `printf`, `sscanf` and `fscanf`.",
+            "support": {
+                "issues": "https://github.com/boesing/psalm-plugin-stringf/issues",
+                "source": "https://github.com/boesing/psalm-plugin-stringf/tree/1.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2022-05-29T14:57:38+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
