@@ -36,8 +36,7 @@ final class RedisCluster extends AbstractAdapter implements
     /** @var RedisClusterFromExtension|null */
     private $resource;
 
-    /** @var string|null */
-    private $namespacePrefix;
+    private ?string $namespacePrefix = null;
 
     /** @var RedisClusterResourceManagerInterface|null */
     private $resourceManager;
@@ -366,7 +365,7 @@ final class RedisCluster extends AbstractAdapter implements
                 'staticTtl'          => true,
                 'ttlPrecision'       => 1,
                 'useRequestTime'     => false,
-                'maxKeyLength'       => $redisVersionLessThanV3 ? 255 : 512000000,
+                'maxKeyLength'       => $redisVersionLessThanV3 ? 255 : 512_000_000,
                 'namespaceIsPrefix'  => true,
             ]
         );

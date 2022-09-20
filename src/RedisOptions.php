@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Laminas\Cache\Storage\Adapter;
 
 use Laminas\Cache\Exception;
+use Laminas\Cache\Storage\Adapter\RedisResourceManager;
 
 use function sprintf;
 use function strlen;
@@ -20,27 +21,20 @@ final class RedisOptions extends AdapterOptions
      */
     protected $__prioritizedProperties__ = ['resource_manager', 'resource_id', 'server'];
     // @codingStandardsIgnoreEnd
-
     /**
      * The namespace separator
-     *
-     * @var string
      */
-    protected $namespaceSeparator = ':';
+    private string $namespaceSeparator = ':';
 
     /**
      * The redis resource manager
-     *
-     * @var null|RedisResourceManager
      */
-    protected $resourceManager;
+    private ?RedisResourceManager $resourceManager = null;
 
     /**
      * The resource id of the resource manager
-     *
-     * @var string
      */
-    protected $resourceId = 'default';
+    private string $resourceId = 'default';
 
     /**
      * Set namespace.

@@ -6,6 +6,7 @@ namespace Laminas\Cache\Storage\Adapter;
 
 use Laminas\Cache\Exception\RuntimeException;
 use Laminas\Cache\Storage\Adapter\Exception\RedisRuntimeException;
+use Laminas\Cache\Storage\Adapter\RedisClusterOptions;
 use Laminas\Cache\Storage\Plugin\PluginInterface;
 use Laminas\Cache\Storage\Plugin\Serializer;
 use Laminas\Cache\Storage\PluginCapableInterface;
@@ -20,11 +21,10 @@ use function assert;
  */
 final class RedisClusterResourceManager implements RedisClusterResourceManagerInterface
 {
-    /** @var RedisClusterOptions */
-    private $options;
+    private RedisClusterOptions $options;
 
     /** @psalm-var array<positive-int,mixed> */
-    private $libraryOptions = [];
+    private array $libraryOptions = [];
 
     public function __construct(RedisClusterOptions $options)
     {

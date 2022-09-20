@@ -34,32 +34,25 @@ final class RedisClusterOptions extends AdapterOptions
     public const OPT_COMPRESSION_LEVEL      = 9;
     public const OPT_NULL_MULTIBULK_AS_NULL = 10;
 
-    /** @var string */
-    protected $namespaceSeparator = ':';
+    private string $namespaceSeparator = ':';
 
-    /** @var string */
-    private $name = '';
+    private string $name = '';
 
-    /** @var float */
-    private $timeout = 1.0;
+    private float $timeout = 1.0;
 
-    /** @var float */
-    private $readTimeout = 2.0;
+    private float $readTimeout = 2.0;
 
-    /** @var bool */
-    private $persistent = false;
+    private bool $persistent = false;
 
     /** @psalm-var list<non-empty-string> */
-    private $seeds = [];
+    private array $seeds = [];
 
-    /** @var string */
-    private $version = '';
+    private string $version = '';
 
     /** @psalm-var array<positive-int,mixed> */
-    private $libOptions = [];
+    private array $libOptions = [];
 
-    /** @var string */
-    private $password = '';
+    private string $password = '';
 
     /**
      * @param array|Traversable|null|AdapterOptions $options

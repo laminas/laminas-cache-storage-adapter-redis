@@ -29,10 +29,8 @@ final class RedisResourceManager
 {
     /**
      * Registered resources
-     *
-     * @var array
      */
-    protected $resources = [];
+    private array $resources = [];
 
     /**
      * Check if a resource exists

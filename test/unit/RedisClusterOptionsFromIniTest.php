@@ -13,8 +13,7 @@ use function ini_set;
 
 final class RedisClusterOptionsFromIniTest extends TestCase
 {
-    /** @var string */
-    private $seedsConfigurationFromIni;
+    private string $seedsConfigurationFromIni;
 
     public function testWillThrowExceptionOnMissingSeedsConfiguration(): void
     {

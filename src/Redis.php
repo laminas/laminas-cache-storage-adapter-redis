@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Laminas\Cache\Storage\Adapter;
 
 use Laminas\Cache\Exception;
+use Laminas\Cache\Storage\Adapter\RedisResourceManager;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\ClearByNamespaceInterface;
 use Laminas\Cache\Storage\ClearByPrefixInterface;
@@ -27,31 +28,23 @@ final class Redis extends AbstractAdapter implements
 {
     /**
      * Has this instance be initialized
-     *
-     * @var bool
      */
-    protected $initialized = false;
+    private bool $initialized = false;
 
     /**
      * The redis resource manager
-     *
-     * @var null|RedisResourceManager
      */
-    protected $resourceManager;
+    private ?RedisResourceManager $resourceManager = null;
 
     /**
      * The redis resource id
-     *
-     * @var null|string
      */
-    protected $resourceId;
+    private ?string $resourceId = null;
 
     /**
      * The namespace prefix
-     *
-     * @var string
      */
-    protected $namespacePrefix = '';
+    private string $namespacePrefix = '';
 
     /**
      * Create new Adapter for redis storage
@@ -66,7 +59,7 @@ final class Redis extends AbstractAdapter implements
 
         // reset initialized flag on update option(s)
         $initialized = &$this->initialized;
-        $this->getEventManager()->attach('option', function () use (&$initialized) {
+        $this->getEventManager()->attach('option', static function () use (&$initialized): void {
             $initialized = false;
         });
     }
@@ -185,9 +178,7 @@ final class Redis extends AbstractAdapter implements
         //combine the key => value pairs and remove all missing values
         return array_filter(
             array_combine($normalizedKeys, $results),
-            function ($value) {
-                return $value !== false;
-            }
+            static fn($value): bool => $value !== false
         );
     }
 
@@ -493,7 +484,7 @@ final class Redis extends AbstractAdapter implements
             $serializer        = $resourceMgr->getLibOption($options->getResourceId(), RedisResource::OPT_SERIALIZER);
             $redisVersion      = $resourceMgr->getMajorVersion($options->getResourceId());
             $minTtl            = version_compare((string) $redisVersion, '2', '<') ? 0 : 1;
-            $maxKeyLength      = version_compare((string) $redisVersion, '3', '<') ? 255 : 512000000;
+            $maxKeyLength      = version_compare((string) $redisVersion, '3', '<') ? 255 : 512_000_000;
             $supportedMetadata = $redisVersion >= 2 ? ['ttl'] : [];
 
             $this->capabilities = new Capabilities(
