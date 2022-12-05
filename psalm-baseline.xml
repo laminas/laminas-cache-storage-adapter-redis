@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.24.0@06dd975cb55d36af80f242561738f16c5f58264f">
+<files psalm-version="4.29.0@7ec5ffbd5f68ae03782d7fd33fff0c45a69f95b3">
   <file src="src/Redis.php">
-    <DocblockTypeContradiction occurrences="1">
-      <code>$value === false</code>
-    </DocblockTypeContradiction>
     <InvalidArgument occurrences="4">
       <code>$ttl</code>
       <code>$ttl</code>
@@ -32,6 +29,13 @@
     <MissingClosureParamType occurrences="1">
       <code>$value</code>
     </MissingClosureParamType>
+    <MixedArgument occurrences="5">
+      <code>$this-&gt;preSerialize($value)</code>
+      <code>$this-&gt;preSerialize($value)</code>
+      <code>$this-&gt;preSerialize($value)</code>
+      <code>$this-&gt;preSerialize($value)</code>
+      <code>$value</code>
+    </MixedArgument>
     <MixedArgumentTypeCoercion occurrences="1">
       <code>$normalizedKeys</code>
     </MixedArgumentTypeCoercion>
