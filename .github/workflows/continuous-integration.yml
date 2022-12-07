@@ -27,6 +27,11 @@ jobs:
       fail-fast: false
       matrix: ${{ fromJSON(needs.matrix.outputs.matrix) }}
     steps:
+      - name: Get internal ip of gha 
+        run: |
+          LOCALIP=$(hostname -I | awk '{print $1}') >> $GITHUB_ENV
+          HOSTNAME=$(hostname) >> $GITHUB_ENV
+
       - name: Test redis cluster
         uses: vishnudxb/redis-cluster@1.0.5
         with:
@@ -42,14 +47,14 @@ jobs:
         run: |
           sudo apt-get install -y redis-tools
           docker ps -a
-          redis-cli -h 0.0.0.0 -p 6379 ping
-          redis-cli -h 0.0.0.0 -p 6379 cluster nodes
+          redis-cli -h ${{ env.LOCALIP }} -p 6379 ping
+          redis-cli -h ${{ env.LOCALIP }} -p 6379 cluster nodes
 
       - name: ${{ matrix.name }}
         uses: laminas/laminas-continuous-integration-action@v1
         with:
           job: ${{ matrix.job }}
         env:
-          TESTS_LAMINAS_CACHE_REDIS_HOST: 0.0.0.0
-          TESTS_LAMINAS_CACHE_REDIS_CLUSTER_NAME: 0.0.0.0
+          TESTS_LAMINAS_CACHE_REDIS_HOST: ${{ env.LOCALIP }}
+          TESTS_LAMINAS_CACHE_REDIS_CLUSTER_NAME: ${{ env.HOSTNAME }}
           TESTS_LAMINAS_CACHE_REDIS_PORT: 6379
