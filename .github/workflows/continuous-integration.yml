@@ -42,14 +42,14 @@ jobs:
         run: |
           sudo apt-get install -y redis-tools
           docker ps -a
-          redis-cli -h 127.0.0.1 -p 6379 ping
-          redis-cli -h 127.0.0.1 -p 6379 cluster nodes
+          redis-cli -h 0.0.0.0 -p 6379 ping
+          redis-cli -h 0.0.0.0 -p 6379 cluster nodes
 
       - name: ${{ matrix.name }}
         uses: laminas/laminas-continuous-integration-action@v1
         with:
           job: ${{ matrix.job }}
         env:
-          TESTS_LAMINAS_CACHE_REDIS_HOST: 127.0.0.1
-          TESTS_LAMINAS_CACHE_REDIS_CLUSTER_NAME: 127.0.0.1
+          TESTS_LAMINAS_CACHE_REDIS_HOST: 0.0.0.0
+          TESTS_LAMINAS_CACHE_REDIS_CLUSTER_NAME: 0.0.0.0
           TESTS_LAMINAS_CACHE_REDIS_PORT: 6379
