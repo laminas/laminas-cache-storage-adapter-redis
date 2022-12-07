@@ -51,5 +51,5 @@ jobs:
           job: ${{ matrix.job }}
         env:
           TESTS_LAMINAS_CACHE_REDIS_HOST: 127.0.0.1
-          TESTS_LAMINAS_CACHE_REDIS_CLUSTER_NAME: redis-cluster
+          TESTS_LAMINAS_CACHE_REDIS_CLUSTER_NAME: 127.0.0.1
           TESTS_LAMINAS_CACHE_REDIS_PORT: 6379
