@@ -29,8 +29,8 @@ jobs:
     steps:
       - name: Get internal ip of gha 
         run: |
-          LOCALIP=$(hostname -I | awk '{print $1}') >> $GITHUB_ENV
-          HOSTNAME=$(hostname) >> $GITHUB_ENV
+          echo "LOCALIP=$(hostname -I | awk '{print $1}')" >> $GITHUB_ENV
+          echo "HOSTNAME=$(hostname)" >> $GITHUB_ENV
 
       - name: Test redis cluster
         uses: vishnudxb/redis-cluster@1.0.5
