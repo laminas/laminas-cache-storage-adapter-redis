@@ -14,7 +14,6 @@ use Laminas\Cache\Storage\TotalSpaceCapableInterface;
 use Redis as RedisResource;
 use RedisException as RedisResourceException;
 use stdClass;
-use Traversable;
 
 use function array_combine;
 use function array_filter;
@@ -49,9 +48,9 @@ final class Redis extends AbstractAdapter implements
     /**
      * Create new Adapter for redis storage
      *
-     * @see \Laminas\Cache\Storage\Adapter\Abstract
+     * @see Abstract
      *
-     * @param null|array|Traversable|RedisOptions $options
+     * @param null|iterable|RedisOptions $options
      */
     public function __construct($options = null)
     {
@@ -100,7 +99,7 @@ final class Redis extends AbstractAdapter implements
      *
      * @see    getOptions()
      *
-     * @param  array|Traversable|RedisOptions $options
+     * @param  iterable|RedisOptions $options
      * @return Redis
      */
     public function setOptions($options)

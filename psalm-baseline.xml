@@ -47,7 +47,8 @@
       <code>$info['used_memory']</code>
       <code>$this-&gt;options</code>
     </MixedReturnStatement>
-    <MoreSpecificImplementedParamType occurrences="1">
+    <MoreSpecificImplementedParamType occurrences="2">
+      <code>$options</code>
       <code>$options</code>
     </MoreSpecificImplementedParamType>
     <MoreSpecificReturnType occurrences="1">
@@ -76,6 +77,12 @@
     <UndefinedMethod occurrences="1">
       <code>$info</code>
     </UndefinedMethod>
+  </file>
+  <file src="src/RedisCluster.php">
+    <MoreSpecificImplementedParamType occurrences="2">
+      <code>$options</code>
+      <code>$options</code>
+    </MoreSpecificImplementedParamType>
   </file>
   <file src="src/RedisOptions.php">
     <InvalidReturnStatement occurrences="1">
@@ -111,10 +118,9 @@
       <code>normalizePersistentId</code>
       <code>normalizeServer</code>
     </MissingReturnType>
-    <MixedArgument occurrences="9">
+    <MixedArgument occurrences="8">
       <code>$k</code>
       <code>$key</code>
-      <code>$resource</code>
       <code>$resource</code>
       <code>$resource['lib_options']</code>
       <code>$resource['persistent_id']</code>
@@ -128,11 +134,10 @@
       <code>$resource['initialized']</code>
       <code>$resource['lib_options']</code>
       <code>$resource['lib_options']</code>
+      <code>$resource['lib_options'][$key]</code>
       <code>$resource['password']</code>
       <code>$resource['password']</code>
       <code>$resource['persistent_id']</code>
-      <code>$resource['resource']</code>
-      <code>$resource['resource']</code>
       <code>$resource['resource']</code>
       <code>$resource['resource']</code>
       <code>$resource['resource']</code>
@@ -150,8 +155,6 @@
       <code>$server['host']</code>
       <code>$server['port']</code>
       <code>$server['port']</code>
-      <code>$server['port']</code>
-      <code>$server['timeout']</code>
       <code>$server['timeout']</code>
       <code>$server['timeout']</code>
       <code>$server['timeout']</code>
@@ -206,10 +209,6 @@
       <code>$this-&gt;storage-&gt;getItem('key')</code>
       <code>$this-&gt;storage-&gt;getMetadata($key)['ttl']</code>
     </MixedArgument>
-    <NonInvariantDocblockPropertyType occurrences="2">
-      <code>$options</code>
-      <code>$storage</code>
-    </NonInvariantDocblockPropertyType>
     <PossiblyInvalidArrayAccess occurrences="2">
       <code>$this-&gt;storage-&gt;getMetadata($key)['ttl']</code>
       <code>$this-&gt;storage-&gt;getMetadata($key)['ttl']</code>
@@ -219,7 +218,6 @@
       <code>null</code>
     </PossiblyNullPropertyAssignmentValue>
     <RedundantConditionGivenDocblockType occurrences="1">
-      <code>$this-&gt;storage</code>
       <code>$this-&gt;storage</code>
     </RedundantConditionGivenDocblockType>
     <UndefinedMethod occurrences="1">
