@@ -76,10 +76,6 @@
     <PropertyNotSetInConstructor occurrences="1">
       <code>Redis</code>
     </PropertyNotSetInConstructor>
-    <RedundantCastGivenDocblockType occurrences="2">
-      <code>(string) $namespace</code>
-      <code>(string) $prefix</code>
-    </RedundantCastGivenDocblockType>
     <ReservedWord occurrences="1">
       <code>$info</code>
     </ReservedWord>
@@ -100,11 +96,6 @@
     <MoreSpecificReturnType occurrences="1">
       <code>RedisOptions</code>
     </MoreSpecificReturnType>
-    <RedundantCastGivenDocblockType occurrences="3">
-      <code>(string) $namespace</code>
-      <code>(string) $namespaceSeparator</code>
-      <code>(string) $resourceId</code>
-    </RedundantCastGivenDocblockType>
   </file>
   <file src="src/RedisResourceManager.php">
     <ArgumentTypeCoercion occurrences="1">
@@ -126,16 +117,26 @@
       <code>normalizePersistentId</code>
       <code>normalizeServer</code>
     </MissingReturnType>
-    <MixedArgument occurrences="9">
+    <MixedArgument occurrences="19">
       <code>$k</code>
       <code>$key</code>
-      <code>$redis</code>
       <code>$resource</code>
       <code>$resource</code>
+      <code>$resource['database']</code>
       <code>$resource['lib_options']</code>
+      <code>$resource['persistent_id']</code>
       <code>$resource['persistent_id']</code>
       <code>$resource['server']</code>
       <code>$server</code>
+      <code>$server['host']</code>
+      <code>$server['host']</code>
+      <code>$server['host']</code>
+      <code>$server['host']</code>
+      <code>$server['port']</code>
+      <code>$server['port']</code>
+      <code>$server['timeout']</code>
+      <code>$server['timeout']</code>
+      <code>$server['timeout']</code>
     </MixedArgument>
     <MixedArrayAccess occurrences="36">
       <code>$resource['database']</code>
@@ -200,15 +201,9 @@
       <code>string</code>
       <code>string|null</code>
     </MixedInferredReturnType>
-    <MixedMethodCall occurrences="8">
-      <code>auth</code>
-      <code>connect</code>
-      <code>connect</code>
-      <code>connect</code>
+    <MixedMethodCall occurrences="2">
       <code>getOption</code>
       <code>getOption</code>
-      <code>pconnect</code>
-      <code>select</code>
     </MixedMethodCall>
     <MixedReturnStatement occurrences="8">
       <code>$resource['database']</code>
@@ -226,11 +221,6 @@
     <RedundantCast occurrences="1">
       <code>(int) $server['port']</code>
     </RedundantCast>
-    <RedundantCastGivenDocblockType occurrences="3">
-      <code>(int) $database</code>
-      <code>(string) $id</code>
-      <code>(string) $persistentId</code>
-    </RedundantCastGivenDocblockType>
   </file>
   <file src="test/integration/Laminas/RedisTest.php">
     <MixedArgument occurrences="2">
