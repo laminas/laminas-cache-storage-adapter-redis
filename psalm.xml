@@ -6,6 +6,7 @@
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
         errorBaseline="psalm-baseline.xml"
+        findUnusedPsalmSuppress="true"
 >
     <projectFiles>
         <directory name="src"/>
@@ -26,6 +27,27 @@
                 <referencedMethod name="Laminas\Cache\Storage\Adapter\RedisClusterOptions::setResourceManager"/>
             </errorLevel>
         </InternalMethod>
+        <!--
+            Since these are usually suppressed anyway AND psalm is already thinking about removing this issue at all,
+            suppressing these might be a good idea. See https://github.com/vimeo/psalm/pull/8776 for more information.
+        -->
+        <MixedAssignment>
+            <errorLevel type="suppress">
+                <directory name="*"/>
+            </errorLevel>
+        </MixedAssignment>
+        <!--
+            Mark these redundant casts as info as some docblocks are not accurate about the return values.
+            The redis extension does not provide integer exception codes and thus, passing null as a code starts
+            being deprecated starting with PHP 8.1 and might trigger errors in PHP 9.0 and thus, lets allow
+            casts for docblock types. Psalm has also `RedundantCast` which is shown when a native type-hint is being
+            cast. i.e. such as property type or return type.
+         -->
+        <RedundantCastGivenDocblockType>
+            <errorLevel type="info">
+                <directory name="*"/>
+            </errorLevel>
+        </RedundantCastGivenDocblockType>
     </issueHandlers>
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>

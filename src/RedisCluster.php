@@ -176,7 +176,6 @@ final class RedisCluster extends AbstractAdapter implements
             return null;
         }
 
-        /** @psalm-suppress MixedAssignment */
         $value   = $casToken = $values[$normalizedKey];
         $success = true;
         return $value;
@@ -202,7 +201,6 @@ final class RedisCluster extends AbstractAdapter implements
         }
 
         $result = [];
-        /** @psalm-suppress MixedAssignment */
         foreach ($resultsByIndex as $keyIndex => $value) {
             $normalizedKey = $normalizedKeys[$keyIndex];
             $namespacedKey = $namespacedKeys[$keyIndex];
@@ -210,7 +208,6 @@ final class RedisCluster extends AbstractAdapter implements
                 continue;
             }
 
-            /** @psalm-suppress MixedAssignment */
             $result[$normalizedKey] = $value;
         }
 
@@ -299,7 +296,6 @@ final class RedisCluster extends AbstractAdapter implements
         $ttl   = (int) $this->getOptions()->getTtl();
 
         $namespacedKeyValuePairs = [];
-        /** @psalm-suppress MixedAssignment */
         foreach ($normalizedKeyValuePairs as $normalizedKey => $value) {
             $namespacedKeyValuePairs[$this->createNamespacedKey((string) $normalizedKey)] = $value;
         }
@@ -307,7 +303,6 @@ final class RedisCluster extends AbstractAdapter implements
         $successByKey = [];
 
         try {
-            /** @psalm-suppress MixedAssignment */
             foreach ($namespacedKeyValuePairs as $key => $value) {
                 if ($ttl) {
                     /**
@@ -443,7 +438,6 @@ final class RedisCluster extends AbstractAdapter implements
      */
     private function isFalseReturnValuePersisted(RedisClusterFromExtension $redis, string $key): bool
     {
-        /** @psalm-suppress MixedAssignment */
         $serializer = $this->getLibOption(RedisClusterFromExtension::OPT_SERIALIZER);
         if ($serializer === RedisClusterFromExtension::SERIALIZER_NONE) {
             return false;
