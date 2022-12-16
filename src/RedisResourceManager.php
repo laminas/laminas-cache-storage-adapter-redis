@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace Laminas\Cache\Storage\Adapter;
 
 use Laminas\Cache\Exception;
+use Laminas\Cache\Storage\Adapter\Exception\RedisRuntimeException;
 use Laminas\Stdlib\ArrayUtils;
 use Redis as RedisResource;
+use RedisException as RedisResourceException;
 use ReflectionClass;
 use Traversable;
 
 use function array_merge;
+use function assert;
 use function constant;
 use function defined;
 use function is_array;
@@ -140,8 +143,11 @@ final class RedisResourceManager
             }
 
             if (! $resource['version']) {
-                $info                = $resource['resource']->info();
+                $redis = $resource['resource'];
+                assert($redis instanceof RedisResource);
+                $info                = $this->getRedisInfo($redis);
                 $resource['version'] = $info['redis_version'];
+                unset($info);
             }
 
             return $resource['resource'];
@@ -158,8 +164,9 @@ final class RedisResourceManager
             $redis->setOption($k, $v);
         }
 
-        $info                             = $redis->info();
-        $resource['version']              = $info['redis_version'];
+        $info                = $this->getRedisInfo($redis);
+        $resource['version'] = $info['redis_version'];
+        unset($info);
         $this->resources[$id]['resource'] = $redis;
         return $redis;
     }
@@ -283,32 +290,38 @@ final class RedisResourceManager
     {
         $server = $resource['server'];
         $redis  = $resource['resource'];
-        if ($resource['persistent_id'] !== '') {
-            //connect or reuse persistent connection
-            $success = $redis->pconnect(
-                $server['host'],
-                $server['port'],
-                $server['timeout'],
-                $resource['persistent_id']
-            );
-        } elseif ($server['port']) {
-            $success = $redis->connect($server['host'], $server['port'], $server['timeout']);
-        } elseif ($server['timeout']) {
-            //connect through unix domain socket
-            $success = $redis->connect($server['host'], $server['timeout']);
-        } else {
-            $success = $redis->connect($server['host']);
-        }
+        assert($redis instanceof RedisResource);
 
-        if (! $success) {
-            throw new Exception\RuntimeException('Could not establish connection with Redis instance');
-        }
+        try {
+            if (($resource['persistent_id'] ?? '') !== '') {
+                //connect or reuse persistent connection
+                $success = $redis->pconnect(
+                    $server['host'],
+                    $server['port'],
+                    $server['timeout'],
+                    $resource['persistent_id']
+                );
+            } elseif ($server['port']) {
+                $success = $redis->connect($server['host'], $server['port'], $server['timeout']);
+            } elseif ($server['timeout']) {
+                //connect through unix domain socket
+                $success = $redis->connect($server['host'], $server['timeout']);
+            } else {
+                $success = $redis->connect($server['host']);
+            }
 
-        $resource['initialized'] = true;
-        if ($resource['password']) {
-            $redis->auth($resource['password']);
+            if (! $success) {
+                throw new Exception\RuntimeException('Could not establish connection with Redis instance');
+            }
+
+            $resource['initialized'] = true;
+            if ($resource['password']) {
+                $redis->auth($resource['password']);
+            }
+            $redis->select($resource['database']);
+        } catch (RedisResourceException $exception) {
+            throw RedisRuntimeException::fromRedisException($exception, $redis);
         }
-        $redis->select($resource['database']);
     }
 
     /**
@@ -462,6 +475,7 @@ final class RedisResourceManager
 
         $this->normalizeLibOptions($libOptions);
         $redis = &$resource['resource'];
+        assert($redis instanceof RedisResource);
 
         if (method_exists($redis, 'setOptions')) {
             $redis->setOptions($libOptions);
@@ -545,6 +559,7 @@ final class RedisResourceManager
      *
      * @param array|Traversable $libOptions
      * @throws Exception\InvalidArgumentException
+     * @param-out array<int,mixed> $libOptions
      */
     protected function normalizeLibOptions(&$libOptions)
     {
@@ -568,19 +583,20 @@ final class RedisResourceManager
      *
      * @param string|int $key
      * @throws Exception\InvalidArgumentException
+     * @param-out int $key
      */
     protected function normalizeLibOptionKey(&$key)
     {
-        // convert option name into it's constant value
-        if (is_string($key)) {
-            $const = 'Redis::OPT_' . str_replace([' ', '-'], '_', strtoupper($key));
-            if (! defined($const)) {
-                throw new Exception\InvalidArgumentException("Unknown redis option '{$key}' ({$const})");
-            }
-            $key = constant($const);
-        } else {
-            $key = (int) $key;
+        if (! is_string($key)) {
+            return;
         }
+
+        $const = 'Redis::OPT_' . str_replace([' ', '-'], '_', strtoupper($key));
+        if (! defined($const)) {
+            throw new Exception\InvalidArgumentException("Unknown redis option '{$key}' ({$const})");
+        }
+        /** @var int $key */
+        $key = constant($const);
     }
 
     /**
@@ -662,12 +678,39 @@ final class RedisResourceManager
         }
 
         $resource = &$this->resources[$id];
-        if ($resource['resource'] instanceof RedisResource && $resource['initialized']) {
-            $resource['resource']->select($database);
+        $redis    = $resource['resource'];
+        if ($redis instanceof RedisResource && $resource['initialized']) {
+            try {
+                $redis->select($database);
+            } catch (RedisResourceException $exception) {
+                throw RedisRuntimeException::fromRedisException($exception, $redis);
+            }
         }
 
         $resource['database'] = $database;
 
         return $this;
+    }
+
+    /**
+     * @return array{redis_version:string}
+     */
+    private function getRedisInfo(RedisResource $redis): array
+    {
+        try {
+            $info = $redis->info();
+        } catch (RedisResourceException $exception) {
+            throw RedisRuntimeException::fromRedisException($exception, $redis);
+        }
+
+        if (! is_array($info)) {
+            return ['redis_version' => '0.0.0-unknown'];
+        }
+
+        if (! isset($info['redis_version']) || ! is_string($info['redis_version'])) {
+            return ['redis_version' => '0.0.0-unknown'];
+        }
+
+        return $info;
     }
 }
