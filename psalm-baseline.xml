@@ -73,21 +73,7 @@
       <code>exec</code>
       <code>setex</code>
     </PossiblyInvalidMethodCall>
-    <PossiblyNullArgument occurrences="16">
-      <code>$redis-&gt;getLastError()</code>
-      <code>$redis-&gt;getLastError()</code>
-      <code>$redis-&gt;getLastError()</code>
-      <code>$redis-&gt;getLastError()</code>
-      <code>$redis-&gt;getLastError()</code>
-      <code>$redis-&gt;getLastError()</code>
-      <code>$redis-&gt;getLastError()</code>
-      <code>$redis-&gt;getLastError()</code>
-      <code>$redis-&gt;getLastError()</code>
-      <code>$redis-&gt;getLastError()</code>
-      <code>$redis-&gt;getLastError()</code>
-      <code>$redis-&gt;getLastError()</code>
-      <code>$redis-&gt;getLastError()</code>
-      <code>$redis-&gt;getLastError()</code>
+    <PossiblyNullArgument occurrences="2">
       <code>$this-&gt;resourceId</code>
       <code>$this-&gt;resourceId</code>
     </PossiblyNullArgument>
