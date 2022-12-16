@@ -392,7 +392,7 @@ final class RedisTest extends AbstractCommonAdapterTest
      */
     private function mockInitializedRedisResource()
     {
-        $redis         = $this->getMockBuilder(RedisResource::class)->getMock();
+        $redis         = $this->createMock(RedisFromExtensionAsset::class);
         $redis->socket = true;
         $redis->method('info')->willReturn(['redis_version' => '0.0.0-unknown']);
         return $redis;
