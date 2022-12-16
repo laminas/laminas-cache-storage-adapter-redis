@@ -141,7 +141,7 @@ final class Redis extends AbstractAdapter implements
         try {
             $value = $redis->get($this->namespacePrefix . $normalizedKey);
         } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError(), $e->getCode(), $e);
+            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
         }
 
         if ($value === false) {
@@ -173,7 +173,7 @@ final class Redis extends AbstractAdapter implements
         try {
             $results = $redis->mGet($namespacedKeys);
         } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError(), $e->getCode(), $e);
+            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
         }
         //combine the key => value pairs and remove all missing values
         return array_filter(
@@ -195,7 +195,7 @@ final class Redis extends AbstractAdapter implements
         try {
             return (bool) $redis->exists($this->namespacePrefix . $normalizedKey);
         } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError(), $e->getCode(), $e);
+            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -223,7 +223,7 @@ final class Redis extends AbstractAdapter implements
                 $success = $redis->set($this->namespacePrefix . $normalizedKey, $this->preSerialize($value));
             }
         } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError(), $e->getCode(), $e);
+            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
         }
 
         return $success;
@@ -263,10 +263,10 @@ final class Redis extends AbstractAdapter implements
                 $success = $redis->mSet($namespacedKeyValuePairs);
             }
         } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError(), $e->getCode(), $e);
+            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
         }
         if (! $success) {
-            throw new Exception\RuntimeException($redis->getLastError());
+            throw new Exception\RuntimeException($redis->getLastError() ?? 'no last error');
         }
 
         return [];
@@ -306,7 +306,7 @@ final class Redis extends AbstractAdapter implements
 
             return $success;
         } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError(), $e->getCode(), $e);
+            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -324,7 +324,7 @@ final class Redis extends AbstractAdapter implements
             $ttl = $this->getOptions()->getTtl();
             return (bool) $redis->expire($this->namespacePrefix . $normalizedKey, $ttl);
         } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError(), $e->getCode(), $e);
+            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -341,7 +341,7 @@ final class Redis extends AbstractAdapter implements
         try {
             return (bool) $redis->del($this->namespacePrefix . $normalizedKey);
         } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError(), $e->getCode(), $e);
+            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -359,7 +359,7 @@ final class Redis extends AbstractAdapter implements
         try {
             return $redis->incrBy($this->namespacePrefix . $normalizedKey, $value);
         } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError(), $e->getCode(), $e);
+            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -377,7 +377,7 @@ final class Redis extends AbstractAdapter implements
         try {
             return $redis->decrBy($this->namespacePrefix . $normalizedKey, $value);
         } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError(), $e->getCode(), $e);
+            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -393,7 +393,7 @@ final class Redis extends AbstractAdapter implements
         try {
             return $redis->flushDB();
         } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError(), $e->getCode(), $e);
+            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -461,7 +461,7 @@ final class Redis extends AbstractAdapter implements
         try {
             $info = $redis->info();
         } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError(), $e->getCode(), $e);
+            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
         }
 
         return $info['used_memory'];
@@ -584,7 +584,7 @@ final class Redis extends AbstractAdapter implements
                 return false;
             }
         } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError(), $e->getCode(), $e);
+            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
         }
 
         return $metadata;
