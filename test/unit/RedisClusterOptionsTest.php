@@ -117,7 +117,6 @@ final class RedisClusterOptionsTest extends AbstractAdapterOptionsTest
             ));
         }
 
-        /** @psalm-suppress MixedAssignment */
         $constantValueInOptions = constant($constantInOptions);
         self::assertIsInt($constantValueInOptions);
         self::assertEquals(

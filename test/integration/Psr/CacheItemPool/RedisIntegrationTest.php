@@ -15,7 +15,6 @@ class RedisIntegrationTest extends AbstractCacheItemPoolIntegrationTest
 
     protected function setUp(): void
     {
-        /** @psalm-suppress MixedArrayAssignment */
         $this->skippedTests['testHasItemReturnsFalseWhenDeferredItemIsExpired']
             = 'Cache decorator does not support deferred deletion';
 

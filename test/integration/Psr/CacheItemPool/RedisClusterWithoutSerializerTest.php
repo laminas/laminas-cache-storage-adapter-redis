@@ -18,7 +18,6 @@ final class RedisClusterWithoutSerializerTest extends AbstractCacheItemPoolInteg
     protected function setUp(): void
     {
         parent::setUp();
-        /** @psalm-suppress MixedArrayAssignment */
         $this->skippedTests['testHasItemReturnsFalseWhenDeferredItemIsExpired'] = sprintf(
             '%s storage doesn\'t support driver deferred',
             RedisCluster::class

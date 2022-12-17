@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace LaminasTest\Cache\Storage\Adapter;
 
+use Laminas\Cache\Storage\Adapter\Exception\RedisRuntimeException;
 use Laminas\Cache\Storage\Adapter\RedisResourceManager;
 use PHPUnit\Framework\TestCase;
+use Redis;
+use RedisException;
 
 use function getenv;
 
@@ -161,5 +164,149 @@ class RedisResourceManagerTest extends TestCase
         $this->resourceManager->setResource($resourceId, $resource);
 
         $this->assertGreaterThan(0, $this->resourceManager->getMajorVersion($resourceId));
+    }
+
+    public function testWillCatchConnectExceptions(): void
+    {
+        $redis = $this->createMock(Redis::class);
+        $redis
+            ->expects(self::atLeastOnce())
+            ->method('connect')
+            ->willThrowException(new RedisException('test'));
+
+        $this->resourceManager->setResource('default', ['resource' => $redis, 'server' => 'localhost:6379']);
+
+        $this->expectException(RedisRuntimeException::class);
+        $this->expectExceptionMessage('test');
+        $this->resourceManager->getResource('default');
+    }
+
+    public function testWillCatchPConnectExceptions(): void
+    {
+        $redis = $this->createMock(Redis::class);
+        $redis
+            ->expects(self::atLeastOnce())
+            ->method('pconnect')
+            ->willThrowException(new RedisException('test'));
+
+        $this->expectException(RedisRuntimeException::class);
+        $this->expectExceptionMessage('test');
+        $this->resourceManager->setResource(
+            'default',
+            [
+                'resource'      => $redis,
+                'server'        => 'localhost:6379',
+                'persistent_id' => 'test',
+            ]
+        );
+        $this->resourceManager->getResource('default');
+    }
+
+    public function testWillCatchAuthExceptions(): void
+    {
+        $redis = $this->createMock(Redis::class);
+        $redis
+            ->method('connect')
+            ->willReturn(true);
+
+        $redis
+            ->method('info')
+            ->willReturn(['redis_version' => '1.2.3']);
+
+        $redis
+            ->expects(self::atLeastOnce())
+            ->method('auth')
+            ->with('foobar')
+            ->willThrowException(new RedisException('test'));
+
+        $this->resourceManager->setResource(
+            'default',
+            [
+                'resource' => $redis,
+                'server'   => 'whatever:6379',
+                'password' => 'foobar',
+            ]
+        );
+        $this->expectException(RedisRuntimeException::class);
+        $this->expectExceptionMessage('test');
+        $this->resourceManager->getResource('default');
+    }
+
+    public function testWillCatchInfoExceptions(): void
+    {
+        $redis = $this->createMock(Redis::class);
+        $redis
+            ->method('connect')
+            ->willReturn(true);
+
+        $redis
+            ->expects(self::atLeastOnce())
+            ->method('info')
+            ->willThrowException(new RedisException('test'));
+
+        $this->resourceManager->setResource(
+            'default',
+            [
+                'resource'    => $redis,
+                'initialized' => true,
+                'server'      => 'somewhere:6379',
+            ]
+        );
+
+        $this->expectException(RedisRuntimeException::class);
+        $this->expectExceptionMessage('test');
+        $this->resourceManager->getResource('default');
+    }
+
+    public function testWillCatchAuthDuringConnectException(): void
+    {
+        $redis = $this->createMock(Redis::class);
+
+        $redis
+            ->method('connect')
+            ->willReturn(true);
+
+        $redis
+            ->expects(self::atLeastOnce())
+            ->method('auth')
+            ->with('secret')
+            ->willThrowException(new RedisException('test'));
+
+        $this->resourceManager->setResource(
+            'default',
+            [
+                'resource'    => $redis,
+                'initialized' => false,
+                'server'      => 'somewhere:6379',
+                'password'    => 'secret',
+            ]
+        );
+
+        $this->expectException(RedisRuntimeException::class);
+        $this->expectExceptionMessage('test');
+        $this->resourceManager->getResource('default');
+    }
+
+    public function testWillCatchSelectDatabaseException(): void
+    {
+        $redis = $this->createMock(Redis::class);
+
+        $redis
+            ->expects(self::atLeastOnce())
+            ->method('select')
+            ->willThrowException(new RedisException('test'));
+
+        $this->resourceManager->setResource(
+            'default',
+            [
+                'resource'    => $redis,
+                'initialized' => true,
+                'server'      => 'somewhere:6379',
+            ]
+        );
+
+        $this->expectException(RedisRuntimeException::class);
+        $this->expectExceptionMessage('test');
+        $this->resourceManager->setDatabase('default', 0);
     }
 }

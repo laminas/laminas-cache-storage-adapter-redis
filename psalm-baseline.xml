@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.29.0@7ec5ffbd5f68ae03782d7fd33fff0c45a69f95b3">
+<files psalm-version="4.30.0@d0bc6e25d89f649e4f36a534f330f8bb4643dd69">
   <file src="src/Redis.php">
     <InvalidArgument occurrences="4">
       <code>$ttl</code>
@@ -39,14 +39,6 @@
     <MixedArgumentTypeCoercion occurrences="1">
       <code>$normalizedKeys</code>
     </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="6">
-      <code>$namespacedKeyValuePairs[$this-&gt;namespacePrefix . $normalizedKey]</code>
-      <code>$normalizedKey</code>
-      <code>$serializer</code>
-      <code>$serializer</code>
-      <code>$value</code>
-      <code>$value</code>
-    </MixedAssignment>
     <MixedInferredReturnType occurrences="2">
       <code>RedisOptions</code>
       <code>int|float</code>
@@ -84,10 +76,6 @@
     <PropertyNotSetInConstructor occurrences="1">
       <code>Redis</code>
     </PropertyNotSetInConstructor>
-    <RedundantCastGivenDocblockType occurrences="2">
-      <code>(string) $namespace</code>
-      <code>(string) $prefix</code>
-    </RedundantCastGivenDocblockType>
     <ReservedWord occurrences="1">
       <code>$info</code>
     </ReservedWord>
@@ -108,11 +96,6 @@
     <MoreSpecificReturnType occurrences="1">
       <code>RedisOptions</code>
     </MoreSpecificReturnType>
-    <RedundantCastGivenDocblockType occurrences="3">
-      <code>(string) $namespace</code>
-      <code>(string) $namespaceSeparator</code>
-      <code>(string) $resourceId</code>
-    </RedundantCastGivenDocblockType>
   </file>
   <file src="src/RedisResourceManager.php">
     <ArgumentTypeCoercion occurrences="1">
@@ -134,19 +117,28 @@
       <code>normalizePersistentId</code>
       <code>normalizeServer</code>
     </MissingReturnType>
-    <MixedArgument occurrences="9">
+    <MixedArgument occurrences="19">
       <code>$k</code>
       <code>$key</code>
-      <code>$redis</code>
       <code>$resource</code>
       <code>$resource</code>
+      <code>$resource['database']</code>
       <code>$resource['lib_options']</code>
+      <code>$resource['persistent_id']</code>
       <code>$resource['persistent_id']</code>
       <code>$resource['server']</code>
       <code>$server</code>
+      <code>$server['host']</code>
+      <code>$server['host']</code>
+      <code>$server['host']</code>
+      <code>$server['host']</code>
+      <code>$server['port']</code>
+      <code>$server['port']</code>
+      <code>$server['timeout']</code>
+      <code>$server['timeout']</code>
+      <code>$server['timeout']</code>
     </MixedArgument>
-    <MixedArrayAccess occurrences="37">
-      <code>$info['redis_version']</code>
+    <MixedArrayAccess occurrences="36">
       <code>$resource['database']</code>
       <code>$resource['initialized']</code>
       <code>$resource['initialized']</code>
@@ -199,39 +191,6 @@
     <MixedArrayOffset occurrences="1">
       <code>$libOptions[$constValue]</code>
     </MixedArrayOffset>
-    <MixedAssignment occurrences="31">
-      <code>$constValue</code>
-      <code>$info</code>
-      <code>$k</code>
-      <code>$key</code>
-      <code>$key</code>
-      <code>$libOptions[$constValue]</code>
-      <code>$redis</code>
-      <code>$redis</code>
-      <code>$resource</code>
-      <code>$resource</code>
-      <code>$resource</code>
-      <code>$resource</code>
-      <code>$resource</code>
-      <code>$resource</code>
-      <code>$resource</code>
-      <code>$resource</code>
-      <code>$resource</code>
-      <code>$resource</code>
-      <code>$resource</code>
-      <code>$resource</code>
-      <code>$resource['version']</code>
-      <code>$resource['version']</code>
-      <code>$result[$key]</code>
-      <code>$server</code>
-      <code>$success</code>
-      <code>$success</code>
-      <code>$success</code>
-      <code>$success</code>
-      <code>$v</code>
-      <code>$value</code>
-      <code>$value</code>
-    </MixedAssignment>
     <MixedInferredReturnType occurrences="8">
       <code>RedisResource</code>
       <code>array</code>
@@ -242,17 +201,9 @@
       <code>string</code>
       <code>string|null</code>
     </MixedInferredReturnType>
-    <MixedMethodCall occurrences="10">
-      <code>auth</code>
-      <code>connect</code>
-      <code>connect</code>
-      <code>connect</code>
+    <MixedMethodCall occurrences="2">
       <code>getOption</code>
       <code>getOption</code>
-      <code>info</code>
-      <code>pconnect</code>
-      <code>select</code>
-      <code>setOption</code>
     </MixedMethodCall>
     <MixedReturnStatement occurrences="8">
       <code>$resource['database']</code>
@@ -270,18 +221,6 @@
     <RedundantCast occurrences="1">
       <code>(int) $server['port']</code>
     </RedundantCast>
-    <RedundantCastGivenDocblockType occurrences="4">
-      <code>(int) $database</code>
-      <code>(int) $key</code>
-      <code>(string) $id</code>
-      <code>(string) $persistentId</code>
-    </RedundantCastGivenDocblockType>
-    <ReservedWord occurrences="1">
-      <code>$info</code>
-    </ReservedWord>
-    <UndefinedMethod occurrences="1">
-      <code>$info</code>
-    </UndefinedMethod>
   </file>
   <file src="test/integration/Laminas/RedisTest.php">
     <MixedArgument occurrences="2">

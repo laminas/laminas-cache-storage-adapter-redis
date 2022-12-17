@@ -132,12 +132,10 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
         RedisClusterFromExtension $resource,
         array $options
     ): RedisClusterFromExtension {
-        /** @psalm-suppress MixedAssignment */
         foreach ($options as $option => $value) {
             /**
              * @see https://github.com/phpredis/phpredis#setoption
              *
-             * @psalm-suppress InvalidArgument
              * @psalm-suppress MixedArgument
              */
             $resource->setOption($option, $value);
@@ -157,11 +155,6 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
                 continue;
             }
 
-            /**
-             * @see https://github.com/phpredis/phpredis#getoption
-             *
-             * @psalm-suppress InvalidArgument
-             */
             $options[$option] = $resource->getOption($option);
         }
 
@@ -178,11 +171,6 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
             return $this->libraryOptions[$option];
         }
 
-        /**
-         * @see https://github.com/phpredis/phpredis#getoption
-         *
-         * @psalm-suppress InvalidArgument
-         */
         return $this->libraryOptions[$option] = $this->getResource()->getOption($option);
     }
 
