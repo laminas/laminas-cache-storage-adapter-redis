@@ -17,6 +17,7 @@ use function assert;
 use function constant;
 use function defined;
 use function is_array;
+use function is_int;
 use function is_string;
 use function method_exists;
 use function parse_url;
