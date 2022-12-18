@@ -106,11 +106,13 @@
       <code>$server instanceof Traversable</code>
       <code>is_array($resource)</code>
     </DocblockTypeContradiction>
-    <InvalidReturnStatement occurrences="2">
+    <InvalidReturnStatement occurrences="3">
+      <code>$info</code>
       <code>$this</code>
     </InvalidReturnStatement>
-    <InvalidReturnType occurrences="1">
+    <InvalidReturnType occurrences="2">
       <code>RedisResource</code>
+      <code>array{redis_version:string}</code>
     </InvalidReturnType>
     <MissingReturnType occurrences="4">
       <code>normalizeLibOptionKey</code>
@@ -118,14 +120,25 @@
       <code>normalizePersistentId</code>
       <code>normalizeServer</code>
     </MissingReturnType>
-    <MixedArgument occurrences="8">
+    <MixedArgument occurrences="18">
       <code>$k</code>
       <code>$key</code>
       <code>$resource</code>
+      <code>$resource['database']</code>
       <code>$resource['lib_options']</code>
+      <code>$resource['persistent_id']</code>
       <code>$resource['persistent_id']</code>
       <code>$resource['server']</code>
       <code>$server</code>
+      <code>$server['host']</code>
+      <code>$server['host']</code>
+      <code>$server['host']</code>
+      <code>$server['host']</code>
+      <code>$server['port']</code>
+      <code>$server['port']</code>
+      <code>$server['timeout']</code>
+      <code>$server['timeout']</code>
+      <code>$server['timeout']</code>
     </MixedArgument>
     <MixedArrayAccess occurrences="32">
       <code>$resource['database']</code>
