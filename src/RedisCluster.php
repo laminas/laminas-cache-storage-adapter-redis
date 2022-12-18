@@ -46,7 +46,6 @@ final class RedisCluster extends AbstractAdapter implements
      */
     public function __construct($options = null)
     {
-        /** @psalm-suppress PossiblyInvalidArgument */
         parent::__construct($options);
         $eventManager = $this->getEventManager();
 
@@ -66,7 +65,6 @@ final class RedisCluster extends AbstractAdapter implements
     public function setOptions($options)
     {
         if (! $options instanceof RedisClusterOptions) {
-            /** @psalm-suppress PossiblyInvalidArgument */
             $options = new RedisClusterOptions($options);
         }
 

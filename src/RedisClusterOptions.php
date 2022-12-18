@@ -63,7 +63,6 @@ final class RedisClusterOptions extends AdapterOptions
             $options = $options->toArray();
         }
 
-        /** @psalm-suppress InvalidArgument */
         parent::__construct($options);
         $hasName  = $this->hasName();
         $hasSeeds = $this->getSeeds() !== [];

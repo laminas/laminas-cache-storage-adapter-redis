@@ -37,6 +37,6 @@ final class RedisRuntimeException extends LaminasCacheRuntimeException
             $message = $exception->getMessage();
         }
 
-        return new self($message, (int) $exception->getCode(), $exception);
+        return new self($message, $exception->getCode(), $exception);
     }
 }

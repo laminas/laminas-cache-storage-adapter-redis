@@ -594,7 +594,6 @@ final class RedisResourceManager
         if (! defined($const)) {
             throw new Exception\InvalidArgumentException("Unknown redis option '{$key}' ({$const})");
         }
-        /** @var int $key */
         $key = (int) constant($const);
     }
 
