@@ -16,7 +16,6 @@ use RedisCluster as RedisClusterFromExtension;
 use RedisClusterException;
 use RedisException;
 use stdClass;
-use Traversable;
 
 use function array_key_exists;
 use function array_values;
@@ -42,12 +41,11 @@ final class RedisCluster extends AbstractAdapter implements
     private $resourceManager;
 
     /**
-     * @param null|array|Traversable|RedisClusterOptions $options
-     * @psalm-param array<string,mixed>|RedisClusterOptions|Traversable<string,mixed> $options
+     * @param null|iterable|RedisClusterOptions $options
+     * @psalm-param null|iterable<string,mixed>|RedisClusterOptions $options
      */
     public function __construct($options = null)
     {
-        /** @psalm-suppress PossiblyInvalidArgument */
         parent::__construct($options);
         $eventManager = $this->getEventManager();
 
@@ -60,13 +58,13 @@ final class RedisCluster extends AbstractAdapter implements
     }
 
     /**
-     * @param  array|Traversable|AdapterOptions $options
+     * @param  iterable|AdapterOptions $options
+     * @psalm-param iterable<string,mixed>|null|AdapterOptions $options
      * @return self
      */
     public function setOptions($options)
     {
         if (! $options instanceof RedisClusterOptions) {
-            /** @psalm-suppress PossiblyInvalidArgument */
             $options = new RedisClusterOptions($options);
         }
 

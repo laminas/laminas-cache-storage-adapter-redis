@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace LaminasTest\Cache\Storage\Adapter\Laminas;
 
-use Laminas\Cache;
 use Laminas\Cache\Storage\Adapter\Redis;
 use Laminas\Cache\Storage\Adapter\RedisOptions;
 use Laminas\Cache\Storage\Adapter\RedisResourceManager;
@@ -19,14 +18,15 @@ use function count;
 use function getenv;
 
 /**
- * @covers Laminas\Cache\Storage\Adapter\Redis<extended>
+ * @covers Redis<extended>
+ * @template-extends AbstractCommonAdapterTest<Redis, RedisOptions>
  */
 final class RedisTest extends AbstractCommonAdapterTest
 {
-    /** @var Cache\Storage\Adapter\RedisOptions */
+    /** @var RedisOptions */
     protected $options;
 
-    /** @var Cache\Storage\Adapter\Redis */
+    /** @var Redis */
     protected $storage;
 
     public function setUp(): void
@@ -47,8 +47,8 @@ final class RedisTest extends AbstractCommonAdapterTest
             $options['password'] = getenv('TESTS_LAMINAS_CACHE_REDIS_PASSWORD');
         }
 
-        $this->options = new Cache\Storage\Adapter\RedisOptions($options);
-        $this->storage = new Cache\Storage\Adapter\Redis($this->options);
+        $this->options = new RedisOptions($options);
+        $this->storage = new Redis($this->options);
 
         parent::setUp();
     }
@@ -96,8 +96,8 @@ final class RedisTest extends AbstractCommonAdapterTest
             $options['password'] = getenv('TESTS_LAMINAS_CACHE_REDIS_PASSWORD');
         }
 
-        $redisOptions = new Cache\Storage\Adapter\RedisOptions($options);
-        $storage      = new Cache\Storage\Adapter\Redis($redisOptions);
+        $redisOptions = new RedisOptions($options);
+        $storage      = new Redis($redisOptions);
 
         $this->assertInstanceOf(Redis::class, $storage);
     }
@@ -230,7 +230,7 @@ final class RedisTest extends AbstractCommonAdapterTest
         $options = ['serializer' => RedisResource::SERIALIZER_PHP];
         $this->options->setLibOptions($options);
 
-        $redis = new Cache\Storage\Adapter\Redis($this->options);
+        $redis = new Redis($this->options);
         $value = ['value'];
         $key   = 'key';
         //test if it's still possible to set/get item and if lib serializer works

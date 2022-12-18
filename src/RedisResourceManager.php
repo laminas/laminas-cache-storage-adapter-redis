@@ -17,6 +17,7 @@ use function assert;
 use function constant;
 use function defined;
 use function is_array;
+use function is_int;
 use function is_string;
 use function method_exists;
 use function parse_url;
@@ -233,9 +234,8 @@ final class RedisResourceManager
                 throw new Exception\InvalidArgumentException("Invalid server given");
             }
 
-            $host    = $server['host'];
-            $port    = isset($server['port']) ? (int) $server['port'] : $port;
-            $timeout = isset($server['timeout']) ? (int) $server['timeout'] : $timeout;
+            $host = $server['host'];
+            $port = isset($server['port']) ? (int) $server['port'] : $port;
         }
 
         if (! $host) {
@@ -328,7 +328,7 @@ final class RedisResourceManager
      * Set a resource
      *
      * @param string $id
-     * @param array|Traversable|RedisResource $resource
+     * @param iterable|RedisResource $resource
      * @return RedisResourceManager Fluent interface
      */
     public function setResource($id, $resource)
@@ -557,7 +557,7 @@ final class RedisResourceManager
     /**
      * Normalize Redis options
      *
-     * @param array|Traversable $libOptions
+     * @param iterable $libOptions
      * @throws Exception\InvalidArgumentException
      * @param-out array<int,mixed> $libOptions
      */
@@ -595,8 +595,8 @@ final class RedisResourceManager
         if (! defined($const)) {
             throw new Exception\InvalidArgumentException("Unknown redis option '{$key}' ({$const})");
         }
-        /** @var int $key */
         $key = constant($const);
+        assert(is_int($key));
     }
 
     /**

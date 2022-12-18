@@ -6,7 +6,6 @@ namespace Laminas\Cache\Storage\Adapter;
 
 use Laminas\Cache\Exception\RuntimeException;
 use Laminas\Cache\Storage\Adapter\Exception\InvalidRedisClusterConfigurationException;
-use Traversable;
 
 final class RedisClusterOptions extends AdapterOptions
 {
@@ -55,8 +54,8 @@ final class RedisClusterOptions extends AdapterOptions
     private string $password = '';
 
     /**
-     * @param array|Traversable|null|AdapterOptions $options
-     * @psalm-param array<string,mixed>|Traversable<string,mixed>|null|AdapterOptions $options
+     * @param iterable|null|AdapterOptions $options
+     * @psalm-param iterable<string,mixed>|null|AdapterOptions $options
      */
     public function __construct($options = null)
     {
@@ -64,7 +63,6 @@ final class RedisClusterOptions extends AdapterOptions
             $options = $options->toArray();
         }
 
-        /** @psalm-suppress InvalidArgument */
         parent::__construct($options);
         $hasName  = $this->hasName();
         $hasSeeds = $this->getSeeds() !== [];

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.30.0@d0bc6e25d89f649e4f36a534f330f8bb4643dd69">
+<files psalm-version="5.2.0@fb685a16df3050d4c18d8a4100fe83abe6458cba">
   <file src="src/Redis.php">
     <InvalidArgument occurrences="4">
       <code>$ttl</code>
@@ -26,9 +26,6 @@
     <LessSpecificReturnStatement occurrences="1">
       <code>parent::setOptions($options)</code>
     </LessSpecificReturnStatement>
-    <MissingClosureParamType occurrences="1">
-      <code>$value</code>
-    </MissingClosureParamType>
     <MixedArgument occurrences="5">
       <code>$this-&gt;preSerialize($value)</code>
       <code>$this-&gt;preSerialize($value)</code>
@@ -50,7 +47,8 @@
       <code>$info['used_memory']</code>
       <code>$this-&gt;options</code>
     </MixedReturnStatement>
-    <MoreSpecificImplementedParamType occurrences="1">
+    <MoreSpecificImplementedParamType occurrences="2">
+      <code>$options</code>
       <code>$options</code>
     </MoreSpecificImplementedParamType>
     <MoreSpecificReturnType occurrences="1">
@@ -76,12 +74,15 @@
     <PropertyNotSetInConstructor occurrences="1">
       <code>Redis</code>
     </PropertyNotSetInConstructor>
-    <ReservedWord occurrences="1">
-      <code>$info</code>
-    </ReservedWord>
     <UndefinedMethod occurrences="1">
       <code>$info</code>
     </UndefinedMethod>
+  </file>
+  <file src="src/RedisCluster.php">
+    <MoreSpecificImplementedParamType occurrences="2">
+      <code>$options</code>
+      <code>$options</code>
+    </MoreSpecificImplementedParamType>
   </file>
   <file src="src/RedisOptions.php">
     <InvalidReturnStatement occurrences="1">
@@ -105,11 +106,13 @@
       <code>$server instanceof Traversable</code>
       <code>is_array($resource)</code>
     </DocblockTypeContradiction>
-    <InvalidReturnStatement occurrences="2">
+    <InvalidReturnStatement occurrences="3">
+      <code>$info</code>
       <code>$this</code>
     </InvalidReturnStatement>
-    <InvalidReturnType occurrences="1">
+    <InvalidReturnType occurrences="2">
       <code>RedisResource</code>
+      <code>array{redis_version:string}</code>
     </InvalidReturnType>
     <MissingReturnType occurrences="4">
       <code>normalizeLibOptionKey</code>
@@ -117,10 +120,9 @@
       <code>normalizePersistentId</code>
       <code>normalizeServer</code>
     </MissingReturnType>
-    <MixedArgument occurrences="19">
+    <MixedArgument occurrences="18">
       <code>$k</code>
       <code>$key</code>
-      <code>$resource</code>
       <code>$resource</code>
       <code>$resource['database']</code>
       <code>$resource['lib_options']</code>
@@ -138,13 +140,14 @@
       <code>$server['timeout']</code>
       <code>$server['timeout']</code>
     </MixedArgument>
-    <MixedArrayAccess occurrences="36">
+    <MixedArrayAccess occurrences="32">
       <code>$resource['database']</code>
       <code>$resource['initialized']</code>
       <code>$resource['initialized']</code>
       <code>$resource['initialized']</code>
       <code>$resource['lib_options']</code>
       <code>$resource['lib_options']</code>
+      <code>$resource['lib_options'][$key]</code>
       <code>$resource['password']</code>
       <code>$resource['password']</code>
       <code>$resource['persistent_id']</code>
@@ -158,35 +161,27 @@
       <code>$resource['resource']</code>
       <code>$resource['resource']</code>
       <code>$resource['resource']</code>
-      <code>$resource['resource']</code>
-      <code>$resource['resource']</code>
       <code>$resource['server']</code>
-      <code>$resource['version']</code>
       <code>$server['host']</code>
       <code>$server['host']</code>
       <code>$server['host']</code>
       <code>$server['host']</code>
       <code>$server['port']</code>
       <code>$server['port']</code>
-      <code>$server['port']</code>
-      <code>$server['timeout']</code>
       <code>$server['timeout']</code>
       <code>$server['timeout']</code>
       <code>$server['timeout']</code>
       <code>$this-&gt;resources[$resourceId]['version']</code>
       <code>$this-&gt;resources[$resourceId]['version']</code>
     </MixedArrayAccess>
-    <MixedArrayAssignment occurrences="10">
+    <MixedArrayAssignment occurrences="7">
       <code>$resource['database']</code>
       <code>$resource['initialized']</code>
       <code>$resource['lib_options']</code>
       <code>$resource['password']</code>
       <code>$resource['password']</code>
       <code>$resource['persistent_id']</code>
-      <code>$resource['resource']</code>
       <code>$resource['server']</code>
-      <code>$resource['version']</code>
-      <code>$this-&gt;resources[$id]['resource']</code>
     </MixedArrayAssignment>
     <MixedArrayOffset occurrences="1">
       <code>$libOptions[$constValue]</code>
@@ -227,10 +222,6 @@
       <code>$this-&gt;storage-&gt;getItem('key')</code>
       <code>$this-&gt;storage-&gt;getMetadata($key)['ttl']</code>
     </MixedArgument>
-    <NonInvariantDocblockPropertyType occurrences="2">
-      <code>$options</code>
-      <code>$storage</code>
-    </NonInvariantDocblockPropertyType>
     <PossiblyInvalidArrayAccess occurrences="2">
       <code>$this-&gt;storage-&gt;getMetadata($key)['ttl']</code>
       <code>$this-&gt;storage-&gt;getMetadata($key)['ttl']</code>
@@ -239,19 +230,12 @@
       <code>null</code>
       <code>null</code>
     </PossiblyNullPropertyAssignmentValue>
-    <RedundantConditionGivenDocblockType occurrences="2">
-      <code>$this-&gt;storage</code>
+    <RedundantConditionGivenDocblockType occurrences="1">
       <code>$this-&gt;storage</code>
     </RedundantConditionGivenDocblockType>
-    <ReservedWord occurrences="1">
-      <code>$redis-&gt;info()</code>
-    </ReservedWord>
     <UndefinedMethod occurrences="1">
       <code>$redis-&gt;info()</code>
     </UndefinedMethod>
-    <UndefinedPropertyAssignment occurrences="1">
-      <code>$redis-&gt;socket</code>
-    </UndefinedPropertyAssignment>
   </file>
   <file src="test/unit/RedisResourceManagerTest.php">
     <ArgumentTypeCoercion occurrences="2">
