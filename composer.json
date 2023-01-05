@@ -18,7 +18,7 @@
         "boesing/psalm-plugin-stringf": "^1.2",
         "laminas/laminas-cache-storage-adapter-benchmark": "^1.0",
         "laminas/laminas-cache-storage-adapter-test": "^2.3",
-        "laminas/laminas-coding-standard": "~2.4.0",
+        "laminas/laminas-coding-standard": "~2.5.0",
         "laminas/laminas-serializer": "^2.13.0",
         "psalm/plugin-phpunit": "^0.18.4",
         "vimeo/psalm": "^5.1.0"
