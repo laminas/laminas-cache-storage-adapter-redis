@@ -19,8 +19,11 @@ use stdClass;
 
 use function array_key_exists;
 use function array_values;
+use function assert;
 use function count;
 use function in_array;
+use function is_array;
+use function is_int;
 use function sprintf;
 use function version_compare;
 
@@ -192,14 +195,23 @@ final class RedisCluster extends AbstractAdapter implements
         $redis = $this->getRedisResource();
 
         try {
-            /** @var array<int,mixed> $resultsByIndex */
             $resultsByIndex = $redis->mget($namespacedKeys);
         } catch (RedisClusterException $exception) {
             throw $this->clusterException($exception, $redis);
         }
 
+        /**
+         * @link https://github.com/phpredis/phpredis/blob/35a7cc094c6c264aa37738b074c4c54c4ca73b87/redis_cluster.stub.php#L621
+         *
+         * @psalm-suppress TypeDoesNotContainType RedisCluster#mget can return `false` on error
+         */
+        if (! is_array($resultsByIndex)) {
+            throw RedisRuntimeException::fromInternalRedisError($redis);
+        }
+
         $result = [];
         foreach ($resultsByIndex as $keyIndex => $value) {
+            assert(is_int($keyIndex));
             $normalizedKey = $normalizedKeys[$keyIndex];
             $namespacedKey = $namespacedKeys[$keyIndex];
             if ($value === false && ! $this->isFalseReturnValuePersisted($redis, $namespacedKey)) {
