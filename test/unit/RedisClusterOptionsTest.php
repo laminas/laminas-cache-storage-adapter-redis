@@ -9,7 +9,7 @@ use InvalidArgumentException;
 use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use Laminas\Cache\Storage\Adapter\Exception\InvalidRedisClusterConfigurationException;
 use Laminas\Cache\Storage\Adapter\RedisClusterOptions;
-use RedisCluster as RedisClusterFromExtension;
+use Redis as RedisFromExtension;
 use ReflectionClass;
 
 use function assert;
@@ -136,7 +136,7 @@ final class RedisClusterOptionsTest extends AbstractAdapterOptionsTest
      */
     public function redisClusterOptionConstants(): Generator
     {
-        $reflection = new ReflectionClass(RedisClusterFromExtension::class);
+        $reflection = new ReflectionClass(RedisFromExtension::class);
 
         foreach ($reflection->getConstants() as $constant => $constantValue) {
             if (strpos($constant, 'OPT_') !== 0) {

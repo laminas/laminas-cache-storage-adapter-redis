@@ -7,7 +7,7 @@ namespace LaminasTest\Cache\Psr\SimpleCache;
 use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Storage\Adapter\AbstractSimpleCacheIntegrationTest;
 use LaminasTest\Cache\Storage\Adapter\Laminas\RedisClusterStorageCreationTrait;
-use RedisCluster;
+use Redis;
 
 final class RedisClusterWithPhpIgbinaryTest extends AbstractSimpleCacheIntegrationTest
 {
@@ -15,6 +15,6 @@ final class RedisClusterWithPhpIgbinaryTest extends AbstractSimpleCacheIntegrati
 
     protected function createStorage(): StorageInterface
     {
-        return $this->createRedisClusterStorage(RedisCluster::SERIALIZER_IGBINARY, false);
+        return $this->createRedisClusterStorage(Redis::SERIALIZER_IGBINARY, false);
     }
 }

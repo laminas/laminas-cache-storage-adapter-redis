@@ -10,6 +10,7 @@ use Laminas\Cache\Storage\Adapter\RedisClusterOptions;
 use Laminas\Cache\Storage\Plugin\PluginInterface;
 use Laminas\Cache\Storage\Plugin\Serializer;
 use Laminas\Cache\Storage\PluginCapableInterface;
+use Redis as RedisFromExtension;
 use RedisCluster as RedisClusterFromExtension;
 use RedisClusterException;
 
@@ -185,11 +186,11 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
          */
         $options    = $this->options;
         $serializer = $options->getLibOption(
-            RedisClusterFromExtension::OPT_SERIALIZER,
-            RedisClusterFromExtension::SERIALIZER_NONE
+            RedisFromExtension::OPT_SERIALIZER,
+            RedisFromExtension::SERIALIZER_NONE
         );
 
-        if ($serializer !== RedisClusterFromExtension::SERIALIZER_NONE) {
+        if ($serializer !== RedisFromExtension::SERIALIZER_NONE) {
             return true;
         }
 

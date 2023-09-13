@@ -9,7 +9,7 @@ use Laminas\Cache\Storage\Adapter\RedisClusterOptions;
 use Laminas\Cache\Storage\Adapter\RedisClusterResourceManager;
 use Laminas\Cache\Storage\Plugin\Serializer;
 use PHPUnit\Framework\TestCase;
-use RedisCluster;
+use Redis;
 use SplObjectStorage;
 
 use function uniqid;
@@ -76,7 +76,7 @@ final class RedisClusterResourceManagerTest extends TestCase
                 new RedisClusterOptions([
                     'name'        => uniqid('', true),
                     'lib_options' => [
-                        RedisCluster::OPT_SERIALIZER => RedisCluster::SERIALIZER_PHP,
+                        Redis::OPT_SERIALIZER => Redis::SERIALIZER_PHP,
                     ],
                 ]),
             ],
@@ -84,7 +84,7 @@ final class RedisClusterResourceManagerTest extends TestCase
                 new RedisClusterOptions([
                     'name'        => uniqid('', true),
                     'lib_options' => [
-                        RedisCluster::OPT_SERIALIZER => RedisCluster::SERIALIZER_IGBINARY,
+                        Redis::OPT_SERIALIZER => Redis::SERIALIZER_IGBINARY,
                     ],
                 ]),
             ],

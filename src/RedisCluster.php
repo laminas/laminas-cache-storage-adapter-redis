@@ -11,7 +11,7 @@ use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\ClearByNamespaceInterface;
 use Laminas\Cache\Storage\ClearByPrefixInterface;
 use Laminas\Cache\Storage\FlushableInterface;
-use Redis;
+use Redis as RedisFromExtension;
 use RedisCluster as RedisClusterFromExtension;
 use RedisClusterException;
 use RedisException;
@@ -76,7 +76,7 @@ final class RedisCluster extends AbstractAdapter implements
      * In RedisCluster, it is totally okay if just one primary server is being flushed.
      * If one or more primaries are not reachable, they will re-sync if they're coming back online.
      *
-     * One has to connect to the primaries directly using {@see Redis::connect}.
+     * One has to connect to the primaries directly using {@see RedisFromExtension::connect}.
      */
     public function flush(): bool
     {
@@ -86,7 +86,7 @@ final class RedisCluster extends AbstractAdapter implements
         $masters = $resource->_masters();
 
         foreach ($masters as [$host, $port]) {
-            $redis = new Redis();
+            $redis = new RedisFromExtension();
             try {
                 $redis->connect($host, $port);
             } catch (RedisException $exception) {
@@ -436,8 +436,8 @@ final class RedisCluster extends AbstractAdapter implements
      */
     private function isFalseReturnValuePersisted(RedisClusterFromExtension $redis, string $key): bool
     {
-        $serializer = $this->getLibOption(RedisClusterFromExtension::OPT_SERIALIZER);
-        if ($serializer === RedisClusterFromExtension::SERIALIZER_NONE) {
+        $serializer = $this->getLibOption(RedisFromExtension::OPT_SERIALIZER);
+        if ($serializer === RedisFromExtension::SERIALIZER_NONE) {
             return false;
         }
 

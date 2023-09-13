@@ -11,7 +11,7 @@ use Laminas\Cache\Storage\Adapter\RedisClusterOptionsFromIni;
 use Laminas\Cache\Storage\Plugin\Serializer;
 use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Storage\Adapter\AbstractCommonAdapterTest;
-use RedisCluster as RedisClusterFromExtension;
+use Redis as RedisFromExtension;
 
 /**
  * @template-extends AbstractCommonAdapterTest<RedisCluster,RedisClusterOptions>
@@ -51,7 +51,7 @@ final class RedisClusterTest extends AbstractCommonAdapterTest
 
         $options = $storage->getOptions();
         $options->setLibOptions([
-            RedisClusterFromExtension::OPT_SERIALIZER => RedisClusterFromExtension::SERIALIZER_PHP,
+            RedisFromExtension::OPT_SERIALIZER => RedisFromExtension::SERIALIZER_PHP,
         ]);
 
         $capabilities = $storage->getCapabilities();
@@ -86,7 +86,7 @@ final class RedisClusterTest extends AbstractCommonAdapterTest
         $this->removeSerializer($storage);
         $options = $storage->getOptions();
         $options->setLibOptions([
-            RedisClusterFromExtension::OPT_SERIALIZER => RedisClusterFromExtension::SERIALIZER_NONE,
+            RedisFromExtension::OPT_SERIALIZER => RedisFromExtension::SERIALIZER_NONE,
         ]);
 
         $capabilities = $storage->getCapabilities();
@@ -136,7 +136,7 @@ final class RedisClusterTest extends AbstractCommonAdapterTest
     protected function setUp(): void
     {
         $this->storage = $this->createRedisClusterStorage(
-            RedisClusterFromExtension::SERIALIZER_PHP,
+            RedisFromExtension::SERIALIZER_PHP,
             false
         );
         // Clear storage before executing tests.
