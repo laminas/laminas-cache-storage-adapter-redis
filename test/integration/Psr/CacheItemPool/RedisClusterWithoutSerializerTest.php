@@ -7,6 +7,7 @@ namespace LaminasTest\Cache\Psr\CacheItemPool;
 use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Storage\Adapter\AbstractCacheItemPoolIntegrationTest;
 use LaminasTest\Cache\Storage\Adapter\Laminas\RedisClusterStorageCreationTrait;
+use Redis;
 use RedisCluster;
 
 use function sprintf;
@@ -26,6 +27,6 @@ final class RedisClusterWithoutSerializerTest extends AbstractCacheItemPoolInteg
 
     protected function createStorage(): StorageInterface
     {
-        return $this->createRedisClusterStorage(RedisCluster::SERIALIZER_NONE, true);
+        return $this->createRedisClusterStorage(Redis::SERIALIZER_NONE, true);
     }
 }

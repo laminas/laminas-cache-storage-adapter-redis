@@ -7,7 +7,7 @@ namespace LaminasTest\Cache\Storage\Adapter\Laminas;
 use Laminas\Cache\Storage\Adapter\RedisCluster;
 use Laminas\Cache\Storage\Adapter\RedisClusterOptions;
 use Laminas\Cache\Storage\Plugin\Serializer;
-use RedisCluster as RedisClusterFromExtension;
+use Redis as RedisFromExtension;
 use RuntimeException;
 
 use function implode;
@@ -44,13 +44,13 @@ trait RedisClusterStorageCreationTrait
         $this->options = new RedisClusterOptions([
             'name'        => $node,
             'lib_options' => [
-                RedisClusterFromExtension::OPT_SERIALIZER => $serializerOption,
+                RedisFromExtension::OPT_SERIALIZER => $serializerOption,
             ],
             'namespace'   => str_shuffle(implode('', ['a', 'b', 'c', 'd', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'])),
         ]);
 
         $storage = new RedisCluster($this->options);
-        if ($serializerOption === RedisClusterFromExtension::SERIALIZER_NONE && $serializerPlugin) {
+        if ($serializerOption === RedisFromExtension::SERIALIZER_NONE && $serializerPlugin) {
             $storage->addPlugin(new Serializer());
         }
 

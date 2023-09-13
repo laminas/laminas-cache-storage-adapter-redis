@@ -9,7 +9,7 @@ use LaminasTest\Cache\Storage\Adapter\Laminas\RedisClusterStorageCreationTrait;
 use PhpBench\Benchmark\Metadata\Annotations\Iterations;
 use PhpBench\Benchmark\Metadata\Annotations\Revs;
 use PhpBench\Benchmark\Metadata\Annotations\Warmup;
-use RedisCluster;
+use Redis;
 
 /**
  * @Revs(100)
@@ -23,7 +23,7 @@ class RedisClusterWithPhpSerializerStorageAdapterBench extends AbstractStorageAd
     public function __construct()
     {
         parent::__construct($this->createRedisClusterStorage(
-            RedisCluster::SERIALIZER_PHP,
+            Redis::SERIALIZER_PHP,
             false
         ));
     }
