@@ -13,6 +13,8 @@ use Throwable;
 
 final class RedisRuntimeException extends LaminasCacheRuntimeException
 {
+    private const INTERNAL_REDIS_ERROR = 'Something went wrong while interacting with redis cluster.';
+
     public static function fromClusterException(RedisClusterException $exception, RedisCluster $redis): self
     {
         $message = $redis->getLastError() ?? $exception->getMessage();
@@ -38,5 +40,16 @@ final class RedisRuntimeException extends LaminasCacheRuntimeException
         }
 
         return new self($message, $exception->getCode(), $exception);
+    }
+
+    public static function fromInternalRedisError(RedisCluster|Redis $redis): self
+    {
+        try {
+            $message = $redis->getLastError() ?? self::INTERNAL_REDIS_ERROR;
+        } catch (RedisException) {
+            $message = self::INTERNAL_REDIS_ERROR;
+        }
+
+        return new self($message);
     }
 }
