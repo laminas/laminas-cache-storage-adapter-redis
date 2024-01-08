@@ -7,7 +7,7 @@
     ],
     "license": "BSD-3-Clause",
     "require": {
-        "php": "~8.0.0 || ~8.1.0 || ~8.2.0",
+        "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
         "ext-redis": "^5.0.2 || ^6.0",
         "laminas/laminas-cache": "^3.10"
     },
@@ -15,7 +15,6 @@
         "laminas/laminas-cache-storage-implementation": "1.0"
     },
     "require-dev": {
-        "boesing/psalm-plugin-stringf": "^1.2",
         "laminas/laminas-cache-storage-adapter-benchmark": "^1.0",
         "laminas/laminas-cache-storage-adapter-test": "^2.5",
         "laminas/laminas-coding-standard": "~2.5.0",
@@ -26,7 +25,7 @@
     "config": {
         "sort-packages": true,
         "platform": {
-            "php": "8.0.99"
+            "php": "8.1.99"
         },
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
