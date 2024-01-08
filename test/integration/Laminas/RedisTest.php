@@ -65,14 +65,6 @@ final class RedisTest extends AbstractCommonAdapterTest
         parent::tearDown();
     }
 
-    public function getCommonAdapterNamesProvider(): array
-    {
-        return [
-            ['redis'],
-            ['Redis'],
-        ];
-    }
-
     public function testLibOptionsFirst(): void
     {
         $options = [

@@ -1,192 +1,254 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.2.0@fb685a16df3050d4c18d8a4100fe83abe6458cba">
+<files psalm-version="5.18.0@b113f3ed0259fd6e212d87c3df80eec95a6abf19">
+  <file src="benchmark/RedisClusterStorageAdapterBench.php">
+    <UnusedClass>
+      <code>RedisClusterStorageAdapterBench</code>
+    </UnusedClass>
+  </file>
+  <file src="benchmark/RedisClusterWithIgbinarySerializerStorageAdapterBench.php">
+    <UnusedClass>
+      <code>RedisClusterWithIgbinarySerializerStorageAdapterBench</code>
+    </UnusedClass>
+  </file>
+  <file src="benchmark/RedisClusterWithPhpSerializerStorageAdapterBench.php">
+    <UnusedClass>
+      <code>RedisClusterWithPhpSerializerStorageAdapterBench</code>
+    </UnusedClass>
+  </file>
+  <file src="benchmark/RedisStorageAdapterBench.php">
+    <UnusedClass>
+      <code>RedisStorageAdapterBench</code>
+    </UnusedClass>
+  </file>
+  <file src="src/Exception/InvalidRedisClusterConfigurationException.php">
+    <PossiblyUnusedMethod>
+      <code>fromInvalidSeedsConfiguration</code>
+    </PossiblyUnusedMethod>
+  </file>
   <file src="src/Redis.php">
-    <InvalidArgument occurrences="4">
+    <InvalidArgument>
       <code>$ttl</code>
       <code>$ttl</code>
       <code>$ttl</code>
       <code>$ttl</code>
     </InvalidArgument>
-    <InvalidOperand occurrences="2">
+    <InvalidOperand>
       <code>$pttl</code>
       <code>$pttl</code>
     </InvalidOperand>
-    <InvalidReturnStatement occurrences="4">
-      <code>$redis-&gt;decrBy($this-&gt;namespacePrefix . $normalizedKey, $value)</code>
-      <code>$redis-&gt;incrBy($this-&gt;namespacePrefix . $normalizedKey, $value)</code>
+    <InvalidReturnStatement>
+      <code><![CDATA[$redis->decrBy($this->namespacePrefix . $normalizedKey, $value)]]></code>
+      <code><![CDATA[$redis->incrBy($this->namespacePrefix . $normalizedKey, $value)]]></code>
       <code>$success</code>
       <code>$success</code>
     </InvalidReturnStatement>
-    <InvalidReturnType occurrences="4">
+    <InvalidReturnType>
       <code>bool</code>
       <code>bool</code>
       <code>int|bool</code>
       <code>int|bool</code>
     </InvalidReturnType>
-    <LessSpecificReturnStatement occurrences="1">
+    <LessSpecificReturnStatement>
       <code>parent::setOptions($options)</code>
     </LessSpecificReturnStatement>
-    <MixedArgument occurrences="5">
-      <code>$this-&gt;preSerialize($value)</code>
-      <code>$this-&gt;preSerialize($value)</code>
-      <code>$this-&gt;preSerialize($value)</code>
-      <code>$this-&gt;preSerialize($value)</code>
+    <MixedArgument>
+      <code><![CDATA[$this->preSerialize($value)]]></code>
+      <code><![CDATA[$this->preSerialize($value)]]></code>
+      <code><![CDATA[$this->preSerialize($value)]]></code>
+      <code><![CDATA[$this->preSerialize($value)]]></code>
       <code>$value</code>
     </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="1">
+    <MixedArgumentTypeCoercion>
       <code>$normalizedKeys</code>
     </MixedArgumentTypeCoercion>
-    <MixedInferredReturnType occurrences="2">
+    <MixedInferredReturnType>
       <code>RedisOptions</code>
       <code>int|float</code>
     </MixedInferredReturnType>
-    <MixedOperand occurrences="1">
+    <MixedOperand>
       <code>$normalizedKey</code>
     </MixedOperand>
-    <MixedReturnStatement occurrences="2">
-      <code>$info['used_memory']</code>
-      <code>$this-&gt;options</code>
+    <MixedReturnStatement>
+      <code><![CDATA[$info['used_memory']]]></code>
+      <code><![CDATA[$this->options]]></code>
     </MixedReturnStatement>
-    <MoreSpecificImplementedParamType occurrences="2">
+    <MoreSpecificImplementedParamType>
       <code>$options</code>
       <code>$options</code>
     </MoreSpecificImplementedParamType>
-    <MoreSpecificReturnType occurrences="1">
+    <MoreSpecificReturnType>
       <code>Redis</code>
     </MoreSpecificReturnType>
-    <PossiblyInvalidArgument occurrences="3">
-      <code>$redis-&gt;keys($prefix . '*')</code>
-      <code>$redis-&gt;keys($prefix . '*')</code>
+    <PossiblyInvalidArgument>
+      <code><![CDATA[$redis->keys($prefix . '*')]]></code>
+      <code><![CDATA[$redis->keys($prefix . '*')]]></code>
       <code>$results</code>
     </PossiblyInvalidArgument>
-    <PossiblyInvalidMethodCall occurrences="2">
+    <PossiblyInvalidMethodCall>
       <code>exec</code>
       <code>setex</code>
     </PossiblyInvalidMethodCall>
-    <PossiblyNullArgument occurrences="2">
-      <code>$this-&gt;resourceId</code>
-      <code>$this-&gt;resourceId</code>
+    <PossiblyNullArgument>
+      <code><![CDATA[$this->resourceId]]></code>
+      <code><![CDATA[$this->resourceId]]></code>
     </PossiblyNullArgument>
-    <PossiblyNullReference occurrences="2">
+    <PossiblyNullReference>
       <code>getResource</code>
       <code>getVersion</code>
     </PossiblyNullReference>
-    <PropertyNotSetInConstructor occurrences="1">
+    <PossiblyUnusedReturnValue>
+      <code>Redis</code>
+      <code>bool</code>
+    </PossiblyUnusedReturnValue>
+    <PropertyNotSetInConstructor>
       <code>Redis</code>
     </PropertyNotSetInConstructor>
-    <UndefinedMethod occurrences="1">
+    <UndefinedMethod>
       <code>$info</code>
     </UndefinedMethod>
+    <UnsupportedPropertyReferenceUsage>
+      <code><![CDATA[$initialized = &$this->initialized]]></code>
+    </UnsupportedPropertyReferenceUsage>
+  </file>
+  <file src="src/Redis/AdapterPluginManagerDelegatorFactory.php">
+    <UnusedParam>
+      <code>$container</code>
+      <code>$name</code>
+    </UnusedParam>
+  </file>
+  <file src="src/Redis/Module.php">
+    <UnusedClass>
+      <code>Module</code>
+    </UnusedClass>
   </file>
   <file src="src/RedisCluster.php">
-    <MoreSpecificImplementedParamType occurrences="2">
+    <MoreSpecificImplementedParamType>
       <code>$options</code>
       <code>$options</code>
     </MoreSpecificImplementedParamType>
+    <PossiblyUnusedReturnValue>
+      <code>bool</code>
+    </PossiblyUnusedReturnValue>
+  </file>
+  <file src="src/RedisClusterOptions.php">
+    <PossiblyUnusedMethod>
+      <code>setName</code>
+      <code>setNamespaceSeparator</code>
+      <code>setPassword</code>
+      <code>setPersistent</code>
+      <code>setReadTimeout</code>
+      <code>setSeeds</code>
+      <code>setTimeout</code>
+    </PossiblyUnusedMethod>
   </file>
   <file src="src/RedisOptions.php">
-    <InvalidReturnStatement occurrences="1">
-      <code>$this-&gt;getResourceManager()-&gt;getDatabase($this-&gt;getResourceId())</code>
+    <InvalidReturnStatement>
+      <code><![CDATA[$this->getResourceManager()->getDatabase($this->getResourceId())]]></code>
     </InvalidReturnStatement>
-    <InvalidReturnType occurrences="1">
+    <InvalidReturnType>
       <code>int</code>
     </InvalidReturnType>
-    <LessSpecificReturnStatement occurrences="1">
+    <LessSpecificReturnStatement>
       <code>parent::setNamespace($namespace)</code>
     </LessSpecificReturnStatement>
-    <MoreSpecificReturnType occurrences="1">
+    <MoreSpecificReturnType>
       <code>RedisOptions</code>
     </MoreSpecificReturnType>
+    <PossiblyUnusedReturnValue>
+      <code>RedisOptions</code>
+    </PossiblyUnusedReturnValue>
   </file>
   <file src="src/RedisResourceManager.php">
-    <ArgumentTypeCoercion occurrences="1">
-      <code>'Redis'</code>
+    <ArgumentTypeCoercion>
+      <code><![CDATA['Redis']]></code>
     </ArgumentTypeCoercion>
-    <DocblockTypeContradiction occurrences="2">
+    <DocblockTypeContradiction>
       <code>$server instanceof Traversable</code>
       <code>is_array($resource)</code>
     </DocblockTypeContradiction>
-    <InvalidReturnStatement occurrences="3">
+    <InvalidReturnStatement>
       <code>$info</code>
       <code>$this</code>
+      <code><![CDATA[$this->setResource($id, [
+                'password' => $password,
+            ])]]></code>
     </InvalidReturnStatement>
-    <InvalidReturnType occurrences="2">
+    <InvalidReturnType>
       <code>RedisResource</code>
       <code>array{redis_version:string}</code>
     </InvalidReturnType>
-    <MissingReturnType occurrences="4">
+    <MissingReturnType>
       <code>normalizeLibOptionKey</code>
       <code>normalizeLibOptions</code>
       <code>normalizePersistentId</code>
       <code>normalizeServer</code>
     </MissingReturnType>
-    <MixedArgument occurrences="18">
+    <MixedArgument>
       <code>$k</code>
       <code>$key</code>
       <code>$resource</code>
-      <code>$resource['database']</code>
-      <code>$resource['lib_options']</code>
-      <code>$resource['persistent_id']</code>
-      <code>$resource['persistent_id']</code>
-      <code>$resource['server']</code>
-      <code>$server</code>
-      <code>$server['host']</code>
-      <code>$server['host']</code>
-      <code>$server['host']</code>
-      <code>$server['host']</code>
-      <code>$server['port']</code>
-      <code>$server['port']</code>
-      <code>$server['timeout']</code>
-      <code>$server['timeout']</code>
-      <code>$server['timeout']</code>
+      <code><![CDATA[$resource['database']]]></code>
+      <code><![CDATA[$resource['lib_options']]]></code>
+      <code><![CDATA[$resource['persistent_id']]]></code>
+      <code><![CDATA[$resource['persistent_id']]]></code>
+      <code><![CDATA[$resource['server']]]></code>
+      <code><![CDATA[$server['host']]]></code>
+      <code><![CDATA[$server['host']]]></code>
+      <code><![CDATA[$server['host']]]></code>
+      <code><![CDATA[$server['host']]]></code>
+      <code><![CDATA[$server['port']]]></code>
+      <code><![CDATA[$server['port']]]></code>
+      <code><![CDATA[$server['timeout']]]></code>
+      <code><![CDATA[$server['timeout']]]></code>
+      <code><![CDATA[$server['timeout']]]></code>
     </MixedArgument>
-    <MixedArrayAccess occurrences="32">
-      <code>$resource['database']</code>
-      <code>$resource['initialized']</code>
-      <code>$resource['initialized']</code>
-      <code>$resource['initialized']</code>
-      <code>$resource['lib_options']</code>
-      <code>$resource['lib_options']</code>
-      <code>$resource['lib_options'][$key]</code>
-      <code>$resource['password']</code>
-      <code>$resource['password']</code>
-      <code>$resource['persistent_id']</code>
-      <code>$resource['resource']</code>
-      <code>$resource['resource']</code>
-      <code>$resource['resource']</code>
-      <code>$resource['resource']</code>
-      <code>$resource['resource']</code>
-      <code>$resource['resource']</code>
-      <code>$resource['resource']</code>
-      <code>$resource['resource']</code>
-      <code>$resource['resource']</code>
-      <code>$resource['resource']</code>
-      <code>$resource['server']</code>
-      <code>$server['host']</code>
-      <code>$server['host']</code>
-      <code>$server['host']</code>
-      <code>$server['host']</code>
-      <code>$server['port']</code>
-      <code>$server['port']</code>
-      <code>$server['timeout']</code>
-      <code>$server['timeout']</code>
-      <code>$server['timeout']</code>
-      <code>$this-&gt;resources[$resourceId]['version']</code>
-      <code>$this-&gt;resources[$resourceId]['version']</code>
+    <MixedArrayAccess>
+      <code><![CDATA[$resource['database']]]></code>
+      <code><![CDATA[$resource['initialized']]]></code>
+      <code><![CDATA[$resource['initialized']]]></code>
+      <code><![CDATA[$resource['initialized']]]></code>
+      <code><![CDATA[$resource['lib_options']]]></code>
+      <code><![CDATA[$resource['lib_options']]]></code>
+      <code><![CDATA[$resource['lib_options'][$key]]]></code>
+      <code><![CDATA[$resource['password']]]></code>
+      <code><![CDATA[$resource['password']]]></code>
+      <code><![CDATA[$resource['persistent_id']]]></code>
+      <code><![CDATA[$resource['resource']]]></code>
+      <code><![CDATA[$resource['resource']]]></code>
+      <code><![CDATA[$resource['resource']]]></code>
+      <code><![CDATA[$resource['resource']]]></code>
+      <code><![CDATA[$resource['resource']]]></code>
+      <code><![CDATA[$resource['resource']]]></code>
+      <code><![CDATA[$resource['resource']]]></code>
+      <code><![CDATA[$resource['resource']]]></code>
+      <code><![CDATA[$resource['resource']]]></code>
+      <code><![CDATA[$resource['resource']]]></code>
+      <code><![CDATA[$resource['server']]]></code>
+      <code><![CDATA[$server['host']]]></code>
+      <code><![CDATA[$server['host']]]></code>
+      <code><![CDATA[$server['host']]]></code>
+      <code><![CDATA[$server['host']]]></code>
+      <code><![CDATA[$server['port']]]></code>
+      <code><![CDATA[$server['port']]]></code>
+      <code><![CDATA[$server['timeout']]]></code>
+      <code><![CDATA[$server['timeout']]]></code>
+      <code><![CDATA[$server['timeout']]]></code>
+      <code><![CDATA[$this->resources[$resourceId]['version']]]></code>
+      <code><![CDATA[$this->resources[$resourceId]['version']]]></code>
     </MixedArrayAccess>
-    <MixedArrayAssignment occurrences="7">
-      <code>$resource['database']</code>
-      <code>$resource['initialized']</code>
-      <code>$resource['lib_options']</code>
-      <code>$resource['password']</code>
-      <code>$resource['password']</code>
-      <code>$resource['persistent_id']</code>
-      <code>$resource['server']</code>
+    <MixedArrayAssignment>
+      <code><![CDATA[$resource['database']]]></code>
+      <code><![CDATA[$resource['initialized']]]></code>
+      <code><![CDATA[$resource['lib_options']]]></code>
+      <code><![CDATA[$resource['password']]]></code>
+      <code><![CDATA[$resource['password']]]></code>
+      <code><![CDATA[$resource['persistent_id']]]></code>
+      <code><![CDATA[$resource['server']]]></code>
     </MixedArrayAssignment>
-    <MixedArrayOffset occurrences="1">
+    <MixedArrayOffset>
       <code>$libOptions[$constValue]</code>
     </MixedArrayOffset>
-    <MixedInferredReturnType occurrences="8">
+    <MixedInferredReturnType>
       <code>RedisResource</code>
       <code>array</code>
       <code>array</code>
@@ -196,51 +258,78 @@
       <code>string</code>
       <code>string|null</code>
     </MixedInferredReturnType>
-    <MixedMethodCall occurrences="2">
+    <MixedMethodCall>
       <code>getOption</code>
       <code>getOption</code>
     </MixedMethodCall>
-    <MixedReturnStatement occurrences="8">
-      <code>$resource['database']</code>
-      <code>$resource['lib_options']</code>
-      <code>$resource['password']</code>
-      <code>$resource['password']</code>
-      <code>$resource['persistent_id']</code>
-      <code>$resource['resource']</code>
-      <code>$resource['server']</code>
-      <code>$this-&gt;resources[$resourceId]['version']</code>
+    <MixedReturnStatement>
+      <code><![CDATA[$resource['database']]]></code>
+      <code><![CDATA[$resource['lib_options']]]></code>
+      <code><![CDATA[$resource['password']]]></code>
+      <code><![CDATA[$resource['password']]]></code>
+      <code><![CDATA[$resource['persistent_id']]]></code>
+      <code><![CDATA[$resource['resource']]]></code>
+      <code><![CDATA[$resource['server']]]></code>
+      <code><![CDATA[$this->resources[$resourceId]['version']]]></code>
     </MixedReturnStatement>
-    <PossiblyUndefinedArrayOffset occurrences="1">
-      <code>$server['host']</code>
+    <NoValue>
+      <code>$server</code>
+    </NoValue>
+    <PossiblyUndefinedArrayOffset>
+      <code><![CDATA[$server['host']]]></code>
     </PossiblyUndefinedArrayOffset>
-    <RedundantCast occurrences="1">
-      <code>(int) $server['port']</code>
+    <PossiblyUnusedMethod>
+      <code>getMayorVersion</code>
+      <code>removeResource</code>
+      <code>setLibOption</code>
+    </PossiblyUnusedMethod>
+    <RedundantCast>
+      <code><![CDATA[(int) $server['port']]]></code>
     </RedundantCast>
+    <UnsupportedPropertyReferenceUsage>
+      <code><![CDATA[$resource                = &$this->resources[$id]]]></code>
+      <code><![CDATA[$resource             = &$this->resources[$id]]]></code>
+      <code><![CDATA[$resource = &$this->resources[$id]]]></code>
+      <code><![CDATA[$resource = &$this->resources[$id]]]></code>
+      <code><![CDATA[$resource = &$this->resources[$id]]]></code>
+      <code><![CDATA[$resource = &$this->resources[$id]]]></code>
+      <code><![CDATA[$resource = &$this->resources[$id]]]></code>
+      <code><![CDATA[$resource = &$this->resources[$id]]]></code>
+      <code><![CDATA[$resource = &$this->resources[$id]]]></code>
+      <code><![CDATA[$resource = &$this->resources[$id]]]></code>
+      <code><![CDATA[$resource = &$this->resources[$id]]]></code>
+      <code><![CDATA[$resource = &$this->resources[$id]]]></code>
+    </UnsupportedPropertyReferenceUsage>
+  </file>
+  <file src="test/integration/Laminas/RedisFromExtensionAsset.php">
+    <PossiblyUnusedProperty>
+      <code>$socket</code>
+    </PossiblyUnusedProperty>
   </file>
   <file src="test/integration/Laminas/RedisTest.php">
-    <MixedArgument occurrences="2">
-      <code>$this-&gt;storage-&gt;getItem('key')</code>
-      <code>$this-&gt;storage-&gt;getMetadata($key)['ttl']</code>
+    <MixedArgument>
+      <code><![CDATA[$this->storage->getItem('key')]]></code>
+      <code><![CDATA[$this->storage->getMetadata($key)['ttl']]]></code>
     </MixedArgument>
-    <PossiblyInvalidArrayAccess occurrences="2">
-      <code>$this-&gt;storage-&gt;getMetadata($key)['ttl']</code>
-      <code>$this-&gt;storage-&gt;getMetadata($key)['ttl']</code>
+    <PossiblyInvalidArrayAccess>
+      <code><![CDATA[$this->storage->getMetadata($key)['ttl']]]></code>
+      <code><![CDATA[$this->storage->getMetadata($key)['ttl']]]></code>
     </PossiblyInvalidArrayAccess>
-    <PossiblyNullPropertyAssignmentValue occurrences="2">
+    <PossiblyNullPropertyAssignmentValue>
       <code>null</code>
       <code>null</code>
     </PossiblyNullPropertyAssignmentValue>
-    <RedundantConditionGivenDocblockType occurrences="1">
-      <code>$this-&gt;storage</code>
+    <RedundantConditionGivenDocblockType>
+      <code><![CDATA[$this->storage]]></code>
     </RedundantConditionGivenDocblockType>
-    <UndefinedMethod occurrences="1">
-      <code>$redis-&gt;info()</code>
+    <UndefinedMethod>
+      <code><![CDATA[$redis->info()]]></code>
     </UndefinedMethod>
   </file>
   <file src="test/unit/RedisResourceManagerTest.php">
-    <ArgumentTypeCoercion occurrences="2">
-      <code>'Redis'</code>
-      <code>'Redis'</code>
+    <ArgumentTypeCoercion>
+      <code><![CDATA['Redis']]></code>
+      <code><![CDATA['Redis']]></code>
     </ArgumentTypeCoercion>
   </file>
 </files>

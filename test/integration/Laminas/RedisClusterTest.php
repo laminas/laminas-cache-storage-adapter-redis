@@ -154,22 +154,6 @@ final class RedisClusterTest extends AbstractCommonAdapterTest
         parent::tearDown();
     }
 
-    /**
-     * @dataProvider getCommonAdapterNamesProvider
-     */
-    public function testAdapterPluginManagerWithCommonNames(string $commonAdapterName): void
-    {
-        self::markTestSkipped('RedisCluster is available by static factory.');
-    }
-
-    /**
-     * @psalm-return array<array-key,list<non-empty-string>>
-     */
-    public function getCommonAdapterNamesProvider(): array
-    {
-        return [['dummy']];
-    }
-
     public function testOptionsFluentInterface(): void
     {
         self::markTestSkipped('Redis cluster specific options do not provide fluent interface!');

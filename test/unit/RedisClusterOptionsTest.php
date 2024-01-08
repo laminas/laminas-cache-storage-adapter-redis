@@ -17,7 +17,7 @@ use function constant;
 use function defined;
 use function is_int;
 use function sprintf;
-use function strpos;
+use function str_starts_with;
 
 /**
  * @template-extends AbstractAdapterOptionsTest<RedisClusterOptions>
@@ -139,11 +139,10 @@ final class RedisClusterOptionsTest extends AbstractAdapterOptionsTest
         $reflection = new ReflectionClass(RedisFromExtension::class);
 
         foreach ($reflection->getConstants() as $constant => $constantValue) {
-            if (strpos($constant, 'OPT_') !== 0) {
+            if (! str_starts_with($constant, 'OPT_')) {
                 continue;
             }
 
-            assert($constant !== '');
             assert(is_int($constantValue) && $constantValue > 0);
             yield $constant => [$constant, $constantValue];
         }
@@ -175,11 +174,10 @@ final class RedisClusterOptionsTest extends AbstractAdapterOptionsTest
         $reflection = new ReflectionClass(RedisClusterOptions::class);
 
         foreach ($reflection->getConstants() as $constant => $constantValue) {
-            if (strpos($constant, 'OPT_') !== 0) {
+            if (! str_starts_with($constant, 'OPT_')) {
                 continue;
             }
 
-            assert($constant !== '');
             assert(is_int($constantValue) && $constantValue > 0);
             yield $constant => [$constant, $constantValue];
         }
