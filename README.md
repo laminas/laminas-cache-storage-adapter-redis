@@ -1,6 +1,8 @@
 # laminas-cache-storage-adapter-redis
 
 [![Build Status](https://github.com/laminas/laminas-cache-storage-adapter-redis/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/laminas/laminas-cache-storage-adapter-redis/actions/workflows/continuous-integration.yml)
+[![type-coverage](https://shepherd.dev/github/laminas/laminas-cache-storage-adapter-redis/coverage.svg)](https://shepherd.dev/github/laminas/laminas-cache-storage-adapter-redis)
+[![Psalm level](https://shepherd.dev/github/laminas/laminas-cache-storage-adapter-redis/level.svg)](https://shepherd.dev/github/laminas/laminas-cache-storage-adapter-redis)
 
 > ## 🇷🇺 Русским гражданам
 >
@@ -34,5 +36,5 @@ Browse the documentation online at https://docs.laminas.dev/laminas-cache/v3/sto
 
 ## Support
 
-* [Issues](https://github.com/laminas/laminas-cache-storage-adapter-redis/issues/)
-* [Forum](https://discourse.laminas.dev/)
+- [Issues](https://github.com/laminas/laminas-cache-storage-adapter-redis/issues/)
+- [Forum](https://discourse.laminas.dev/)
