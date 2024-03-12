@@ -38,6 +38,7 @@ final class RedisClusterOptionsTest extends AbstractAdapterOptionsTest
             'persistent'    => false,
             'redis_version' => '1.0',
             'password'      => 'secret',
+            'ssl_context'   => ['verify_peer' => false],
         ]);
 
         $this->assertEquals('foo', $options->getName());
@@ -46,6 +47,7 @@ final class RedisClusterOptionsTest extends AbstractAdapterOptionsTest
         $this->assertEquals(false, $options->isPersistent());
         $this->assertEquals('1.0', $options->getRedisVersion());
         $this->assertEquals('secret', $options->getPassword());
+        $this->assertEquals(['verify_peer' => false], $options->getSslContext());
     }
 
     public function testCanHandleOptionsWithSeeds(): void
@@ -57,6 +59,7 @@ final class RedisClusterOptionsTest extends AbstractAdapterOptionsTest
             'persistent'    => false,
             'redis_version' => '1.0',
             'password'      => 'secret',
+            'ssl_context'   => ['verify_peer' => false],
         ]);
 
         $this->assertEquals(['localhost:1234'], $options->getSeeds());
@@ -65,6 +68,7 @@ final class RedisClusterOptionsTest extends AbstractAdapterOptionsTest
         $this->assertEquals(false, $options->isPersistent());
         $this->assertEquals('1.0', $options->getRedisVersion());
         $this->assertEquals('secret', $options->getPassword());
+        $this->assertEquals(['verify_peer' => false], $options->getSslContext());
     }
 
     public function testWillDetectSeedsAndNodenameConfiguration(): void
