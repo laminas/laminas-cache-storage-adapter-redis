@@ -53,6 +53,9 @@ final class RedisClusterOptions extends AdapterOptions
 
     private string $password = '';
 
+    /** @psalm-var array<non-empty-string,mixed>|null */
+    private ?array $sslContext = null;
+
     /**
      * @param iterable|null|AdapterOptions $options
      * @psalm-param iterable<string,mixed>|null|AdapterOptions $options
@@ -221,5 +224,21 @@ final class RedisClusterOptions extends AdapterOptions
     public function setPassword(string $password): void
     {
         $this->password = $password;
+    }
+
+    /**
+     * @psalm-return array<non-empty-string,mixed>|null
+     */
+    public function getSslContext(): ?array
+    {
+        return $this->sslContext;
+    }
+
+    /**
+     * @psalm-param array<non-empty-string,mixed>|null $sslContext
+     */
+    public function setSslContext(?array $sslContext): void
+    {
+        $this->sslContext = $sslContext;
     }
 }
