@@ -139,6 +139,7 @@
       <code>setReadTimeout</code>
       <code>setSeeds</code>
       <code>setTimeout</code>
+      <code>setSslContext</code>
     </PossiblyUnusedMethod>
   </file>
   <file src="src/RedisOptions.php">
