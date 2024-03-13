@@ -111,7 +111,7 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
         float $fallbackReadTimeout,
         bool $persistent,
         string $fallbackPassword,
-        array $sslContext
+        ?array $sslContext
     ): RedisClusterFromExtension {
         $options     = new RedisClusterOptionsFromIni();
         $seeds       = $options->getSeeds($name);
