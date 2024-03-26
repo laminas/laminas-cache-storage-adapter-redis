@@ -98,7 +98,7 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
             $options->getReadTimeout(),
             $options->isPersistent(),
             $password,
-            $options->getSslContext()
+            $options->getSslContext()?->getArrayCopy()
         );
     }
 
@@ -111,7 +111,7 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
         float $fallbackReadTimeout,
         bool $persistent,
         string $fallbackPassword,
-        ?array $sslContext
+        ?SslContext $sslContext
     ): RedisClusterFromExtension {
         $options     = new RedisClusterOptionsFromIni();
         $seeds       = $options->getSeeds($name);
@@ -126,7 +126,7 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
             $readTimeout,
             $persistent,
             $password,
-            $sslContext
+            $sslContext?->getArrayCopy()
         );
     }
 

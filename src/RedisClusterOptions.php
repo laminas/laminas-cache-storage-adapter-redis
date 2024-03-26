@@ -7,6 +7,8 @@ namespace Laminas\Cache\Storage\Adapter;
 use Laminas\Cache\Exception\RuntimeException;
 use Laminas\Cache\Storage\Adapter\Exception\InvalidRedisClusterConfigurationException;
 
+use function is_array;
+
 final class RedisClusterOptions extends AdapterOptions
 {
     public const LIBRARY_OPTIONS = [
@@ -53,8 +55,8 @@ final class RedisClusterOptions extends AdapterOptions
 
     private string $password = '';
 
-    /** @psalm-var array<non-empty-string,mixed>|null */
-    private ?array $sslContext = null;
+    /** @psalm-var SslContext|null */
+    private ?SslContext $sslContext = null;
 
     /**
      * @param iterable|null|AdapterOptions $options
@@ -227,18 +229,23 @@ final class RedisClusterOptions extends AdapterOptions
     }
 
     /**
-     * @psalm-return array<non-empty-string,mixed>|null
+     * @psalm-return SslContext|null
      */
-    public function getSslContext(): ?array
+    public function getSslContext(): ?SslContext
     {
         return $this->sslContext;
     }
 
     /**
-     * @psalm-param array<non-empty-string,mixed>|null $sslContext
+     * @psalm-param array<non-empty-string,mixed>|SslContext|null $sslContext
      */
-    public function setSslContext(?array $sslContext): void
+    public function setSslContext(array|SslContext|null $sslContext): void
     {
+        if (is_array($sslContext)) {
+            $data       = $sslContext;
+            $sslContext = new SslContext();
+            $sslContext->exchangeArray($data);
+        }
         $this->sslContext = $sslContext;
     }
 }
