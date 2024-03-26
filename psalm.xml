@@ -50,15 +50,6 @@
                 <directory name="*"/>
             </errorLevel>
         </RedundantCastGivenDocblockType>
-        <!--
-            Psalm currently (<= 5.23.1) uses an outdated (phpredis < 5.3.2) constructor signature for the RedisCluster
-            class in the phpredis extension.
-        -->
-        <TooManyArguments>
-            <errorLevel type="suppress">
-                <referencedFunction name="RedisCluster::__construct"/>
-            </errorLevel>
-        </TooManyArguments>
     </issueHandlers>
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>

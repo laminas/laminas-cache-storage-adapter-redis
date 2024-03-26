@@ -91,6 +91,12 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
             $password = null;
         }
 
+        /**
+         * Psalm currently (<= 5.23.1) uses an outdated (phpredis < 5.3.2) constructor signature for the RedisCluster
+         * class in the phpredis extension.
+         *
+         * @psalm-suppress TooManyArguments https://github.com/vimeo/psalm/pull/10862
+         */
         return new RedisClusterFromExtension(
             null,
             $options->getSeeds(),
@@ -119,6 +125,12 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
         $readTimeout = $options->getReadTimeout($name, $fallbackReadTimeout);
         $password    = $options->getPasswordByName($name, $fallbackPassword);
 
+        /**
+         * Psalm currently (<= 5.23.1) uses an outdated (phpredis < 5.3.2) constructor signature for the RedisCluster
+         * class in the phpredis extension.
+         *
+         * @psalm-suppress TooManyArguments https://github.com/vimeo/psalm/pull/10862
+         */
         return new RedisClusterFromExtension(
             null,
             $seeds,
