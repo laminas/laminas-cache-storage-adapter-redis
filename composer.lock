@@ -57,7 +57,7 @@
         },
         {
             "name": "laminas/laminas-cache",
-            "version": "4.0.x-dev",
+            "version": "4.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-cache.git",
@@ -1560,7 +1560,7 @@
         },
         {
             "name": "laminas/laminas-cache-storage-adapter-benchmark",
-            "version": "2.0.x-dev",
+            "version": "2.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-cache-storage-adapter-benchmark.git",
@@ -1616,7 +1616,7 @@
         },
         {
             "name": "laminas/laminas-cache-storage-adapter-test",
-            "version": "3.0.x-dev",
+            "version": "3.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-cache-storage-adapter-test.git",
