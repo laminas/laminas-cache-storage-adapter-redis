@@ -20,11 +20,8 @@ use Throwable;
  */
 final class RedisClusterResourceManager implements RedisClusterResourceManagerInterface
 {
-    private RedisClusterOptions $options;
-
-    public function __construct(RedisClusterOptions $options)
+    public function __construct(private readonly RedisClusterOptions $options)
     {
-        $this->options = $options;
     }
 
     public function getResource(): RedisClusterFromExtension
