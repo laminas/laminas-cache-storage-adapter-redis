@@ -91,7 +91,7 @@ final class RedisCluster extends AbstractMetadataCapableAdapter implements
             $redis = new RedisFromExtension();
             try {
                 $redis->connect($host, $port);
-            } catch (RedisException $exception) {
+            } catch (RedisException) {
                 continue;
             }
 

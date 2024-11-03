@@ -35,7 +35,7 @@ final class RedisRuntimeException extends LaminasCacheRuntimeException
     {
         try {
             $message = $redis->getLastError() ?? $exception->getMessage();
-        } catch (RedisException $exceptionThrownByGetLastErrorMethod) {
+        } catch (RedisException) {
             $message = $exception->getMessage();
         }
 
