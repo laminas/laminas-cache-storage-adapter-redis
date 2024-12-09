@@ -1,7 +1,8 @@
-/.phpunit.result.cache
+/.phpunit.cache
 /.psalm-cache
 /docs/html/
 /laminas-mkdoc-theme.tgz
 /laminas-mkdoc-theme/
 /vendor/
 /.phpcs-cache
+/.idea
