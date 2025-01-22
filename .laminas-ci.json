@@ -16,5 +16,8 @@
                 "command": "REDIS_VERSION=5.3.7 vendor/bin/phpunit"
             }
         }
-    ]
+    ],
+    "ignore_php_platform_requirements": {
+        "8.4": true
+    }
 }
