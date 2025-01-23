@@ -11,10 +11,37 @@
         {
             "name": "Run tests on ext-redis 5.3.7",
             "job": {
-                "php": "*",
+                "php": "8.1",
                 "dependencies": "locked",
                 "command": "REDIS_VERSION=5.3.7 vendor/bin/phpunit"
             }
+        },
+        {
+            "name": "Run tests on ext-redis 5.3.7",
+            "job": {
+                "php": "8.2",
+                "dependencies": "locked",
+                "command": "REDIS_VERSION=5.3.7 vendor/bin/phpunit"
+            }
+        },
+        {
+            "name": "Run tests on ext-redis 5.3.7",
+            "job": {
+                "php": "8.3",
+                "dependencies": "locked",
+                "command": "REDIS_VERSION=5.3.7 vendor/bin/phpunit"
+            }
+        },
+        {
+            "name": "Run tests on ext-redis 6.1.0",
+            "job": {
+                "php": "*",
+                "dependencies": "locked",
+                "command": "REDIS_VERSION=6.1.0 vendor/bin/phpunit"
+            }
         }
-    ]
+    ],
+    "ignore_php_platform_requirements": {
+        "8.4": true
+    }
 }

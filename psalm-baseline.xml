@@ -1,109 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.18.0@b113f3ed0259fd6e212d87c3df80eec95a6abf19">
+<files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
   <file src="benchmark/RedisClusterStorageAdapterBench.php">
     <UnusedClass>
-      <code>RedisClusterStorageAdapterBench</code>
+      <code><![CDATA[RedisClusterStorageAdapterBench]]></code>
     </UnusedClass>
   </file>
   <file src="benchmark/RedisClusterWithIgbinarySerializerStorageAdapterBench.php">
     <UnusedClass>
-      <code>RedisClusterWithIgbinarySerializerStorageAdapterBench</code>
+      <code><![CDATA[RedisClusterWithIgbinarySerializerStorageAdapterBench]]></code>
     </UnusedClass>
   </file>
   <file src="benchmark/RedisClusterWithPhpSerializerStorageAdapterBench.php">
     <UnusedClass>
-      <code>RedisClusterWithPhpSerializerStorageAdapterBench</code>
+      <code><![CDATA[RedisClusterWithPhpSerializerStorageAdapterBench]]></code>
     </UnusedClass>
   </file>
   <file src="benchmark/RedisStorageAdapterBench.php">
     <UnusedClass>
-      <code>RedisStorageAdapterBench</code>
+      <code><![CDATA[RedisStorageAdapterBench]]></code>
     </UnusedClass>
   </file>
   <file src="src/Exception/InvalidRedisClusterConfigurationException.php">
     <PossiblyUnusedMethod>
-      <code>fromInvalidSeedsConfiguration</code>
+      <code><![CDATA[fromInvalidSeedsConfiguration]]></code>
     </PossiblyUnusedMethod>
   </file>
   <file src="src/Redis.php">
     <InvalidArgument>
-      <code>$ttl</code>
-      <code>$ttl</code>
-      <code>$ttl</code>
-      <code>$ttl</code>
+      <code><![CDATA[$ttl]]></code>
+      <code><![CDATA[$ttl]]></code>
+      <code><![CDATA[$ttl]]></code>
+      <code><![CDATA[$ttl]]></code>
     </InvalidArgument>
     <InvalidOperand>
-      <code>$pttl</code>
-      <code>$pttl</code>
+      <code><![CDATA[$pttl]]></code>
+      <code><![CDATA[$pttl]]></code>
     </InvalidOperand>
     <InvalidReturnStatement>
       <code><![CDATA[$redis->decrBy($this->namespacePrefix . $normalizedKey, $value)]]></code>
       <code><![CDATA[$redis->incrBy($this->namespacePrefix . $normalizedKey, $value)]]></code>
-      <code>$success</code>
-      <code>$success</code>
+      <code><![CDATA[$success]]></code>
+      <code><![CDATA[$success]]></code>
     </InvalidReturnStatement>
     <InvalidReturnType>
-      <code>bool</code>
-      <code>bool</code>
-      <code>int|bool</code>
-      <code>int|bool</code>
+      <code><![CDATA[bool]]></code>
+      <code><![CDATA[bool]]></code>
+      <code><![CDATA[int|bool]]></code>
+      <code><![CDATA[int|bool]]></code>
     </InvalidReturnType>
     <LessSpecificReturnStatement>
-      <code>parent::setOptions($options)</code>
+      <code><![CDATA[parent::setOptions($options)]]></code>
     </LessSpecificReturnStatement>
     <MixedArgument>
       <code><![CDATA[$this->preSerialize($value)]]></code>
       <code><![CDATA[$this->preSerialize($value)]]></code>
       <code><![CDATA[$this->preSerialize($value)]]></code>
       <code><![CDATA[$this->preSerialize($value)]]></code>
-      <code>$value</code>
+      <code><![CDATA[$value]]></code>
     </MixedArgument>
     <MixedArgumentTypeCoercion>
-      <code>$normalizedKeys</code>
+      <code><![CDATA[$normalizedKeys]]></code>
+      <code><![CDATA[$options]]></code>
     </MixedArgumentTypeCoercion>
     <MixedInferredReturnType>
-      <code>RedisOptions</code>
-      <code>int|float</code>
+      <code><![CDATA[RedisOptions]]></code>
+      <code><![CDATA[int|float]]></code>
     </MixedInferredReturnType>
     <MixedOperand>
-      <code>$normalizedKey</code>
+      <code><![CDATA[$normalizedKey]]></code>
     </MixedOperand>
     <MixedReturnStatement>
       <code><![CDATA[$info['used_memory']]]></code>
       <code><![CDATA[$this->options]]></code>
     </MixedReturnStatement>
     <MoreSpecificImplementedParamType>
-      <code>$options</code>
-      <code>$options</code>
+      <code><![CDATA[$options]]></code>
+      <code><![CDATA[$options]]></code>
     </MoreSpecificImplementedParamType>
     <MoreSpecificReturnType>
-      <code>Redis</code>
+      <code><![CDATA[Redis]]></code>
     </MoreSpecificReturnType>
     <PossiblyInvalidArgument>
       <code><![CDATA[$redis->keys($prefix . '*')]]></code>
       <code><![CDATA[$redis->keys($prefix . '*')]]></code>
-      <code>$results</code>
+      <code><![CDATA[$results]]></code>
     </PossiblyInvalidArgument>
     <PossiblyInvalidMethodCall>
-      <code>exec</code>
-      <code>setex</code>
+      <code><![CDATA[exec]]></code>
+      <code><![CDATA[setex]]></code>
     </PossiblyInvalidMethodCall>
     <PossiblyNullArgument>
       <code><![CDATA[$this->resourceId]]></code>
       <code><![CDATA[$this->resourceId]]></code>
     </PossiblyNullArgument>
     <PossiblyNullReference>
-      <code>getResource</code>
-      <code>getVersion</code>
+      <code><![CDATA[getResource]]></code>
+      <code><![CDATA[getVersion]]></code>
     </PossiblyNullReference>
     <PossiblyUnusedReturnValue>
-      <code>Redis</code>
+      <code><![CDATA[Redis]]></code>
     </PossiblyUnusedReturnValue>
     <PropertyNotSetInConstructor>
-      <code>Redis</code>
+      <code><![CDATA[Redis]]></code>
     </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[! $success]]></code>
+      <code><![CDATA[$success]]></code>
+    </RiskyTruthyFalsyComparison>
     <UndefinedMethod>
-      <code>$info</code>
+      <code><![CDATA[$info]]></code>
     </UndefinedMethod>
     <UnsupportedPropertyReferenceUsage>
       <code><![CDATA[$initialized = &$this->initialized]]></code>
@@ -111,45 +116,48 @@
   </file>
   <file src="src/Redis/AdapterPluginManagerDelegatorFactory.php">
     <UnusedParam>
-      <code>$container</code>
-      <code>$name</code>
+      <code><![CDATA[$container]]></code>
+      <code><![CDATA[$name]]></code>
     </UnusedParam>
   </file>
   <file src="src/Redis/Module.php">
     <UnusedClass>
-      <code>Module</code>
+      <code><![CDATA[Module]]></code>
     </UnusedClass>
   </file>
   <file src="src/RedisCluster.php">
     <MoreSpecificImplementedParamType>
-      <code>$options</code>
-      <code>$options</code>
+      <code><![CDATA[$options]]></code>
+      <code><![CDATA[$options]]></code>
     </MoreSpecificImplementedParamType>
     <PossiblyUnusedReturnValue>
-      <code>bool</code>
+      <code><![CDATA[bool]]></code>
     </PossiblyUnusedReturnValue>
   </file>
   <file src="src/RedisClusterOptions.php">
+    <MixedArgumentTypeCoercion>
+      <code><![CDATA[$options]]></code>
+    </MixedArgumentTypeCoercion>
     <PossiblyUnusedMethod>
-      <code>setName</code>
-      <code>setNamespaceSeparator</code>
-      <code>setPassword</code>
-      <code>setPersistent</code>
-      <code>setReadTimeout</code>
-      <code>setSeeds</code>
-      <code>setSslContext</code>
-      <code>setTimeout</code>
+      <code><![CDATA[setName]]></code>
+      <code><![CDATA[setNamespaceSeparator]]></code>
+      <code><![CDATA[setPassword]]></code>
+      <code><![CDATA[setPersistent]]></code>
+      <code><![CDATA[setReadTimeout]]></code>
+      <code><![CDATA[setSeeds]]></code>
+      <code><![CDATA[setSslContext]]></code>
+      <code><![CDATA[setTimeout]]></code>
     </PossiblyUnusedMethod>
   </file>
   <file src="src/RedisOptions.php">
     <LessSpecificReturnStatement>
-      <code>parent::setNamespace($namespace)</code>
+      <code><![CDATA[parent::setNamespace($namespace)]]></code>
     </LessSpecificReturnStatement>
     <MoreSpecificReturnType>
-      <code>RedisOptions</code>
+      <code><![CDATA[RedisOptions]]></code>
     </MoreSpecificReturnType>
     <PossiblyUnusedReturnValue>
-      <code>RedisOptions</code>
+      <code><![CDATA[RedisOptions]]></code>
     </PossiblyUnusedReturnValue>
   </file>
   <file src="src/RedisResourceManager.php">
@@ -157,38 +165,49 @@
       <code><![CDATA['Redis']]></code>
     </ArgumentTypeCoercion>
     <DocblockTypeContradiction>
-      <code>$server instanceof Traversable</code>
-      <code>is_array($resource)</code>
+      <code><![CDATA[$server instanceof Traversable]]></code>
+      <code><![CDATA[is_array($resource)]]></code>
     </DocblockTypeContradiction>
     <InvalidReturnStatement>
-      <code>$info</code>
+      <code><![CDATA[$info]]></code>
     </InvalidReturnStatement>
     <InvalidReturnType>
-      <code>array{redis_version:string}</code>
+      <code><![CDATA[array{redis_version:string}]]></code>
     </InvalidReturnType>
     <MissingReturnType>
-      <code>normalizeLibOptionKey</code>
-      <code>normalizeLibOptions</code>
-      <code>normalizePersistentId</code>
-      <code>normalizeServer</code>
+      <code><![CDATA[normalizeLibOptionKey]]></code>
+      <code><![CDATA[normalizeLibOptions]]></code>
+      <code><![CDATA[normalizePersistentId]]></code>
+      <code><![CDATA[normalizeServer]]></code>
     </MissingReturnType>
     <MixedArgument>
-      <code>$key</code>
+      <code><![CDATA[$key]]></code>
     </MixedArgument>
     <NoValue>
-      <code>$server</code>
+      <code><![CDATA[$server]]></code>
     </NoValue>
     <PossiblyUndefinedArrayOffset>
       <code><![CDATA[$server['host']]]></code>
     </PossiblyUndefinedArrayOffset>
     <PossiblyUnusedMethod>
-      <code>getMayorVersion</code>
-      <code>removeResource</code>
-      <code>setLibOption</code>
+      <code><![CDATA[getMayorVersion]]></code>
+      <code><![CDATA[removeResource]]></code>
+      <code><![CDATA[setLibOption]]></code>
     </PossiblyUnusedMethod>
     <RedundantCast>
       <code><![CDATA[(int) $server['port']]]></code>
     </RedundantCast>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[! $host]]></code>
+      <code><![CDATA[! $server]]></code>
+      <code><![CDATA[$resource['password']]]></code>
+      <code><![CDATA[$resource['password']]]></code>
+      <code><![CDATA[$resource['user']]]></code>
+      <code><![CDATA[empty($resource['password'])]]></code>
+      <code><![CDATA[empty($resource['password'])]]></code>
+      <code><![CDATA[empty($resource['user'])]]></code>
+      <code><![CDATA[empty($resource['user'])]]></code>
+    </RiskyTruthyFalsyComparison>
     <UnsupportedPropertyReferenceUsage>
       <code><![CDATA[$resource                = &$this->resources[$id]]]></code>
       <code><![CDATA[$resource             = &$this->resources[$id]]]></code>
@@ -205,7 +224,7 @@
   </file>
   <file src="test/integration/Laminas/RedisFromExtensionAsset.php">
     <PossiblyUnusedProperty>
-      <code>$socket</code>
+      <code><![CDATA[$socket]]></code>
     </PossiblyUnusedProperty>
   </file>
   <file src="test/integration/Laminas/RedisTest.php">
@@ -217,6 +236,18 @@
       <code><![CDATA[$this->storage->getMetadata($key)['ttl']]]></code>
       <code><![CDATA[$this->storage->getMetadata($key)['ttl']]]></code>
     </PossiblyInvalidArrayAccess>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[getenv('TESTS_LAMINAS_CACHE_REDIS_DATABASE')]]></code>
+      <code><![CDATA[getenv('TESTS_LAMINAS_CACHE_REDIS_DATABASE')]]></code>
+      <code><![CDATA[getenv('TESTS_LAMINAS_CACHE_REDIS_HOST')]]></code>
+      <code><![CDATA[getenv('TESTS_LAMINAS_CACHE_REDIS_HOST')]]></code>
+      <code><![CDATA[getenv('TESTS_LAMINAS_CACHE_REDIS_HOST')]]></code>
+      <code><![CDATA[getenv('TESTS_LAMINAS_CACHE_REDIS_HOST')]]></code>
+      <code><![CDATA[getenv('TESTS_LAMINAS_CACHE_REDIS_PASSWORD')]]></code>
+      <code><![CDATA[getenv('TESTS_LAMINAS_CACHE_REDIS_PASSWORD')]]></code>
+      <code><![CDATA[getenv('TESTS_LAMINAS_CACHE_REDIS_PORT')]]></code>
+      <code><![CDATA[getenv('TESTS_LAMINAS_CACHE_REDIS_PORT')]]></code>
+    </RiskyTruthyFalsyComparison>
     <UndefinedMethod>
       <code><![CDATA[$redis->info()]]></code>
     </UndefinedMethod>
@@ -226,5 +257,15 @@
       <code><![CDATA['Redis']]></code>
       <code><![CDATA['Redis']]></code>
     </ArgumentTypeCoercion>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[getenv('TESTS_LAMINAS_CACHE_REDIS_HOST')]]></code>
+      <code><![CDATA[getenv('TESTS_LAMINAS_CACHE_REDIS_HOST')]]></code>
+      <code><![CDATA[getenv('TESTS_LAMINAS_CACHE_REDIS_HOST')]]></code>
+      <code><![CDATA[getenv('TESTS_LAMINAS_CACHE_REDIS_HOST')]]></code>
+      <code><![CDATA[getenv('TESTS_LAMINAS_CACHE_REDIS_PORT')]]></code>
+      <code><![CDATA[getenv('TESTS_LAMINAS_CACHE_REDIS_PORT')]]></code>
+      <code><![CDATA[getenv('TESTS_LAMINAS_CACHE_REDIS_PORT')]]></code>
+      <code><![CDATA[getenv('TESTS_LAMINAS_CACHE_REDIS_PORT')]]></code>
+    </RiskyTruthyFalsyComparison>
   </file>
 </files>
