@@ -18,12 +18,12 @@ use Redis;
 #[Revs(100)]
 #[Iterations(10)]
 #[Warmup(1)]
-class RedisStorageAdapterBench extends AbstractStorageAdapterBenchmark
+class RedisWithIgbinarySerializerStorageAdapterBench extends AbstractStorageAdapterBenchmark
 {
     use RedisStorageCreationTrait;
 
     public function __construct()
     {
-        parent::__construct($this->createRedisStorage(Redis::SERIALIZER_NONE, true));
+        parent::__construct($this->createRedisStorage(Redis::SERIALIZER_IGBINARY, false));
     }
 }

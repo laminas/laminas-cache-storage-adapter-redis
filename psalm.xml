@@ -18,6 +18,9 @@
             <directory name="vendor"/>
         </ignoreFiles>
     </projectFiles>
+    <stubs>
+        <file name="psalm/Redis.stub.php"/>
+    </stubs>
     <issueHandlers>
         <InvalidThrow>
             <errorLevel type="suppress">
@@ -50,6 +53,16 @@
                 <directory name="*"/>
             </errorLevel>
         </RedundantCastGivenDocblockType>
+        <RiskyTruthyFalsyComparison>
+            <errorLevel type="suppress">
+                <directory name="test/"/>
+            </errorLevel>
+        </RiskyTruthyFalsyComparison>
+        <UnusedClass>
+            <errorLevel type="suppress">
+                <directory name="benchmark/"/>
+            </errorLevel>
+        </UnusedClass>
     </issueHandlers>
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>

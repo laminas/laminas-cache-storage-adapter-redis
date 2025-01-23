@@ -4,53 +4,27 @@ declare(strict_types=1);
 
 namespace Laminas\Cache\Storage\Adapter;
 
-use Laminas\Cache\Exception\RuntimeException;
+use Laminas\Cache\Storage\Adapter\Exception\InvalidRedisClusterConfigurationException;
 use Laminas\Cache\Storage\Adapter\Exception\RedisRuntimeException;
-use Laminas\Cache\Storage\Adapter\RedisClusterOptions;
 use Laminas\Cache\Storage\Plugin\PluginInterface;
 use Laminas\Cache\Storage\Plugin\Serializer;
 use Laminas\Cache\Storage\PluginCapableInterface;
+use Laminas\Cache\Storage\StorageInterface;
 use Redis as RedisFromExtension;
 use RedisCluster as RedisClusterFromExtension;
 use RedisClusterException;
-
-use function array_key_exists;
-use function assert;
+use Throwable;
 
 /**
- * @psalm-type RedisClusterInfoType = array<string,mixed>&array{redis_version:string}
+ * @uses PluginCapableInterface
  */
 final class RedisClusterResourceManager implements RedisClusterResourceManagerInterface
 {
     private RedisClusterOptions $options;
 
-    /** @psalm-var array<positive-int,mixed> */
-    private array $libraryOptions = [];
-
     public function __construct(RedisClusterOptions $options)
     {
         $this->options = $options;
-    }
-
-    public function getVersion(): string
-    {
-        $versionFromOptions = $this->options->getRedisVersion();
-        if ($versionFromOptions) {
-            return $versionFromOptions;
-        }
-
-        $resource = $this->getResource();
-        try {
-            $info = $this->info($resource);
-        } catch (RedisClusterException $exception) {
-            throw RedisRuntimeException::fromClusterException($exception, $resource);
-        }
-
-        $version = $info['redis_version'];
-        assert($version !== '');
-        $this->options->setRedisVersion($version);
-
-        return $version;
     }
 
     public function getResource(): RedisClusterFromExtension
@@ -64,8 +38,7 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
         $libraryOptions = $this->options->getLibOptions();
 
         try {
-            $resource             = $this->applyLibraryOptions($resource, $libraryOptions);
-            $this->libraryOptions = $this->mergeLibraryOptionsFromCluster($libraryOptions, $resource);
+            $resource = $this->applyLibraryOptions($resource, $libraryOptions);
         } catch (RedisClusterException $exception) {
             throw RedisRuntimeException::fromClusterException($exception, $resource);
         }
@@ -119,7 +92,14 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
         string $fallbackPassword,
         ?SslContext $sslContext
     ): RedisClusterFromExtension {
-        $options     = new RedisClusterOptionsFromIni();
+        try {
+            $options = new RedisClusterOptionsFromIni();
+        } catch (InvalidRedisClusterConfigurationException $exception) {
+            throw $exception;
+        } catch (Throwable $throwable) {
+            throw new InvalidRedisClusterConfigurationException($throwable->getMessage(), previous: $throwable);
+        }
+
         $seeds       = $options->getSeeds($name);
         $timeout     = $options->getTimeout($name, $fallbackTimeout);
         $readTimeout = $options->getReadTimeout($name, $fallbackReadTimeout);
@@ -161,37 +141,7 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
         return $resource;
     }
 
-    /**
-     * @psalm-param array<positive-int,mixed> $options
-     * @psalm-return array<positive-int,mixed>
-     */
-    private function mergeLibraryOptionsFromCluster(array $options, RedisClusterFromExtension $resource): array
-    {
-        foreach (RedisClusterOptions::LIBRARY_OPTIONS as $option) {
-            if (array_key_exists($option, $options)) {
-                continue;
-            }
-
-            $options[$option] = $resource->getOption($option);
-        }
-
-        return $options;
-    }
-
-    /**
-     * @psalm-param RedisClusterOptions::OPT_* $option
-     * @return mixed
-     */
-    public function getLibOption(int $option)
-    {
-        if (array_key_exists($option, $this->libraryOptions)) {
-            return $this->libraryOptions[$option];
-        }
-
-        return $this->libraryOptions[$option] = $this->getResource()->getOption($option);
-    }
-
-    public function hasSerializationSupport(PluginCapableInterface $adapter): bool
+    public function hasSerializationSupport(PluginCapableInterface&StorageInterface $adapter): bool
     {
         /**
          * NOTE: we are not using {@see RedisClusterResourceManager::getLibOption} here
@@ -200,7 +150,7 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
          *       resource manager and then apply changes to it. As this is not the common use-case, this is not
          *       considered in this check.
          */
-        $options    = $this->options;
+        $options    = $adapter->getOptions();
         $serializer = $options->getLibOption(
             RedisFromExtension::OPT_SERIALIZER,
             RedisFromExtension::SERIALIZER_NONE
@@ -221,30 +171,5 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
         }
 
         return false;
-    }
-
-    /**
-     * @psalm-return RedisClusterInfoType
-     */
-    private function info(RedisClusterFromExtension $resource): array
-    {
-        if ($this->options->hasName()) {
-            $name = $this->options->getName();
-
-            /** @psalm-var RedisClusterInfoType $info */
-            $info = $resource->info($name);
-            return $info;
-        }
-
-        $seeds = $this->options->getSeeds();
-        if ($seeds === []) {
-            throw new RuntimeException('Neither the node name nor any seed is configured.');
-        }
-
-        $seed = $seeds[0];
-        /** @psalm-var RedisClusterInfoType $info */
-        $info = $resource->info($seed);
-
-        return $info;
     }
 }

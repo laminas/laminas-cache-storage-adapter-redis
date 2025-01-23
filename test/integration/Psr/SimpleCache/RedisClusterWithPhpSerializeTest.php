@@ -9,7 +9,7 @@ use LaminasTest\Cache\Storage\Adapter\AbstractSimpleCacheIntegrationTest;
 use LaminasTest\Cache\Storage\Adapter\Laminas\RedisClusterStorageCreationTrait;
 use Redis;
 
-final class RedisClusterWithPhpSerializerTest extends AbstractSimpleCacheIntegrationTest
+final class RedisClusterWithPhpSerializeTest extends AbstractSimpleCacheIntegrationTest
 {
     use RedisClusterStorageCreationTrait;
 

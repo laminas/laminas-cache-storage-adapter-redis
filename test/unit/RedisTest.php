@@ -4,21 +4,28 @@ declare(strict_types=1);
 
 namespace LaminasTest\Cache\Storage\Adapter;
 
-use Laminas\Cache\Storage\Adapter\RedisCluster;
-use Laminas\Cache\Storage\Adapter\RedisClusterOptions;
-use Laminas\Cache\Storage\Adapter\RedisClusterResourceManagerInterface;
+use Laminas\Cache\Storage\Adapter\Redis;
+use Laminas\Cache\Storage\Adapter\RedisOptions;
+use Laminas\Cache\Storage\Adapter\RedisResourceManagerInterface;
 use PHPUnit\Framework\TestCase;
 
-use function uniqid;
-
-final class RedisClusterTest extends TestCase
+final class RedisTest extends TestCase
 {
+    public function testWillReturnVersionFromOptions(): void
+    {
+        $adapter = new Redis(new RedisOptions([
+            'redis_version' => '1.0.0',
+        ]));
+
+        $version = $adapter->getRedisVersion();
+        self::assertEquals('1.0.0', $version);
+    }
+
     public function testCanDetectCapabilitiesWithSerializationSupport(): void
     {
-        $resourceManager = $this->createMock(RedisClusterResourceManagerInterface::class);
+        $resourceManager = $this->createMock(RedisResourceManagerInterface::class);
 
-        $adapter = new RedisCluster(new RedisClusterOptions([
-            'name'          => 'bar',
+        $adapter = new Redis(new RedisOptions([
             'redis_version' => '5.0.0',
         ]));
 
@@ -46,10 +53,9 @@ final class RedisClusterTest extends TestCase
 
     public function testCanDetectCapabilitiesWithoutSerializationSupport(): void
     {
-        $resourceManager = $this->createMock(RedisClusterResourceManagerInterface::class);
+        $resourceManager = $this->createMock(RedisResourceManagerInterface::class);
 
-        $adapter = new RedisCluster(new RedisClusterOptions([
-            'name'          => 'bar',
+        $adapter = new Redis(new RedisOptions([
             'redis_version' => '5.0.0',
         ]));
 
@@ -73,16 +79,5 @@ final class RedisClusterTest extends TestCase
             'object'   => false,
             'resource' => false,
         ], $datatypes);
-    }
-
-    public function testWillReturnVersionFromOptions(): void
-    {
-        $manager = new RedisCluster(new RedisClusterOptions([
-            'name'          => uniqid('', true),
-            'redis_version' => '1.0.0',
-        ]));
-
-        $version = $manager->getRedisVersion();
-        self::assertEquals('1.0.0', $version);
     }
 }

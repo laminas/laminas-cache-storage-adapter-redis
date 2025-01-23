@@ -5,26 +5,25 @@ declare(strict_types=1);
 namespace LaminasBench\Cache;
 
 use Laminas\Cache\Storage\Adapter\Benchmark\AbstractStorageAdapterBenchmark;
+use Laminas\Cache\Storage\Adapter\RedisClusterOptions;
 use LaminasTest\Cache\Storage\Adapter\Laminas\RedisClusterStorageCreationTrait;
-use PhpBench\Benchmark\Metadata\Annotations\Iterations;
-use PhpBench\Benchmark\Metadata\Annotations\Revs;
-use PhpBench\Benchmark\Metadata\Annotations\Warmup;
+use PhpBench\Attributes\Iterations;
+use PhpBench\Attributes\Revs;
+use PhpBench\Attributes\Warmup;
 use Redis;
 
 /**
- * @Revs(100)
- * @Iterations(10)
- * @Warmup(1)
+ * @template-extends AbstractStorageAdapterBenchmark<RedisClusterOptions>
  */
+#[Revs(100)]
+#[Iterations(10)]
+#[Warmup(1)]
 class RedisClusterWithIgbinarySerializerStorageAdapterBench extends AbstractStorageAdapterBenchmark
 {
     use RedisClusterStorageCreationTrait;
 
     public function __construct()
     {
-        parent::__construct($this->createRedisClusterStorage(
-            Redis::SERIALIZER_IGBINARY,
-            false
-        ));
+        parent::__construct($this->createRedisClusterStorage(Redis::SERIALIZER_IGBINARY, false));
     }
 }

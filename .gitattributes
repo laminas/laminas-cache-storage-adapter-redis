@@ -11,3 +11,4 @@
 /test/ export-ignore
 /benchmark/ export-ignore
 /phpbench.json export-ignore
+/psalm export-ignore

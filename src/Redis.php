@@ -5,208 +5,206 @@ declare(strict_types=1);
 namespace Laminas\Cache\Storage\Adapter;
 
 use Laminas\Cache\Exception;
-use Laminas\Cache\Storage\Adapter\RedisResourceManager;
+use Laminas\Cache\Storage\AbstractMetadataCapableAdapter;
+use Laminas\Cache\Storage\Adapter\Exception\RedisRuntimeException;
+use Laminas\Cache\Storage\Adapter\Redis\Metadata;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\ClearByNamespaceInterface;
 use Laminas\Cache\Storage\ClearByPrefixInterface;
 use Laminas\Cache\Storage\FlushableInterface;
 use Laminas\Cache\Storage\TotalSpaceCapableInterface;
-use Redis as RedisResource;
-use RedisException as RedisResourceException;
-use stdClass;
+use Redis as RedisFromExtension;
+use RedisException as RedisFromExtensionException;
+use Webmozart\Assert\Assert;
 
-use function array_combine;
-use function array_filter;
+use function array_key_exists;
+use function assert;
+use function is_array;
+use function is_string;
+use function round;
 use function version_compare;
 
-final class Redis extends AbstractAdapter implements
+/**
+ * @template-extends AbstractMetadataCapableAdapter<RedisOptions, Metadata>
+ */
+final class Redis extends AbstractMetadataCapableAdapter implements
     ClearByNamespaceInterface,
     ClearByPrefixInterface,
     FlushableInterface,
     TotalSpaceCapableInterface
 {
-    /**
-     * Has this instance be initialized
-     */
-    private bool $initialized = false;
+    private RedisFromExtension|null $resource;
 
-    /**
-     * The redis resource manager
-     */
-    private ?RedisResourceManager $resourceManager = null;
-
-    /**
-     * The redis resource id
-     */
-    private ?string $resourceId = null;
+    private RedisResourceManagerInterface|null $resourceManager;
 
     /**
      * The namespace prefix
      */
-    private string $namespacePrefix = '';
+    private string|null $namespacePrefix;
 
     /**
-     * Create new Adapter for redis storage
-     *
-     * @see Abstract
-     *
-     * @param null|iterable|RedisOptions $options
+     * @param null|iterable<string,mixed>|RedisOptions $options
      */
-    public function __construct($options = null)
+    public function __construct(iterable|RedisOptions|null $options = null)
     {
         parent::__construct($options);
-
-        // reset initialized flag on update option(s)
-        $initialized = &$this->initialized;
-        $this->getEventManager()->attach('option', static function () use (&$initialized): void {
-            $initialized = false;
+        $this->resourceManager = null;
+        $this->resource        = null;
+        $this->namespacePrefix = null;
+        $this->getEventManager()->attach('option', function (): void {
+            $this->resource        = null;
+            $this->namespacePrefix = null;
         });
     }
 
-    /**
-     * Get Redis resource
-     *
-     * @return RedisResource
-     */
-    protected function getRedisResource()
+    private function getRedisResource(): RedisFromExtension
     {
-        if (! $this->initialized) {
-            $options = $this->getOptions();
-
-            // get resource manager and resource id
-            $this->resourceManager = $options->getResourceManager();
-            $this->resourceId      = $options->getResourceId();
-
-            // init namespace prefix
-            $namespace = $options->getNamespace();
-            if ($namespace !== '') {
-                $this->namespacePrefix = $namespace . $options->getNamespaceSeparator();
-            } else {
-                $this->namespacePrefix = '';
-            }
-
-            // update initialized flag
-            $this->initialized = true;
+        if ($this->resource !== null) {
+            return $this->resource;
         }
 
-        return $this->resourceManager->getResource($this->resourceId);
+        $resourceManager = $this->getResourceManager();
+        $this->resource  = $resourceManager->getResource();
+        $options         = $this->getOptions();
+
+        // init namespace prefix
+        $namespace             = $options->getNamespace();
+        $this->namespacePrefix = '';
+        if ($namespace !== '') {
+            $this->namespacePrefix = $namespace . $options->getNamespaceSeparator();
+        }
+
+        return $this->resource;
     }
 
-    /* options */
-
     /**
-     * Set options.
-     *
-     * @see    getOptions()
-     *
-     * @param  iterable|RedisOptions $options
-     * @return Redis
+     * {@inheritDoc}
      */
-    public function setOptions($options)
+    public function setOptions(iterable|AdapterOptions $options): self
     {
         if (! $options instanceof RedisOptions) {
             $options = new RedisOptions($options);
         }
-        return parent::setOptions($options);
+
+        parent::setOptions($options);
+        return $this;
     }
 
     /**
-     * Get options.
-     *
-     * @see setOptions()
-     *
-     * @return RedisOptions
+     * {@inheritDoc}
      */
-    public function getOptions()
+    public function getOptions(): RedisOptions
     {
         if (! $this->options) {
             $this->setOptions(new RedisOptions());
         }
+        assert($this->options instanceof RedisOptions);
         return $this->options;
     }
 
     /**
-     * Internal method to get an item.
-     *
-     * @param string  $normalizedKey Key where to store data
-     * @param bool $success       If the operation was successful
-     * @param mixed   $casToken      Token
-     * @return mixed Data on success, false on key not found
-     * @throws Exception\RuntimeException
+     * @psalm-api
+     * @return non-empty-string|null
      */
-    protected function internalGetItem(&$normalizedKey, &$success = null, &$casToken = null)
+    public function getPersistentId(bool $update = false): ?string
     {
-        $redis = $this->getRedisResource();
-        try {
-            $value = $redis->get($this->namespacePrefix . $normalizedKey);
-        } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
+        $options = $this->getOptions();
+
+        if (! $options->isPersistent()) {
+            return null;
         }
 
-        if ($value === false) {
+        if ($update === false) {
+            $persistentId = $options->getPersistentId();
+            if ($persistentId !== null) {
+                return $persistentId;
+            }
+        }
+
+        $persistentId = $this->getRedisResource()->getPersistentID();
+        if (! is_string($persistentId) || $persistentId === '') {
+            return null;
+        }
+
+        return $persistentId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function internalGetItem(
+        string $normalizedKey,
+        bool|null &$success = null,
+        mixed &$casToken = null
+    ): mixed {
+        $normalizedKeys = [$normalizedKey];
+        $values         = $this->internalGetItems($normalizedKeys);
+        if (! array_key_exists($normalizedKey, $values)) {
             $success = false;
-            return;
+            return null;
         }
 
-        $success  = true;
-        $casToken = $value;
+        $value   = $casToken = $values[$normalizedKey];
+        $success = true;
         return $value;
     }
 
-     /**
-      * Internal method to get multiple items.
-      *
-      * @param array &$normalizedKeys Array of keys to be obtained
-      * @return array Associative array of keys and values
-      * @throws Exception\RuntimeException
-      */
-    protected function internalGetItems(array &$normalizedKeys)
+    /**
+     * {@inheritDoc}
+     */
+    protected function internalGetItems(array $normalizedKeys): array
     {
-        $redis = $this->getRedisResource();
-
         $namespacedKeys = [];
         foreach ($normalizedKeys as $normalizedKey) {
-            $namespacedKeys[] = $this->namespacePrefix . $normalizedKey;
+            $namespacedKeys[] = $this->createNamespacedKey($normalizedKey);
         }
 
+        $redis = $this->getRedisResource();
+
         try {
-            $results = $redis->mGet($namespacedKeys);
-        } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
+            $resultsByIndex = $redis->mget($namespacedKeys);
+        } catch (RedisFromExtensionException $exception) {
+            throw RedisRuntimeException::fromRedisException(
+                $exception,
+                $redis
+            );
         }
-        //combine the key => value pairs and remove all missing values
-        return array_filter(
-            array_combine($normalizedKeys, $results),
-            static fn($value): bool => $value !== false
-        );
+
+        if (! is_array($resultsByIndex)) {
+            throw RedisRuntimeException::fromInternalRedisError($redis);
+        }
+
+        $result = [];
+        foreach ($resultsByIndex as $keyIndex => $value) {
+            $normalizedKey = $normalizedKeys[$keyIndex];
+            $namespacedKey = $namespacedKeys[$keyIndex];
+            if ($value === false && ! $this->isFalseReturnValuePersisted($redis, $namespacedKey)) {
+                continue;
+            }
+
+            $result[$normalizedKey] = $value;
+        }
+
+        return $result;
     }
 
     /**
-     * Internal method to test if an item exists.
-     *
-     * @param string $normalizedKey Normalized key which will be checked
-     * @return bool
-     * @throws Exception\RuntimeException
+     * {@inheritDoc}
      */
-    protected function internalHasItem(&$normalizedKey)
+    protected function internalHasItem(string $normalizedKey): bool
     {
         $redis = $this->getRedisResource();
         try {
-            return (bool) $redis->exists($this->namespacePrefix . $normalizedKey);
-        } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
+            return (bool) $redis->exists($this->createNamespacedKey($normalizedKey));
+        } catch (RedisFromExtensionException $exception) {
+            throw RedisRuntimeException::fromRedisException($exception, $redis);
         }
     }
 
     /**
-     * Internal method to store an item.
-     *
-     * @param string $normalizedKey Key in Redis under which value will be saved
-     * @param mixed  $value         Value to store under cache key
-     * @return bool
-     * @throws Exception\RuntimeException
+     * {@inheritDoc}
      */
-    protected function internalSetItem(&$normalizedKey, &$value)
+    protected function internalSetItem(string $normalizedKey, mixed $value): bool
     {
         $redis   = $this->getRedisResource();
         $options = $this->getOptions();
@@ -214,28 +212,33 @@ final class Redis extends AbstractAdapter implements
 
         try {
             if ($ttl) {
-                if ($options->getResourceManager()->getMajorVersion($options->getResourceId()) < 2) {
-                    throw new Exception\UnsupportedMethodCallException("To use ttl you need version >= 2.0.0");
+                if ($this->getCapabilities()->ttlSupported === false) {
+                    throw new Exception\UnsupportedMethodCallException(
+                        'To use ttl you need redis-server version >= 2.0.0',
+                    );
                 }
-                $success = $redis->setex($this->namespacePrefix . $normalizedKey, $ttl, $this->preSerialize($value));
+                $success = $redis->setex(
+                    $this->createNamespacedKey($normalizedKey),
+                    (int) $ttl,
+                    $this->preSerialize($value)
+                ) !== false;
             } else {
-                $success = $redis->set($this->namespacePrefix . $normalizedKey, $this->preSerialize($value));
+                $success = $redis->set(
+                    $this->createNamespacedKey($normalizedKey),
+                    $this->preSerialize($value)
+                ) !== false;
             }
-        } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
+        } catch (RedisFromExtensionException $exception) {
+            throw RedisRuntimeException::fromRedisException($exception, $redis);
         }
 
         return $success;
     }
 
-     /**
-      * Internal method to store multiple items.
-      *
-      * @param array &$normalizedKeyValuePairs An array of normalized key/value pairs
-      * @return array Array of not stored keys
-      * @throws Exception\RuntimeException
-      */
-    protected function internalSetItems(array &$normalizedKeyValuePairs)
+    /**
+     * {@inheritDoc}
+     */
+    protected function internalSetItems(array $normalizedKeyValuePairs): array
     {
         $redis   = $this->getRedisResource();
         $options = $this->getOptions();
@@ -243,176 +246,126 @@ final class Redis extends AbstractAdapter implements
 
         $namespacedKeyValuePairs = [];
         foreach ($normalizedKeyValuePairs as $normalizedKey => $value) {
-            $namespacedKeyValuePairs[$this->namespacePrefix . $normalizedKey] = $this->preSerialize($value);
+            $namespacedKeyValuePairs[$this->createNamespacedKey($normalizedKey)] = $this->preSerialize($value);
         }
 
         try {
             if ($ttl > 0) {
-                //check if ttl is supported
-                if ($options->getResourceManager()->getMajorVersion($options->getResourceId()) < 2) {
-                    throw new Exception\UnsupportedMethodCallException("To use ttl you need version >= 2.0.0");
+                if ($this->getCapabilities()->ttlSupported === false) {
+                    throw new Exception\UnsupportedMethodCallException(
+                        'To use ttl you need redis-server version >= 2.0.0',
+                    );
                 }
+
                 //mSet does not allow ttl, so use transaction
                 $transaction = $redis->multi();
                 foreach ($namespacedKeyValuePairs as $key => $value) {
-                    $transaction->setex($key, $ttl, $value);
+                    $transaction->setex($key, (int) $ttl, $value);
                 }
-                $success = $transaction->exec();
+                $success = $transaction->exec() !== false;
             } else {
-                $success = $redis->mSet($namespacedKeyValuePairs);
+                $success = $redis->mSet($namespacedKeyValuePairs) !== false;
             }
-        } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
+        } catch (RedisFromExtensionException $exception) {
+            throw RedisRuntimeException::fromRedisException($exception, $redis);
         }
+
         if (! $success) {
-            throw new Exception\RuntimeException($redis->getLastError() ?? 'no last error');
+            throw RedisRuntimeException::fromInternalRedisError($redis);
         }
 
         return [];
     }
 
     /**
-     * Add an item.
-     *
-     * @param  string $normalizedKey
-     * @param  mixed  $value
-     * @return bool
-     * @throws Exception\RuntimeException
+     * {@inheritDoc}
      */
-    protected function internalAddItem(&$normalizedKey, &$value)
+    protected function internalAddItem(string $normalizedKey, mixed $value): bool
     {
         $redis   = $this->getRedisResource();
         $options = $this->getOptions();
         $ttl     = $options->getTtl();
 
         try {
-            if ($ttl) {
-                if ($options->getResourceManager()->getMajorVersion($options->getResourceId()) < 2) {
-                    throw new Exception\UnsupportedMethodCallException("To use ttl you need version >= 2.0.0");
+            if ($ttl > 0) {
+                if ($this->getCapabilities()->ttlSupported === false) {
+                    throw new Exception\UnsupportedMethodCallException(
+                        'To use ttl you need redis-server version >= 2.0.0',
+                    );
                 }
 
                 /**
                  * To ensure expected behaviour, we stick with the "setnx" method.
                  * This means we only set the ttl after the key/value has been successfully set.
                  */
-                $success = $redis->setnx($this->namespacePrefix . $normalizedKey, $this->preSerialize($value));
+                $success = $redis->setnx(
+                    $this->createNamespacedKey($normalizedKey),
+                    $this->preSerialize($value)
+                ) !== false;
                 if ($success) {
-                    $redis->expire($this->namespacePrefix . $normalizedKey, $ttl);
+                    $redis->expire($this->createNamespacedKey($normalizedKey), (int) $ttl);
                 }
-            } else {
-                $success = $redis->setnx($this->namespacePrefix . $normalizedKey, $this->preSerialize($value));
+
+                return $success;
             }
 
-            return $success;
-        } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
+            return $redis->setnx($this->createNamespacedKey($normalizedKey), $this->preSerialize($value)) !== false;
+        } catch (RedisFromExtensionException $exception) {
+            throw RedisRuntimeException::fromRedisException($exception, $redis);
         }
     }
 
     /**
-     * Internal method to touch an item.
-     *
-     * @param string $normalizedKey Key which will be touched
-     * @return bool
-     * @throws Exception\RuntimeException
+     * {@inheritDoc}
      */
-    protected function internalTouchItem(&$normalizedKey)
+    protected function internalTouchItem(string $normalizedKey): bool
     {
         $redis = $this->getRedisResource();
         try {
             $ttl = $this->getOptions()->getTtl();
-            return (bool) $redis->expire($this->namespacePrefix . $normalizedKey, $ttl);
-        } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
+            return (bool) $redis->expire($this->createNamespacedKey($normalizedKey), (int) $ttl);
+        } catch (RedisFromExtensionException $exception) {
+            throw RedisRuntimeException::fromRedisException($exception, $redis);
         }
     }
 
     /**
-     * Internal method to remove an item.
-     *
-     * @param string $normalizedKey Key which will be removed
-     * @return bool
-     * @throws Exception\RuntimeException
+     * {@inheritDoc}
      */
-    protected function internalRemoveItem(&$normalizedKey)
+    protected function internalRemoveItem(string $normalizedKey): bool
     {
         $redis = $this->getRedisResource();
         try {
-            return (bool) $redis->del($this->namespacePrefix . $normalizedKey);
-        } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
+            return (bool) $redis->del($this->createNamespacedKey($normalizedKey));
+        } catch (RedisFromExtensionException $exception) {
+            throw RedisRuntimeException::fromRedisException($exception, $redis);
         }
     }
 
     /**
-     * Internal method to increment an item.
-     *
-     * @param  string $normalizedKey
-     * @param  int    $value
-     * @return int|bool The new value on success, false on failure
-     * @throws Exception\RuntimeException
+     * {@inheritDoc}
      */
-    protected function internalIncrementItem(&$normalizedKey, &$value)
-    {
-        $redis = $this->getRedisResource();
-        try {
-            return $redis->incrBy($this->namespacePrefix . $normalizedKey, $value);
-        } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
-        }
-    }
-
-    /**
-     * Internal method to decrement an item.
-     *
-     * @param  string $normalizedKey
-     * @param  int    $value
-     * @return int|bool The new value on success, false on failure
-     * @throws Exception\RuntimeException
-     */
-    protected function internalDecrementItem(&$normalizedKey, &$value)
-    {
-        $redis = $this->getRedisResource();
-        try {
-            return $redis->decrBy($this->namespacePrefix . $normalizedKey, $value);
-        } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
-        }
-    }
-
-    /**
-     * Flush currently set DB
-     *
-     * @return bool
-     * @throws Exception\RuntimeException
-     */
-    public function flush()
+    public function flush(): bool
     {
         $redis = $this->getRedisResource();
         try {
             return $redis->flushDB();
-        } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
+        } catch (RedisFromExtensionException $exception) {
+            throw RedisRuntimeException::fromRedisException($exception, $redis);
         }
     }
 
-    /* ClearByNamespaceInterface */
-
     /**
-     * Remove items of given namespace
-     *
-     * @param string $namespace
-     * @return bool
+     * {@inheritDoc}
      */
-    public function clearByNamespace($namespace)
+    public function clearByNamespace(string $namespace): bool
     {
-        $redis = $this->getRedisResource();
-
-        $namespace = (string) $namespace;
+        /** @psalm-suppress TypeDoesNotContainType Psalm type does not prevent from injecting empty string */
         if ($namespace === '') {
             throw new Exception\InvalidArgumentException('No namespace given');
         }
 
+        $redis   = $this->getRedisResource();
         $options = $this->getOptions();
         $prefix  = $namespace . $options->getNamespaceSeparator();
 
@@ -421,23 +374,17 @@ final class Redis extends AbstractAdapter implements
         return true;
     }
 
-    /* ClearByPrefixInterface */
-
     /**
-     * Remove items matching given prefix
-     *
-     * @param string $prefix
-     * @return bool
+     * {@inheritDoc}
      */
-    public function clearByPrefix($prefix)
+    public function clearByPrefix(string $prefix): bool
     {
-        $redis = $this->getRedisResource();
-
-        $prefix = (string) $prefix;
+        /** @psalm-suppress TypeDoesNotContainType Psalm type does not prevent from injecting empty string */
         if ($prefix === '') {
             throw new Exception\InvalidArgumentException('No prefix given');
         }
 
+        $redis     = $this->getRedisResource();
         $options   = $this->getOptions();
         $namespace = $options->getNamespace();
         $prefix    = $namespace === '' ? '' : $namespace . $options->getNamespaceSeparator() . $prefix;
@@ -447,146 +394,177 @@ final class Redis extends AbstractAdapter implements
         return true;
     }
 
-    /* TotalSpaceCapableInterface */
-
     /**
-     * Get total space in bytes
-     *
-     * @return int|float
+     * {@inheritDoc}
      */
-    public function getTotalSpace()
+    public function getTotalSpace(): int
     {
         $redis = $this->getRedisResource();
         try {
             $info = $redis->info();
-        } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
+        } catch (RedisFromExtensionException $exception) {
+            throw RedisRuntimeException::fromRedisException($exception, $redis);
         }
 
+        Assert::isMap($info);
+        Assert::keyExists($info, 'used_memory');
+        assert(array_key_exists('used_memory', $info), 'Provide info to psalm');
+        Assert::natural($info['used_memory']);
         return $info['used_memory'];
-    }
-
-    /* status */
-
-    /**
-     * Internal method to get capabilities of this adapter
-     *
-     * @return Capabilities
-     */
-    protected function internalGetCapabilities()
-    {
-        if ($this->capabilities === null) {
-            $this->capabilityMarker = new stdClass();
-
-            $options           = $this->getOptions();
-            $resourceMgr       = $options->getResourceManager();
-            $serializer        = $resourceMgr->getLibOption($options->getResourceId(), RedisResource::OPT_SERIALIZER);
-            $redisVersion      = $resourceMgr->getMajorVersion($options->getResourceId());
-            $minTtl            = version_compare((string) $redisVersion, '2', '<') ? 0 : 1;
-            $maxKeyLength      = version_compare((string) $redisVersion, '3', '<') ? 255 : 512_000_000;
-            $supportedMetadata = $redisVersion >= 2 ? ['ttl'] : [];
-
-            $this->capabilities = new Capabilities(
-                $this,
-                $this->capabilityMarker,
-                [
-                    'supportedDatatypes' => $serializer ? [
-                        'NULL'     => true,
-                        'boolean'  => true,
-                        'integer'  => true,
-                        'double'   => true,
-                        'string'   => true,
-                        'array'    => 'array',
-                        'object'   => 'object',
-                        'resource' => false,
-                    ] : [
-                        'NULL'     => 'string',
-                        'boolean'  => 'string',
-                        'integer'  => 'string',
-                        'double'   => 'string',
-                        'string'   => true,
-                        'array'    => false,
-                        'object'   => false,
-                        'resource' => false,
-                    ],
-                    'supportedMetadata'  => $supportedMetadata,
-                    'minTtl'             => $minTtl,
-                    'maxTtl'             => 0,
-                    'staticTtl'          => true,
-                    'ttlPrecision'       => 1,
-                    'useRequestTime'     => false,
-                    'maxKeyLength'       => $maxKeyLength,
-                    'namespaceIsPrefix'  => true,
-                ]
-            );
-        }
-
-        return $this->capabilities;
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @throws Exception\ExceptionInterface
      */
-    protected function internalGetMetadata(&$normalizedKey)
+    protected function internalGetCapabilities(): Capabilities
     {
-        $redis    = $this->getRedisResource();
-        $metadata = [];
-
-        try {
-            $redisVersion = $this->resourceManager->getVersion($this->resourceId);
-
-            // redis >= 2.8
-            // The command 'pttl' returns -2 if the item does not exist
-            // and -1 if the item has no associated expire
-            if (version_compare($redisVersion, '2.8', '>=')) {
-                $pttl = $redis->pttl($this->namespacePrefix . $normalizedKey);
-                if ($pttl <= -2) {
-                    return false;
-                }
-                $metadata['ttl'] = $pttl === -1 ? null : $pttl / 1000;
-
-            // redis >= 2.6, < 2.8
-            // The command 'pttl' returns -1 if the item does not exist or the item has no associated expire
-            } elseif (version_compare($redisVersion, '2.6', '>=')) {
-                $pttl = $redis->pttl($this->namespacePrefix . $normalizedKey);
-                if ($pttl <= -1) {
-                    if (! $this->internalHasItem($normalizedKey)) {
-                        return false;
-                    }
-                    $metadata['ttl'] = null;
-                } else {
-                    $metadata['ttl'] = $pttl / 1000;
-                }
-
-            // redis >= 2, < 2.6
-            // The command 'pttl' is not supported but 'ttl'
-            // The command 'ttl' returns 0 if the item does not exist same as if the item is going to be expired
-            // NOTE: In case of ttl=0 we return false because the item is going to be expired in a very near future
-            //       and then doesn't exist any more
-            } elseif (version_compare($redisVersion, '2', '>=')) {
-                $ttl = $redis->ttl($this->namespacePrefix . $normalizedKey);
-                if ($ttl <= -1) {
-                    if (! $this->internalHasItem($normalizedKey)) {
-                        return false;
-                    }
-                    $metadata['ttl'] = null;
-                } else {
-                    $metadata['ttl'] = $ttl;
-                }
-
-            // redis < 2
-            // The commands 'pttl' and 'ttl' are not supported
-            // but item existence have to be checked
-            } elseif (! $this->internalHasItem($normalizedKey)) {
-                return false;
-            }
-        } catch (RedisResourceException $e) {
-            throw new Exception\RuntimeException($redis->getLastError() ?? $e->getMessage(), $e->getCode(), $e);
+        if ($this->capabilities !== null) {
+            return $this->capabilities;
         }
 
-        return $metadata;
+        $redisSerializerOptionUsed = $this->getResourceManager()->hasSerializationSupport($this);
+        $redisVersion              = $this->getRedisVersion();
+        $maxKeyLength              = version_compare($redisVersion, '3', '<') ? 255 : 512_000_000;
+
+        $supportedDataTypes = [
+            'NULL'     => 'string',
+            'boolean'  => 'string',
+            'integer'  => 'string',
+            'double'   => 'string',
+            'string'   => true,
+            'array'    => false,
+            'object'   => false,
+            'resource' => false,
+        ];
+
+        if ($redisSerializerOptionUsed === true) {
+            $supportedDataTypes = [
+                'NULL'     => true,
+                'boolean'  => true,
+                'integer'  => true,
+                'double'   => true,
+                'string'   => true,
+                'array'    => 'array',
+                'object'   => 'object',
+                'resource' => false,
+            ];
+        }
+
+        return $this->capabilities = new Capabilities(
+            maxKeyLength: $maxKeyLength,
+            ttlSupported: version_compare($redisVersion, '2', 'ge'),
+            namespaceIsPrefix: true,
+            supportedDataTypes: $supportedDataTypes,
+            ttlPrecision: 1,
+            usesRequestTime: false,
+        );
+    }
+
+    public function getRedisVersion(): string
+    {
+        $options            = $this->getOptions();
+        $versionFromOptions = $options->getRedisVersion();
+        if ($versionFromOptions !== '') {
+            return $versionFromOptions;
+        }
+
+        $redis = $this->getRedisResource();
+        try {
+            $info = $redis->info();
+        } catch (RedisFromExtensionException $exception) {
+            throw RedisRuntimeException::fromRedisException($exception, $redis);
+        }
+
+        if (! is_array($info)) {
+            return '0.0.0-unknown';
+        }
+
+        if (! isset($info['redis_version']) || ! is_string($info['redis_version'])) {
+            return '0.0.0-unknown';
+        }
+
+        $version = $info['redis_version'];
+        assert($version !== '');
+        $options->setRedisVersion($version);
+
+        return $version;
+    }
+
+    public function setResourceManager(RedisResourceManagerInterface $resourceManager): void
+    {
+        $this->resourceManager = $resourceManager;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function internalGetMetadata(string $normalizedKey): Metadata|null
+    {
+        $redis = $this->getRedisResource();
+
+        try {
+            $redisVersion = $this->getRedisVersion();
+
+            if (version_compare($redisVersion, '2.8', '>=')) {
+                // redis >= 2.8
+                // The command 'pttl' returns -2 if the item does not exist
+                // and -1 if the item has no associated expire
+                $pttl = $redis->pttl($this->createNamespacedKey($normalizedKey));
+                if ($pttl <= -2) {
+                    return null;
+                }
+
+                if ($pttl === -1) {
+                    return new Metadata(remainingTimeToLive: Metadata::TTL_UNLIMITED);
+                }
+
+                $ttl = (int) round($pttl / 1000);
+                Assert::natural($ttl);
+                return new Metadata(remainingTimeToLive: $ttl);
+            }
+
+            if (version_compare($redisVersion, '2.6', '>=')) {
+                // redis >= 2.6, < 2.8
+                // The command 'pttl' returns -1 if the item does not exist or the item has no associated expire
+                $pttl = $redis->pttl($this->createNamespacedKey($normalizedKey));
+                if ($pttl <= -1) {
+                    if (! $this->internalHasItem($normalizedKey)) {
+                        return null;
+                    }
+
+                    return new Metadata(remainingTimeToLive: Metadata::TTL_UNLIMITED);
+                }
+
+                $ttl = (int) round($pttl / 1000);
+                Assert::natural($ttl);
+                return new Metadata(remainingTimeToLive: $ttl);
+            }
+
+            if (version_compare($redisVersion, '2', '>=')) {
+                // redis >= 2, < 2.6
+                // The command 'pttl' is not supported but 'ttl'
+                // The command 'ttl' returns 0 if the item does not exist same as if the item is going to be expired
+                // NOTE: In case of ttl=0 we return false because the item is going to be expired in a very near future
+                //       and then doesn't exist anymore
+                $ttl = $redis->ttl($this->createNamespacedKey($normalizedKey));
+                if ($ttl <= -1) {
+                    if (! $this->internalHasItem($normalizedKey)) {
+                        return null;
+                    }
+
+                    return new Metadata(remainingTimeToLive: Metadata::TTL_UNLIMITED);
+                }
+
+                Assert::natural($ttl);
+                return new Metadata(remainingTimeToLive: $ttl);
+            } elseif (! $this->internalHasItem($normalizedKey)) {
+                return null;
+            }
+        } catch (RedisFromExtensionException $exception) {
+            throw RedisRuntimeException::fromRedisException($exception, $redis);
+        }
+
+        return new Metadata(remainingTimeToLive: null);
     }
 
     /**
@@ -595,19 +573,66 @@ final class Redis extends AbstractAdapter implements
      * which is producing a segfault on storing NULL as long as no serializer was configured.
      *
      * @link https://github.com/zendframework/zend-cache/issues/88
-     *
-     * @param mixed $value
-     * @return mixed
      */
-    protected function preSerialize($value)
+    private function preSerialize(mixed $value): mixed
     {
-        $options     = $this->getOptions();
-        $resourceMgr = $options->getResourceManager();
-        $serializer  = $resourceMgr->getLibOption($options->getResourceId(), RedisResource::OPT_SERIALIZER);
-        if ($serializer === null) {
+        $resourceManager = $this->getResourceManager();
+        if (! $resourceManager->hasSerializationSupport($this)) {
             return (string) $value;
         }
 
         return $value;
+    }
+
+    private function getResourceManager(): RedisResourceManagerInterface
+    {
+        if ($this->resourceManager !== null) {
+            return $this->resourceManager;
+        }
+
+        return $this->resourceManager = new RedisResourceManager($this->getOptions());
+    }
+
+    /**
+     * @param non-empty-string|int $key
+     * @return non-empty-string
+     */
+    private function createNamespacedKey(string|int $key): string
+    {
+        if ($this->namespacePrefix !== null) {
+            return $this->namespacePrefix . $key;
+        }
+
+        $options               = $this->getOptions();
+        $namespace             = $options->getNamespace();
+        $this->namespacePrefix = $namespace;
+        if ($namespace !== '') {
+            $this->namespacePrefix = $namespace . $options->getNamespaceSeparator();
+        }
+
+        return $this->namespacePrefix . $key;
+    }
+
+    /**
+     * This method verifies that the return value from {@see RedisClusterFromExtension::get} or
+     * {@see RedisClusterFromExtension::mget} is `false` because the key does not exist or because the keys value
+     * is `false` at type-level.
+     */
+    private function isFalseReturnValuePersisted(RedisFromExtension $redis, string $key): bool
+    {
+        $serializer = $this
+            ->getOptions()
+            ->getLibOption(RedisFromExtension::OPT_SERIALIZER, RedisFromExtension::SERIALIZER_NONE);
+        if ($serializer === RedisFromExtension::SERIALIZER_NONE) {
+            return false;
+        }
+
+        try {
+            /** @psalm-var 0|1 $exists */
+            $exists = $redis->exists($key);
+            return (bool) $exists;
+        } catch (RedisFromExtensionException $exception) {
+            throw RedisRuntimeException::fromRedisException($exception, $redis);
+        }
     }
 }

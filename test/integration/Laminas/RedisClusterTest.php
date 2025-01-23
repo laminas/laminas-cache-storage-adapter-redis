@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaminasTest\Cache\Storage\Adapter\Laminas;
 
-use Laminas\Cache\Storage\Adapter\AbstractAdapter;
+use Laminas\Cache\Storage\Adapter\Redis\Metadata;
 use Laminas\Cache\Storage\Adapter\RedisCluster;
 use Laminas\Cache\Storage\Adapter\RedisClusterOptions;
 use Laminas\Cache\Storage\Adapter\RedisClusterOptionsFromIni;
@@ -14,7 +14,7 @@ use LaminasTest\Cache\Storage\Adapter\AbstractCommonAdapterTest;
 use Redis as RedisFromExtension;
 
 /**
- * @template-extends AbstractCommonAdapterTest<RedisCluster,RedisClusterOptions>
+ * @template-extends AbstractCommonAdapterTest<RedisClusterOptions,RedisCluster>
  */
 final class RedisClusterTest extends AbstractCommonAdapterTest
 {
@@ -26,8 +26,8 @@ final class RedisClusterTest extends AbstractCommonAdapterTest
         self::assertInstanceOf(StorageInterface::class, $storage);
         $storage->setItem('foo', 'bar');
         $flushed = $storage->flush();
-        $this->assertTrue($flushed);
-        $this->assertFalse($storage->hasItem('foo'));
+        self::assertTrue($flushed);
+        self::assertFalse($storage->hasItem('foo'));
     }
 
     public function testCanCreateResourceFromSeeds(): void
@@ -40,7 +40,7 @@ final class RedisClusterTest extends AbstractCommonAdapterTest
         ]);
 
         $storage = new RedisCluster($options);
-        $this->assertTrue($storage->flush());
+        self::assertTrue($storage->flush());
     }
 
     public function testWillHandleIntegratedSerializerInformation(): void
@@ -55,8 +55,8 @@ final class RedisClusterTest extends AbstractCommonAdapterTest
         ]);
 
         $capabilities = $storage->getCapabilities();
-        $dataTypes    = $capabilities->getSupportedDatatypes();
-        $this->assertEquals([
+        $dataTypes    = $capabilities->supportedDataTypes;
+        self::assertEquals([
             'NULL'     => true,
             'boolean'  => true,
             'integer'  => true,
@@ -68,7 +68,7 @@ final class RedisClusterTest extends AbstractCommonAdapterTest
         ], $dataTypes);
     }
 
-    private function removeSerializer(AbstractAdapter $storage): void
+    private function removeSerializer(RedisCluster $storage): void
     {
         foreach ($storage->getPluginRegistry() as $plugin) {
             if (! $plugin instanceof Serializer) {
@@ -90,8 +90,8 @@ final class RedisClusterTest extends AbstractCommonAdapterTest
         ]);
 
         $capabilities = $storage->getCapabilities();
-        $dataTypes    = $capabilities->getSupportedDatatypes();
-        $this->assertEquals([
+        $dataTypes    = $capabilities->supportedDataTypes;
+        self::assertEquals([
             'NULL'     => 'string',
             'boolean'  => 'string',
             'integer'  => 'string',
@@ -139,23 +139,31 @@ final class RedisClusterTest extends AbstractCommonAdapterTest
             RedisFromExtension::SERIALIZER_PHP,
             false
         );
+        $this->options = $this->storage->getOptions();
+
         // Clear storage before executing tests.
         $this->storage->flush();
 
         parent::setUp();
     }
 
-    /**
-     * Remove the property cache as we do want to create a new instance for the next test.
-     */
-    protected function tearDown(): void
+    public function testTouchItem(): void
     {
-        $this->storage = null;
-        parent::tearDown();
-    }
+        $key = 'key';
 
-    public function testOptionsFluentInterface(): void
-    {
-        self::markTestSkipped('Redis cluster specific options do not provide fluent interface!');
+        // no TTL
+        $this->storage->getOptions()->setTtl(0);
+        $this->storage->setItem($key, 'val');
+        $metadata = $this->storage->getMetadata($key);
+        self::assertNotNull($metadata);
+        self::assertEquals(Metadata::TTL_UNLIMITED, $metadata->remainingTimeToLive);
+
+        // touch with a specific TTL will add this TTL
+        $ttl = 1000;
+        $this->storage->getOptions()->setTtl($ttl);
+        self::assertTrue($this->storage->touchItem($key));
+        $metadata = $this->storage->getMetadata($key);
+        self::assertNotNull($metadata);
+        self::assertEquals($ttl, $metadata->remainingTimeToLive);
     }
 }

@@ -30,7 +30,7 @@ final class RedisClusterOptionsFromIniTest extends TestCase
         ini_set('redis.clusters.seeds', $config);
         $options = new RedisClusterOptionsFromIni();
         $seeds   = $options->getSeeds($name);
-        $this->assertEquals($expected, $seeds);
+        self::assertEquals($expected, $seeds);
     }
 
     public function testWillThrowExceptionOnMissingNameInSeeds(): void
@@ -44,7 +44,7 @@ final class RedisClusterOptionsFromIniTest extends TestCase
     /**
      * @psalm-return non-empty-array<non-empty-string,array{0:non-empty-string,1:non-empty-string,2:non-empty-list<non-empty-string>}>
      */
-    public function seedsByNameProvider(): array
+    public static function seedsByNameProvider(): array
     {
         return [
             'simple'         => [
@@ -73,10 +73,10 @@ final class RedisClusterOptionsFromIniTest extends TestCase
         ini_set('redis.clusters.auth', 'foo=secret');
         $options = new RedisClusterOptionsFromIni();
 
-        $this->assertEquals(['bar'], $options->getSeeds('foo'));
-        $this->assertEquals(1.0, $options->getTimeout('foo', 0.0));
-        $this->assertEquals(2.0, $options->getReadTimeout('foo', 0.0));
-        $this->assertEquals('secret', $options->getPasswordByName('foo', ''));
+        self::assertEquals(['bar'], $options->getSeeds('foo'));
+        self::assertEquals(1.0, $options->getTimeout('foo', 0.0));
+        self::assertEquals(2.0, $options->getReadTimeout('foo', 0.0));
+        self::assertEquals('secret', $options->getPasswordByName('foo', ''));
     }
 
     protected function setUp(): void

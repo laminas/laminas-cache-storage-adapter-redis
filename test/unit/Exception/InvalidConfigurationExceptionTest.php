@@ -13,6 +13,6 @@ final class InvalidConfigurationExceptionTest extends TestCase
     public function testInstanceOfLaminasCacheException(): void
     {
         $exception = new InvalidRedisClusterConfigurationException();
-        $this->assertInstanceOf(ExceptionInterface::class, $exception);
+        self::assertInstanceOf(ExceptionInterface::class, $exception);
     }
 }

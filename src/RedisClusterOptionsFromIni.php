@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Laminas\Cache\Storage\Adapter;
 
 use Laminas\Cache\Storage\Adapter\Exception\InvalidRedisClusterConfigurationException;
+use Webmozart\Assert\Assert;
 
 use function assert;
 use function ini_get;
@@ -17,22 +18,22 @@ use function parse_str;
  */
 final class RedisClusterOptionsFromIni
 {
-    /** @psalm-var array<non-empty-string,list<non-empty-string>> */
-    private $seedsByName;
+    /** @var array<non-empty-string,non-empty-list<non-empty-string>> */
+    private array $seedsByName;
 
-    /** @psalm-var array<non-empty-string,float> */
-    private $timeoutByName;
+    /** @var array<non-empty-string,float> */
+    private array $timeoutByName;
 
-    /** @psalm-var array<non-empty-string,float> */
-    private $readTimeoutByName;
+    /** @var array<non-empty-string,float> */
+    private array $readTimeoutByName;
 
-    /** @psalm-var array<non-empty-string,string> */
-    private $authenticationByName;
+    /** @var array<non-empty-string,string> */
+    private array $authenticationByName;
 
     public function __construct()
     {
         $seedsConfiguration = ini_get('redis.clusters.seeds');
-        if (! is_string($seedsConfiguration)) {
+        if ($seedsConfiguration === false) {
             $seedsConfiguration = '';
         }
 
@@ -41,55 +42,67 @@ final class RedisClusterOptionsFromIni
         }
 
         $seedsByName = [];
-        parse_str($seedsConfiguration, $seedsByName);
-        /** @psalm-var non-empty-array<non-empty-string,list<non-empty-string>> $seedsByName */
+        parse_str($seedsConfiguration, $parsedSeedsByName);
+        foreach ($parsedSeedsByName as $name => $seeds) {
+            assert(is_string($name) && $name !== '');
+            Assert::isNonEmptyList($seeds);
+            Assert::allStringNotEmpty($seeds);
+            $seedsByName[$name] = $seeds;
+        }
         $this->seedsByName = $seedsByName;
 
         $timeoutConfiguration = ini_get('redis.clusters.timeout');
-        if (! is_string($timeoutConfiguration)) {
+        if ($timeoutConfiguration === false || $timeoutConfiguration === '0') {
             $timeoutConfiguration = '';
         }
 
         $timeoutByName = [];
-        parse_str($timeoutConfiguration, $timeoutByName);
-        foreach ($timeoutByName as $name => $timeout) {
-            assert($name !== '' && is_numeric($timeout));
-            $timeoutByName[$name] = (float) $timeout;
+        if ($timeoutConfiguration !== '') {
+            parse_str($timeoutConfiguration, $parsedTimeoutByName);
+            foreach ($parsedTimeoutByName as $name => $timeout) {
+                assert(is_string($name) && $name !== '' && is_numeric($timeout));
+                $timeoutByName[$name] = (float) $timeout;
+            }
         }
-        /** @psalm-var array<non-empty-string,float> $timeoutByName */
+
         $this->timeoutByName = $timeoutByName;
 
         $readTimeoutConfiguration = ini_get('redis.clusters.read_timeout');
-        if (! is_string($readTimeoutConfiguration)) {
+        if ($readTimeoutConfiguration === false || $readTimeoutConfiguration === '0') {
             $readTimeoutConfiguration = '';
         }
 
         $readTimeoutByName = [];
-        parse_str($readTimeoutConfiguration, $readTimeoutByName);
-        foreach ($readTimeoutByName as $name => $readTimeout) {
-            assert($name !== '' && is_numeric($readTimeout));
-            $readTimeoutByName[$name] = (float) $readTimeout;
+        if ($readTimeoutConfiguration !== '') {
+            parse_str($readTimeoutConfiguration, $parsedReadTimeoutByName);
+            foreach ($parsedReadTimeoutByName as $name => $readTimeout) {
+                assert(is_string($name) && $name !== '' && is_numeric($readTimeout));
+                $readTimeoutByName[$name] = (float) $readTimeout;
+            }
         }
 
-        /** @psalm-var array<non-empty-string,float> $readTimeoutByName */
         $this->readTimeoutByName = $readTimeoutByName;
 
         $authenticationConfiguration = ini_get('redis.clusters.auth');
-        if (! is_string($authenticationConfiguration)) {
+        if ($authenticationConfiguration === false) {
             $authenticationConfiguration = '';
         }
 
         $authenticationByName = [];
-        parse_str($authenticationConfiguration, $authenticationByName);
-        /** @psalm-var array<non-empty-string,string> $authenticationByName */
+        if ($authenticationConfiguration !== '') {
+            parse_str($authenticationConfiguration, $parsedAuthenticationByName);
+            foreach ($parsedAuthenticationByName as $name => $authentication) {
+                assert(is_string($name) && $name !== '' && is_string($authentication));
+                $authenticationByName[$name] = $authentication;
+            }
+        }
 
         $this->authenticationByName = $authenticationByName;
     }
 
     /**
-     * @psalm-param non-empty-string $name
-     * @return array<int,string>
-     * @psalm-return list<non-empty-string>
+     * @param non-empty-string $name
+     * @return non-empty-list<non-empty-string>
      */
     public function getSeeds(string $name): array
     {

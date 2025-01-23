@@ -8,6 +8,8 @@ use Laminas\Cache\Storage\Adapter\AbstractAdapter;
 use Laminas\Cache\Storage\Adapter\RedisClusterOptions;
 use Laminas\Cache\Storage\Adapter\RedisClusterResourceManager;
 use Laminas\Cache\Storage\Plugin\Serializer;
+use Laminas\Serializer\AdapterPluginManager;
+use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 use Redis;
 use SplObjectStorage;
@@ -24,10 +26,15 @@ final class RedisClusterResourceManagerTest extends TestCase
         $manager = new RedisClusterResourceManager($options);
         $adapter = $this->createMock(AbstractAdapter::class);
         $adapter
+            ->expects(self::once())
+            ->method('getOptions')
+            ->willReturn($options);
+
+        $adapter
             ->expects($this->never())
             ->method('getPluginRegistry');
 
-        $this->assertTrue($manager->hasSerializationSupport($adapter));
+        self::assertTrue($manager->hasSerializationSupport($adapter));
     }
 
     public function testCanDetectSerializationSupportFromSerializerPlugin(): void
@@ -36,7 +43,7 @@ final class RedisClusterResourceManagerTest extends TestCase
         $registry
             ->expects($this->any())
             ->method('current')
-            ->willReturn(new Serializer());
+            ->willReturn(new Serializer(new AdapterPluginManager(new ServiceManager())));
 
         $registry
             ->expects($this->once())
@@ -48,28 +55,22 @@ final class RedisClusterResourceManagerTest extends TestCase
         ]));
         $adapter = $this->createMock(AbstractAdapter::class);
         $adapter
+            ->expects(self::once())
+            ->method('getOptions')
+            ->willReturn(new RedisClusterOptions(['name' => 'foo']));
+
+        $adapter
             ->expects($this->once())
             ->method('getPluginRegistry')
             ->willReturn($registry);
 
-        $this->assertTrue($manager->hasSerializationSupport($adapter));
-    }
-
-    public function testWillReturnVersionFromOptions(): void
-    {
-        $manager = new RedisClusterResourceManager(new RedisClusterOptions([
-            'name'          => uniqid('', true),
-            'redis_version' => '1.0.0',
-        ]));
-
-        $version = $manager->getVersion();
-        $this->assertEquals('1.0.0', $version);
+        self::assertTrue($manager->hasSerializationSupport($adapter));
     }
 
     /**
      * @psalm-return array<string,array{0:RedisClusterOptions}>
      */
-    public function serializationSupportOptionsProvider(): array
+    public static function serializationSupportOptionsProvider(): array
     {
         return [
             'php-serialize'      => [
