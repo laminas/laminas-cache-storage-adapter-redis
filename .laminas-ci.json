@@ -7,8 +7,8 @@
         "redis.clusters.timeout = 'cluster=5'",
         "redis.clusters.read_timeout = 'cluster=10'"
     ],
+    "backwardCompatibilityCheck": true,
     "ignore_php_platform_requirements": {
         "8.4": true
-    },
-    "backwardCompatibilityCheck": true
+    }
 }

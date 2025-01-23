@@ -20,11 +20,8 @@ use Throwable;
  */
 final class RedisClusterResourceManager implements RedisClusterResourceManagerInterface
 {
-    private RedisClusterOptions $options;
-
-    public function __construct(RedisClusterOptions $options)
+    public function __construct(private readonly RedisClusterOptions $options)
     {
-        $this->options = $options;
     }
 
     public function getResource(): RedisClusterFromExtension
@@ -48,27 +45,25 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
 
     private function createRedisResource(RedisClusterOptions $options): RedisClusterFromExtension
     {
+        $authenticationInfo = RedisAuthenticationInfo::fromOptions($options);
+
         if ($options->hasName()) {
             return $this->createRedisResourceFromName(
                 $options->getName(),
                 $options->getTimeout(),
                 $options->getReadTimeout(),
                 $options->isPersistent(),
-                $options->getPassword(),
+                $authenticationInfo,
                 $options->getSslContext()
             );
         }
 
-        $password = $options->getPassword();
-        if ($password === '') {
-            $password = null;
-        }
-
         /**
-         * Psalm currently (<= 5.23.1) uses an outdated (phpredis < 5.3.2) constructor signature for the RedisCluster
+         * Psalm currently (<= 5.26.1) uses an outdated (phpredis < 5.3.2) constructor signature for the RedisCluster
          * class in the phpredis extension.
          *
-         * @psalm-suppress TooManyArguments https://github.com/vimeo/psalm/pull/10862
+         * @psalm-suppress TooManyArguments
+         * @psalm-suppress InvalidArgument
          */
         return new RedisClusterFromExtension(
             null,
@@ -76,7 +71,7 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
             $options->getTimeout(),
             $options->getReadTimeout(),
             $options->isPersistent(),
-            $password,
+            $authenticationInfo?->toRedisAuthInfo(),
             $options->getSslContext()?->toSslContextArray()
         );
     }
@@ -89,7 +84,7 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
         float $fallbackTimeout,
         float $fallbackReadTimeout,
         bool $persistent,
-        string $fallbackPassword,
+        RedisAuthenticationInfo|null $fallbackAuthentication,
         ?SslContext $sslContext
     ): RedisClusterFromExtension {
         try {
@@ -100,16 +95,18 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
             throw new InvalidRedisClusterConfigurationException($throwable->getMessage(), previous: $throwable);
         }
 
-        $seeds       = $options->getSeeds($name);
-        $timeout     = $options->getTimeout($name, $fallbackTimeout);
-        $readTimeout = $options->getReadTimeout($name, $fallbackReadTimeout);
-        $password    = $options->getPasswordByName($name, $fallbackPassword);
+        $seeds          = $options->getSeeds($name);
+        $timeout        = $options->getTimeout($name, $fallbackTimeout);
+        $readTimeout    = $options->getReadTimeout($name, $fallbackReadTimeout);
+        $password       = $options->getPasswordByName($name, '');
+        $authentication = $password === '' ? $fallbackAuthentication?->toRedisAuthInfo() : $password;
 
         /**
-         * Psalm currently (<= 5.23.1) uses an outdated (phpredis < 5.3.2) constructor signature for the RedisCluster
+         * Psalm currently (<= 5.26.1) uses an outdated (phpredis < 5.3.2) constructor signature for the RedisCluster
          * class in the phpredis extension.
          *
-         * @psalm-suppress TooManyArguments https://github.com/vimeo/psalm/pull/10862
+         * @psalm-suppress TooManyArguments
+         * @psalm-suppress PossiblyInvalidArgument
          */
         return new RedisClusterFromExtension(
             null,
@@ -117,7 +114,7 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
             $timeout,
             $readTimeout,
             $persistent,
-            $password,
+            $authentication,
             $sslContext?->toSslContextArray()
         );
     }

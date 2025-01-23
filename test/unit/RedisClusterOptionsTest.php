@@ -70,8 +70,9 @@ final class RedisClusterOptionsTest extends AbstractAdapterOptionsTest
         self::assertEquals('foo', $options->getName());
         self::assertEquals(1.0, $options->getTimeout());
         self::assertEquals(2.0, $options->getReadTimeout());
-        self::assertEquals(false, $options->isPersistent());
+        self::assertFalse($options->isPersistent());
         self::assertEquals('1.0', $options->getRedisVersion());
+        self::assertEmpty($options->getUser());
         self::assertEquals('secret', $options->getPassword());
     }
 
@@ -83,15 +84,16 @@ final class RedisClusterOptionsTest extends AbstractAdapterOptionsTest
             'read_timeout'  => 2.0,
             'persistent'    => false,
             'redis_version' => '1.0',
-            'password'      => 'secret',
+            'user'          => 'user',
         ]);
 
         self::assertEquals(['localhost:1234'], $options->getSeeds());
         self::assertEquals(1.0, $options->getTimeout());
         self::assertEquals(2.0, $options->getReadTimeout());
-        self::assertEquals(false, $options->isPersistent());
+        self::assertFalse($options->isPersistent());
         self::assertEquals('1.0', $options->getRedisVersion());
-        self::assertEquals('secret', $options->getPassword());
+        self::assertEquals('user', $options->getUser());
+        self::assertEquals('', $options->getPassword());
     }
 
     public function testWillDetectSeedsAndNodenameConfiguration(): void

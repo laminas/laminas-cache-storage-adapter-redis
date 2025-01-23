@@ -228,6 +228,9 @@ final class RedisOptions extends AdapterOptions
         $this->password = $password;
     }
 
+    /**
+     * @return non-empty-string|null
+     */
     public function getPassword(): string|null
     {
         return $this->password;
@@ -242,6 +245,9 @@ final class RedisOptions extends AdapterOptions
         $this->user = $user;
     }
 
+    /**
+     * @return non-empty-string|null
+     */
     public function getUser(): ?string
     {
         return $this->user;

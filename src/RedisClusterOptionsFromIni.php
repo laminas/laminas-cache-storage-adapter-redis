@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Laminas\Cache\Storage\Adapter;
 
+use InvalidArgumentException;
 use Laminas\Cache\Storage\Adapter\Exception\InvalidRedisClusterConfigurationException;
 use Webmozart\Assert\Assert;
 
@@ -28,7 +29,7 @@ final class RedisClusterOptionsFromIni
     private array $readTimeoutByName;
 
     /** @var array<non-empty-string,string> */
-    private array $authenticationByName;
+    private array $passwordByName;
 
     public function __construct()
     {
@@ -43,12 +44,17 @@ final class RedisClusterOptionsFromIni
 
         $seedsByName = [];
         parse_str($seedsConfiguration, $parsedSeedsByName);
-        foreach ($parsedSeedsByName as $name => $seeds) {
-            assert(is_string($name) && $name !== '');
-            Assert::isNonEmptyList($seeds);
-            Assert::allStringNotEmpty($seeds);
-            $seedsByName[$name] = $seeds;
+        try {
+            foreach ($parsedSeedsByName as $name => $seeds) {
+                assert(is_string($name) && $name !== '');
+                Assert::isNonEmptyList($seeds);
+                Assert::allStringNotEmpty($seeds);
+                $seedsByName[$name] = $seeds;
+            }
+        } catch (InvalidArgumentException) {
+            throw InvalidRedisClusterConfigurationException::fromInvalidSeedsConfiguration($seedsConfiguration);
         }
+
         $this->seedsByName = $seedsByName;
 
         $timeoutConfiguration = ini_get('redis.clusters.timeout');
@@ -88,16 +94,16 @@ final class RedisClusterOptionsFromIni
             $authenticationConfiguration = '';
         }
 
-        $authenticationByName = [];
+        $passwordByName = [];
         if ($authenticationConfiguration !== '') {
             parse_str($authenticationConfiguration, $parsedAuthenticationByName);
-            foreach ($parsedAuthenticationByName as $name => $authentication) {
-                assert(is_string($name) && $name !== '' && is_string($authentication));
-                $authenticationByName[$name] = $authentication;
+            foreach ($parsedAuthenticationByName as $name => $password) {
+                assert(is_string($name) && $name !== '' && is_string($password));
+                $passwordByName[$name] = $password;
             }
         }
 
-        $this->authenticationByName = $authenticationByName;
+        $this->passwordByName = $passwordByName;
     }
 
     /**
@@ -135,6 +141,6 @@ final class RedisClusterOptionsFromIni
      */
     public function getPasswordByName(string $name, string $fallback): string
     {
-        return $this->authenticationByName[$name] ?? $fallback;
+        return $this->passwordByName[$name] ?? $fallback;
     }
 }
