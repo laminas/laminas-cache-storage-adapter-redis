@@ -68,7 +68,10 @@ final class RedisResourceManager implements RedisResourceManagerInterface
         ];
 
         $resource = new RedisFromExtension(array_filter($resourceOptions, fn (mixed $value) => $value !== null));
-        $resource->select($options->getDatabase());
+        $db       = $options->getDatabase();
+        if (0 !== $db) {
+            $resource->select($db);
+        }
 
         return $resource;
     }
