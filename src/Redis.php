@@ -211,7 +211,7 @@ final class Redis extends AbstractMetadataCapableAdapter implements
         $ttl     = $options->getTtl();
 
         try {
-            if ($ttl) {
+            if ($ttl > 0) {
                 if ($this->getCapabilities()->ttlSupported === false) {
                     throw new Exception\UnsupportedMethodCallException(
                         'To use ttl you need redis-server version >= 2.0.0',
@@ -323,7 +323,11 @@ final class Redis extends AbstractMetadataCapableAdapter implements
         $redis = $this->getRedisResource();
         try {
             $ttl = $this->getOptions()->getTtl();
-            return (bool) $redis->expire($this->createNamespacedKey($normalizedKey), (int) $ttl);
+            if ($ttl > 0) {
+                return (bool) $redis->expire($this->createNamespacedKey($normalizedKey), (int) $ttl);
+            } else {
+                return (bool) $redis->touch($this->createNamespacedKey($normalizedKey));
+            }
         } catch (RedisFromExtensionException $exception) {
             throw RedisRuntimeException::fromRedisException($exception, $redis);
         }
