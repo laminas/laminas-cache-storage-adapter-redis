@@ -18,7 +18,7 @@ use Redis;
 #[Revs(100)]
 #[Iterations(10)]
 #[Warmup(1)]
-class RedisClusterWithPhpSerializerStorageAdapterBench extends AbstractStorageAdapterBenchmark
+final class RedisClusterWithPhpSerializerStorageAdapterBench extends AbstractStorageAdapterBenchmark
 {
     use RedisClusterStorageCreationTrait;
 

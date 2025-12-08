@@ -82,7 +82,7 @@ final class RedisClusterOptionsFromIniTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seedsConfigurationFromIni = ini_get('redis.clusters.seeds');
+        $this->seedsConfigurationFromIni = (string) ini_get('redis.clusters.seeds');
         ini_set('redis.clusters.seeds', '');
     }
 

@@ -18,7 +18,7 @@ use Redis;
 #[Revs(100)]
 #[Iterations(10)]
 #[Warmup(1)]
-class RedisStorageAdapterBench extends AbstractStorageAdapterBenchmark
+final class RedisStorageAdapterBench extends AbstractStorageAdapterBenchmark
 {
     use RedisStorageCreationTrait;
 

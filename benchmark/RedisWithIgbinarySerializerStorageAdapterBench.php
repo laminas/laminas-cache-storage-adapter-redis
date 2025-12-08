@@ -18,7 +18,7 @@ use Redis;
 #[Revs(100)]
 #[Iterations(10)]
 #[Warmup(1)]
-class RedisWithIgbinarySerializerStorageAdapterBench extends AbstractStorageAdapterBenchmark
+final class RedisWithIgbinarySerializerStorageAdapterBench extends AbstractStorageAdapterBenchmark
 {
     use RedisStorageCreationTrait;
 

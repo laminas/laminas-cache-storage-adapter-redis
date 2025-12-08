@@ -62,7 +62,6 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
          * Psalm currently (<= 5.26.1) uses an outdated (phpredis < 5.3.2) constructor signature for the RedisCluster
          * class in the phpredis extension.
          *
-         * @psalm-suppress TooManyArguments
          * @psalm-suppress InvalidArgument
          */
         return new RedisClusterFromExtension(
@@ -105,7 +104,6 @@ final class RedisClusterResourceManager implements RedisClusterResourceManagerIn
          * Psalm currently (<= 5.26.1) uses an outdated (phpredis < 5.3.2) constructor signature for the RedisCluster
          * class in the phpredis extension.
          *
-         * @psalm-suppress TooManyArguments
          * @psalm-suppress PossiblyInvalidArgument
          */
         return new RedisClusterFromExtension(
