@@ -50,7 +50,6 @@ final class RedisAuthenticationInfoTest extends TestCase
     }
 
     /**
-     * @psalm-suppress PossiblyUnusedMethod PHPUnit psalm plugin does not yet support attributes
      * @psalm-return non-empty-array<non-empty-string, array{
      *  0:string|null,
      *  1:string|null,

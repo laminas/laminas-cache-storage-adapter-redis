@@ -15,12 +15,12 @@
         "laminas/laminas-cache-storage-implementation": "2.0"
     },
     "require-dev": {
-        "laminas/laminas-cache-storage-adapter-benchmark": "^2.1",
-        "laminas/laminas-cache-storage-adapter-test": "^4.0.1",
+        "laminas/laminas-cache-storage-adapter-benchmark": "^2.2",
+        "laminas/laminas-cache-storage-adapter-test": "^4.2.0",
         "laminas/laminas-coding-standard": "~3.1.0",
-        "laminas/laminas-serializer": "^3.0",
-        "psalm/plugin-phpunit": "^0.19.0",
-        "vimeo/psalm": "^6.0"
+        "laminas/laminas-serializer": "^3.1",
+        "psalm/plugin-phpunit": "^0.19.5",
+        "vimeo/psalm": "^6.13.1"
     },
     "config": {
         "sort-packages": true,
